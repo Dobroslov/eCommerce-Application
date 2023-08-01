@@ -15,8 +15,8 @@ This application icluded:
 ## Stack of technologies used in project development:
 
 - React
-- TipeScript
-- Sass
+- TypeScript
+- Scss
 
 ## Run Locally
 
