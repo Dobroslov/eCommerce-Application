@@ -13,6 +13,7 @@ This application icluded:
 - About Us page 🙋‍♂️🙋‍♀️
 
 ## Stack of technologies used in project development:
+
 - React
 - TipeScript
 - Sass
@@ -20,44 +21,50 @@ This application icluded:
 ## Run Locally
 
 1. Clone repo
-$ git clone git@github.com:basir/node-react-ecommerce.git
-$ cd node-react-ecommerce
+   $ git clone git@github.com:basir/node-react-ecommerce.git
+   $ cd node-react-ecommerce
+
 ### 1. Install Dependencies
+
 ```sh
-$ npm install 
+$ npm install
 ```
+
 or
 
 ```sh
 $ npm i
 ```
 
-### 2. 
-
+### 2.
 
 ### 3. Run development server
-```sh 
+
+```sh
 $ npm run start
 ```
 
 ---
 
 ## Build the project
+
 ```sh
 $ npm run build
 ```
 
 ## Run test
+
 ```sh
 $ npm run test
 ```
 
 ## Features (добавить остальные фичи проекта)
-* Admin CRUD operations
-* ...
 
-## Team members 
+- Admin CRUD operations
+- ...
 
-* [Siarhei Makhnach](https://github.com/sergey-mak1)
-* [Marat Nikolaev](https://github.com/akulove)
-* [Vladimir Dobroslov](https://github.com/dobroslov)
+## Team members
+
+- Siarhei Makhnach [https://github.com/sergey-mak1](https://github.com/sergey-mak1)
+- Marat Nikolaev[https://github.com/akulove](https://github.com/akulove)
+- Vladimir Dobroslov [https://github.com/dobroslov](https://github.com/dobroslov)
