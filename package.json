@@ -7,7 +7,7 @@
 		"start": "webpack serve",
 		"dev": "webpack",
 		"test": "jest",
-		"lint": "eslint ./",
+		"lint": "eslint ./ --color",
 		"fix": "eslint ./ --fix",
 		"build": "webpack --node-env=production",
 		"clear": "rd /s /q dist",
