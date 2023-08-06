@@ -81,6 +81,6 @@ $ npm run test
 
 ## Team members
 
-- Siarhei Makhnach [https://github.com/sergey-mak1](https://github.com/sergey-mak1)
-- Marat Nikolaev[https://github.com/akulove](https://github.com/akulove)
-- Vladimir Dobroslov [https://github.com/dobroslov](https://github.com/dobroslov)
+- Siarhei Makhnach - [https://github.com/sergey-mak1](https://github.com/sergey-mak1)
+- Marat Nikolaev - [https://github.com/akulove](https://github.com/akulove)
+- Vladimir Dobroslov - [https://github.com/dobroslov](https://github.com/dobroslov)
