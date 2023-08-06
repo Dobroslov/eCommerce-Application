@@ -84,3 +84,5 @@ $ npm run test
 - Siarhei Makhnach - [https://github.com/sergey-mak1](https://github.com/sergey-mak1)
 - Marat Nikolaev - [https://github.com/akulove](https://github.com/akulove)
 - Vladimir Dobroslov - [https://github.com/dobroslov](https://github.com/dobroslov)
+
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
