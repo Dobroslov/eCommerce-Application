@@ -36,9 +36,7 @@ or
 $ npm i
 ```
 
-### 2.
-
-### 3. Run development server
+### 2. Run development server
 
 ```sh
 $ npm run start
@@ -52,12 +50,6 @@ $ npm run start
 $ npm run build
 ```
 
-## Run test
-
-```sh
-$ npm run test
-```
-
 ## Features (добавить остальные фичи проекта)
 
 - Admin CRUD operations
@@ -68,3 +60,6 @@ $ npm run test
 - Siarhei Makhnach [https://github.com/sergey-mak1](https://github.com/sergey-mak1)
 - Marat Nikolaev[https://github.com/akulove](https://github.com/akulove)
 - Vladimir Dobroslov [https://github.com/dobroslov](https://github.com/dobroslov)
+
+## License
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
