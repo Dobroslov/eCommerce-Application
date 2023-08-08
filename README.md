@@ -39,6 +39,7 @@ $ npm start
 $ npm run dev
 ```
 
+
 ### 3. Build the project in production mode
 
 ```sh
@@ -46,6 +47,7 @@ $ npm run build
 ```
 
 ### 4. clear and delete your dist directory
+
 
 ```sh
 $ npm run clear
@@ -63,6 +65,7 @@ $ npm run lint
 $ npm run fix
 ```
 
+
 ### 7. Start jest tests
 
 ```sh
@@ -70,6 +73,7 @@ $ npm run test
 ```
 
 ## Features
+
 
 - Admin CRUD operations
 - SPA
@@ -86,3 +90,4 @@ $ npm run test
 - Vladimir Dobroslov - [https://github.com/dobroslov](https://github.com/dobroslov)
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+
