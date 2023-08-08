@@ -1,6 +1,6 @@
 # Ctrl+C, Ctrl+V Gang - development team | E-commerce react app
 
-It is final comand project RS-Scholl by team "Ctrl+C, Ctrl+V Gang".
+It is final comand project RS-Scholl (JS / FRONT-END 2023) by team "Ctrl+C, Ctrl+V Gang".
 
 This application icluded:
 
@@ -20,46 +20,74 @@ This application icluded:
 
 ## Run Locally
 
-1. Clone repo
-   $ git clone git@github.com:basir/node-react-ecommerce.git
-   $ cd node-react-ecommerce
+1. Clone this repo by `git clone https://github.com/Dobroslov/eCommerce-Application.git` in your local directory
+1. Open cloned directory by `cd eCommerce-Application`
+1. Switch main branch to **development** branch by `git checkout develop`
+1. Install Dependencies by `npm i` or `npm install`
 
-### 1. Install Dependencies
+## Project scripts:
 
-```sh
-$ npm install
-```
-
-or
+### 1. Run development server
 
 ```sh
-$ npm i
+$ npm start
 ```
 
-### 2. Run development server
+### 2. Build the project in development mode
 
 ```sh
-$ npm run start
+$ npm run dev
 ```
 
----
 
-## Build the project
+### 3. Build the project in production mode
 
 ```sh
 $ npm run build
 ```
 
-## Features (добавить остальные фичи проекта)
+### 4. clear and delete your dist directory
+
+
+```sh
+$ npm run clear
+```
+
+### 5. Show all eslint problems in your project
+
+```sh
+$ npm run lint
+```
+
+### 6. Fix all auto-fixable eslint problems
+
+```sh
+$ npm run fix
+```
+
+
+### 7. Start jest tests
+
+```sh
+$ npm run test
+```
+
+## Features
+
 
 - Admin CRUD operations
-- ...
+- SPA
+- Ajax
+- Webpack
+- Husky
+- Jest
+- CSS Modules
 
 ## Team members
 
-- Siarhei Makhnach [https://github.com/sergey-mak1](https://github.com/sergey-mak1)
-- Marat Nikolaev[https://github.com/akulove](https://github.com/akulove)
-- Vladimir Dobroslov [https://github.com/dobroslov](https://github.com/dobroslov)
+- Siarhei Makhnach - [https://github.com/sergey-mak1](https://github.com/sergey-mak1)
+- Marat Nikolaev - [https://github.com/akulove](https://github.com/akulove)
+- Vladimir Dobroslov - [https://github.com/dobroslov](https://github.com/dobroslov)
 
-## License
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+
