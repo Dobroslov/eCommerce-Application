@@ -1,0 +1,22 @@
+.products__item {
+	color: black;
+}
+.product-card {
+	color: black;
+  &__img-container {
+    color: black;
+  }
+  &__img {
+    color: black;
+  }
+  &__price {
+    color: blue;
+  }
+  &__title {
+    color: black;
+  }
+}
+
+.product-card__img {
+  color: red;
+}
