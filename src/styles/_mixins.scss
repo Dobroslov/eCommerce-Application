@@ -1,0 +1,7 @@
+@mixin font($weight: normal, $size, $lineHeight: $size, $style: normal) {
+  font-weight: $weight;
+  font-size: $size;
+  line-height: $lineHeight;
+  // line-height: $size / $lineHeight *100%; // адаптивный ланхейт
+  font-style: $style;
+}
