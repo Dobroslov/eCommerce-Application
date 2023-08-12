@@ -1,64 +1,63 @@
 {
-  "settings": {
-    "import/resolver": {
-      "node": {
-        "paths": ["src"],
-        "extensions": [".js", ".ts", ".tsx"]
-      }
-    }
-  },
-    "parser": "@typescript-eslint/parser",
-    "plugins": ["prettier", "import",
-    "@typescript-eslint"
-],
-    "extends": [
-        "prettier",
-        "eslint:recommended",
-        "plugin:@typescript-eslint/recommended",
-        "airbnb"
-    ],
-    "parserOptions": {
-        "ecmaVersion": 2020,
-        "sourceType": "module"
-    },
-    "env": {
-        "es6": true,
-        "browser": true,
-        "node": true,
-        "jest": true
-    },
-    "rules": {
-        "import/extensions": [
-          "error",
-          "ignorePackages",
-          {
-            "": "never",
-            "js": "never",
-            "jsx": "never",
-            "ts": "never",
-            "tsx": "never"
-          }
-        ],
-        "no-unused-vars": "off",
-        "no-debugger": "off",
-        "no-console": 0,
-        "no-shadow": "off",
-        "class-methods-use-this": "off",
-        "@typescript-eslint/no-shadow": "warn",
-        "@typescript-eslint/no-unused-vars": "error",
-        "@typescript-eslint/no-explicit-any": 2,
-        "linebreak-style": "off",
-        "react/jsx-filename-extension": [1, { "extensions": [".tsx", ".ts"] }],
-        "no-use-before-define": "off",
-        "@typescript-eslint/no-use-before-define": ["error"],
-        "indent": [2, "tab", { "SwitchCase": 1, "VariableDeclarator": 1 }],
-        "no-tabs": 0,
-        "react/prop-types": 0,
-        "react/require-default-props": "off",
-        "react/jsx-props-no-spreading": "off",
-        "jsx-a11y/control-has-associated-label": "off",
-        "react/jsx-indent": [2, "tab"],
-        "react/jsx-indent-props": [2, "tab"],
-        "jsx-quotes": [2, "prefer-single"]
-    }
+	"settings": {
+		"import/resolver": {
+			"node": {
+				"paths": ["src"],
+				"extensions": [".js", ".ts", ".tsx"]
+			}
+		}
+	},
+	"parser": "@typescript-eslint/parser",
+	"plugins": ["prettier", "import", "@typescript-eslint"],
+	"extends": [
+		"prettier",
+		"eslint:recommended",
+		"plugin:@typescript-eslint/recommended",
+		"airbnb"
+	],
+	"parserOptions": {
+		"ecmaVersion": 2020,
+		"sourceType": "module"
+	},
+	"env": {
+		"es6": true,
+		"browser": true,
+		"node": true,
+		"jest": true
+	},
+	"rules": {
+		"import/extensions": [
+			"error",
+			"ignorePackages",
+			{
+				"": "never",
+				"js": "never",
+				"jsx": "never",
+				"ts": "never",
+				"tsx": "never"
+			}
+		],
+		"no-unused-vars": "off",
+		"no-debugger": "off",
+		"no-console": 0,
+		"no-shadow": "off",
+		"class-methods-use-this": "off",
+		"@typescript-eslint/no-shadow": "warn",
+		"@typescript-eslint/no-unused-vars": "error",
+		"@typescript-eslint/no-explicit-any": 2,
+		"linebreak-style": "off",
+		"react/jsx-filename-extension": [1, { "extensions": [".tsx", ".ts"] }],
+		"no-use-before-define": "off",
+		"@typescript-eslint/no-use-before-define": ["error"],
+		"indent": [2, "tab", { "SwitchCase": 1, "VariableDeclarator": 1 }],
+		"no-tabs": 0,
+		"react/prop-types": 0,
+		"react/require-default-props": "off",
+		"react/jsx-props-no-spreading": "off",
+		"jsx-a11y/control-has-associated-label": "off",
+		"react/jsx-indent": [2, "tab"],
+		"react/jsx-indent-props": [2, "tab"],
+		"jsx-quotes": [2, "prefer-single"],
+		"react/jsx-no-bind": "off"
+	}
 }
