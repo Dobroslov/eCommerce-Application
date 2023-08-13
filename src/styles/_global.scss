@@ -1,0 +1,70 @@
+@import './constants';
+
+html {
+	font-size: 10px;
+}
+
+body {
+	font-family: 'DM Sans', sans-serif;
+	background-color: $white;
+}
+
+// Container for every big element (section, header, footer, other)
+.wrapper {
+	max-width: 1440px;
+	padding: 0 96px;
+	margin: 0 auto;
+
+	@media (max-width: $tablet-with) {
+		padding: 0 32px;
+	}
+
+	@media (max-width: $mobile-small) {
+		padding: 0 16px;
+	}
+}
+
+// Text style
+.title_h1 {
+	font-size: 3.3rem;
+}
+
+.title_h2 {
+	font-weight: 400;
+	font-size: 2.6rem;
+}
+
+.title_h3 {
+	font-weight: 400;
+	font-size: 2rem;
+	line-height: 1.34;
+}
+
+.title_h4 {
+	font-weight: 500;
+	font-size: 2rem;
+	line-height: 1.3;
+}
+
+.title_h5 {
+	font-weight: 500;
+	font-size: 2rem;
+	line-height: 1;
+}
+
+.text_lage {
+	font-weight: 700;
+	font-size: 1.6rem;
+}
+
+.text_medium {
+	font-weight: 400;
+	font-size: 1.4rem;
+}
+
+.text_small {
+	font-weight: 400;
+	font-size: 1.2rem;
+	line-height: 1.66;
+}
+

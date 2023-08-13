@@ -1,6 +1,6 @@
 import React from 'react';
-import './productCardList.module.scss';
 import { IProductCard } from '../../utils/types';
+import styles from './productCardList.module.scss';
 
 interface IProductCardItem extends IProductCard {
 	handleProductClick: (id: number) => void
@@ -12,13 +12,13 @@ function ProductCard(props: IProductCardItem): React.JSX.Element {
 	} = props;
 
 	return (
-		<li className='products__item product-card'>
-			<div className='product_card__img-container'>
-				<img className='product_card__img' src={`./assets/images/${image}`} alt={altImage} />
-				<a href='#{product-id}' className='product__link' onClick={() => handleProductClick(id)}>View All</a>
+		<li className={styles.product_card}>
+			<div className={styles.product_card__img_container}>
+				<img className={styles.product_card__img} src={`./assets/images/${image}`} alt={altImage} />
+				<a href='#{product-id}' className={`${styles.product_card__link} ${styles.text_lage}`} onClick={() => handleProductClick(id)}>Add to cart</a>
 			</div>
-			<h3 className='product-card__title'>{title}</h3>
-			<p className='product-card__price'>{`$ ${price}`}</p>
+			<h3 className={`${styles.product_card__title} ${styles.title_h3}`}>{title}</h3>
+			<p className={`${styles.product_card__price} ${styles.title_h4}`}>{`$ ${price}`}</p>
 		</li>
 	);
 }
