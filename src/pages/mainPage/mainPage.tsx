@@ -3,7 +3,6 @@ import ProductCardsList from '../../components/productCardsList/productCardsList
 import { IProductCard } from '../../utils/types';
 import MAIN_IMAGE from '../../../public/assets/images/main-girl-with-earings.jpg';
 
-import '../../styles/_global.scss';
 import styles from './mainPage.module.scss';
 
 function MainPage(): React.ReactElement {
@@ -25,7 +24,7 @@ function MainPage(): React.ReactElement {
 
 	return (
 		<main className={styles.main}>
-			<div className='wrapper'>
+			<div className={styles.container}>
 				<div className={styles.main__img}>
 					<img src={MAIN_IMAGE} alt='girl' />
 					<h2 className={`${styles.title_h2} ${styles.title_light}`}>Gold bih hoops</h2>
