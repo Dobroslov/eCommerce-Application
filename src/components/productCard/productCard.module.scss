@@ -1,0 +1,69 @@
+@import '../../styles/global';
+
+.product_card {
+	width: 380px;
+	height: auto;
+	background-color: transparent;
+	position: relative;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0);
+	transition: box-shadow 0.3s ease-in-out;
+
+	&:hover {
+		box-shadow: 11px 11px 19px -5px rgba(0,0,0,0.2);
+		border: 1px solid $dark-gray-light;
+		.product_card__link {
+			background-color: $light-gray;
+			visibility: visible;
+			color: $dark-gray;
+		}
+	}
+
+	&__img_container {
+		width: 100%;
+		height: 380px;
+		position: relative;
+		overflow: hidden;
+	}
+
+	&__link {
+		display: block;
+		padding: 22px 0;
+		width: 100%;
+		height: 17%;
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		color: transparent;
+		text-align: center;
+		text-transform: uppercase;
+		background-color: transparent;
+		transition:
+			color 0.2s ease-in-out,
+			background-color 0.3s ease-in-out,
+			box-shadow 0.3s ease-in-out;
+		visibility: hidden;
+	}
+
+	&__title {
+		color: $dark-gray;
+		margin-top: 23px;
+	}
+
+	&__price {
+		color: $accent;
+		margin-top: 16px;
+	}
+
+	&__img {
+		width: 100%; // Ширина 100% для адаптивности
+		height: auto; // Высота автоматически рассчитывается
+		position: absolute;
+		top: 50%; // Позиционируем верхний край картинки на середину контейнера
+		left: 50%; // Позиционируем левый край картинки на середину контейнера
+		transform: translate(
+			-50%,
+			-50%
+		); // Центрируем картинку относительно своего центра
+		transition: transform 0.3s ease-in-out; // Добавляем плавное изменение при уменьшении разрешения
+	}
+}

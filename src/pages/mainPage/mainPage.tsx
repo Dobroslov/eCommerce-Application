@@ -23,25 +23,25 @@ function MainPage(): React.ReactElement {
 	}
 
 	return (
-		<main className={styles.main}>
-			<div className={styles.container}>
-				<div className={styles.main__img}>
-					<img src={MAIN_IMAGE} alt='girl' />
-					<h2 className={`${styles.title_h2} ${styles.title_light}`}>Gold bih hoops</h2>
-					<h3>$ 63.00</h3>
-				</div>
-				<div className={styles.catalog}>
-					<div className={styles.catalog__title}>
-						<h2 className={`${styles.title_h2} ${styles.catalor__title}`}>Shop The Latest</h2>
-						<a href='#top' className={`${styles.catalog__link} ${styles.title_h4}`}>View All</a>
-					</div>
-					<ProductCardsList
-						products={sampleCardData}
-						handleProductClick={handleProductClick}
-					/>
+		<>
+			<div className={styles.main__img_container}>
+				<img className={styles.main__img} src={MAIN_IMAGE} alt='girl' />
+				<div className={styles.main__product_card_info}>
+					<h2 className={`${styles.title_h1} ${styles.main__title_light}`}>Gold bih hoops</h2>
+					<h3 className={`${styles.title_h2} ${styles.main__title_light}`}>$ 63.00</h3>
 				</div>
 			</div>
-		</main>
+			<div className={styles.catalog}>
+				<div className={styles.catalog__title}>
+					<h2 className={`${styles.title_h2} ${styles.catalor__title}`}>Shop The Latest</h2>
+					<a href='#top' className={`${styles.catalog__link} ${styles.title_h4}`}>View All</a>
+				</div>
+				<ProductCardsList
+					products={sampleCardData}
+					handleProductClick={handleProductClick}
+				/>
+			</div>
+		</>
 	);
 }
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { IProductCard } from '../../utils/types';
-import styles from './productCardList.module.scss';
+import styles from './productCard.module.scss';
 
 interface IProductCardItem extends IProductCard {
 	handleProductClick: (id: number) => void

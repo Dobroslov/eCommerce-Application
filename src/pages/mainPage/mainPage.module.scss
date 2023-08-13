@@ -1,41 +1,59 @@
 @import '/src/styles/global';
 
-.main__img {
-	// background-image: url('../../assets/images/main-girl-with-earings.jpg');
-	background-size: cover;
-	// object-fit: cover;
-	background-repeat: no-repeat;
-	width: 1248px;
-	height: 646px;
-	border-radius: 16px;
-	overflow: hidden;
+.main {
+	&__img_container {
+		width: 100%;
+		height: auto;
+		border-radius: 16px;
+		overflow: hidden;
+		position: relative;
+	}
+
+	&__img {
+		position: relative;
+		transition: transform 0.3s ease-in-out;
+	}
+
+	&__title_light {
+		color: $white;
+	}
+
+	&__title_light {
+		color: $white;
+	}
+
+	&__product_card_info {
+		position: absolute;
+		top: 32%;
+		margin-left: 39px;
+	}
 }
 
 .catalog {
 	display: flex;
 	flex-direction: column;
 	margin-top: 64px;
-}
 
-.catalog__title {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-}
+	&__title {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
 
-.title_light {
-	color: $white;
-}
+	&_light {
+		color: $white;
+	}
 
-.catalor__title {
-	color: $dark-gray;
-}
+	&__title {
+		color: $dark-gray;
+	}
 
-.catalog__link {
-	color: $accent;
-	transition: color 0.2s ease-in-out;
+	&__link {
+		color: $accent;
+		transition: color 0.2s ease-in-out;
 
-	&:hover {
-		color: #8b7b24;
+		&:hover {
+			color: #8b7b24;
+		}
 	}
 }
