@@ -12,11 +12,11 @@
    [2.4 Добавление нового пользователя](#create-new-customer)
 3. Работа с товарами  
    [3.1 Получение всех товаров](#get-products)  
-   [3.2 Получение всех товаров](#get-product-by-key)
+   [3.2 Получение товара по ключу](#get-product-by-key)
 4. Ответы сервера  
-   [4.1 объект access_token](#access_token-response)  
-   [4.2 объект customer](#get-customers-response)  
-   [4.3 объект product](#get-products-response)
+   [4.1 Объект access_token](#access_token-response)  
+   [4.2 Объект customer](#get-customers-response)  
+   [4.3 Объект product](#get-products-response)
 ## Общий раздел
 
 ### Api variables
