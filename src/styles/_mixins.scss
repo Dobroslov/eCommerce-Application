@@ -1,0 +1,60 @@
+@mixin font($weight: normal, $size, $lineHeight: $size, $style: normal) {
+	font-weight: $weight;
+	font-size: $size;
+	line-height: $lineHeight;
+	font-style: $style;
+}
+
+// Миксин для респонсив рамера шрифта
+
+@mixin adaptive-value($start, $end) {
+  @media (min-width: 320px) and (max-width: 1248px) {
+    font-size: calc(#{$start} + (#{$end} - #{$start}) * ((100vw - 320px) / (1248 - 320)));
+  }
+}
+
+@mixin adaptive-font-size($start, $end) {
+	font-size: calc(
+		#{$start} + (#{$end} - #{$start}) * ((100vw - 320px) / (1248 - 320))
+	);
+}
+// $start - начальный (минимальный) размер шрифта
+// $end - конечный (максимальный) размер шрифта
+
+// *Пример использования
+// h1 {
+//   @include adaptive-font-size(24px, 48px); // Начальный размер: 24px, Конечный размер: 48px
+//   font-weight: bold;
+// }
+
+// *Миксин для респонсив рамера ширины
+
+@mixin adaptive-width($start, $end) {
+	width: calc(
+		#{$start} + (#{$end} - #{$start}) * ((100vw - 320px) / (1248 - 320))
+	);
+}
+
+// Допустим, у вас есть контейнер, который должен занимать 80% ширины окна просмотра на максимальной ширине (1248px), но на минимальной ширине (320px) он должен занимать 100%:
+
+// *Пример использования
+// .container {
+//   @include adaptive-width(100%, 80%); // Начальная ширина: 100%, Конечная ширина: 80%
+// }
+
+// *Миксин универсальный для респонсив рамера шрифта и ширины
+
+// @mixin adaptive-value($property, $start, $end) {
+//   @media (min-width: 320px) and (max-width: 1248px) {
+//     #{$property}: calc(#{$start} + (#{$end} - #{$start}) * ((100vw - 320px) / (1248 - 320)));
+//   }
+// }
+
+// *Пример использования
+// .text {
+//   @include adaptive-value(font-size, 12px, 20px);
+// }
+
+// .container {
+//   @include adaptive-value(width, 100%, 80%);
+// }

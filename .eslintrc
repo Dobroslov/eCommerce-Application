@@ -59,6 +59,7 @@
         "jsx-a11y/control-has-associated-label": "off",
         "react/jsx-indent": [2, "tab"],
         "react/jsx-indent-props": [2, "tab"],
-        "jsx-quotes": [2, "prefer-single"]
+        "jsx-quotes": [2, "prefer-single"],
+        "react/jsx-no-bind": "off"
     }
 }
