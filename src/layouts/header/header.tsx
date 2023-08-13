@@ -8,7 +8,7 @@ function Header(): React.JSX.Element {
 	return (
 		<header className={header.header}>
 			<div className={header.container}>
-				<a href='#top' className={header.logo}>GLITTER</a>
+				<h1 className={header.logo}><a href='#top'>GLITTER</a></h1>
 				<Menu />
 				<Burger />
 			</div>

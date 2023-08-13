@@ -3,32 +3,43 @@
 %hover__line {
     color: #000000;
     transition: 0.3s;
+
     &::after {
         width: 100%;
         left: 0;
         transition: width 0.3s, left 0.3s;
     }
 }
-%after__link{
-    
-        content: "";
-        position: absolute;
-        top: 35px;
-        left: 50%;
-        height: 2px;
-        width: 0;
-        background: #000000;
-        transition: width 0.3, left 0.3s;
-    
+
+%after__link {
+
+    content: "";
+    position: absolute;
+    top: 39px;
+    left: 50%;
+    height: 2px;
+    width: 0;
+    background: #000000;
+    transition: width 0.3, left 0.3s;
+    z-index: 11;
 }
 
-.header {
-    padding-top: 40px;
-    max-width: 1248px;
-    margin: 0 auto;
+.container {
+    padding-top: 48px;
+    padding-bottom: 17px;
     display: flex;
     justify-content: space-between;
-    border-bottom: 1px solid gray;
+    position: relative;
+
+    &::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 16px;
+        height: 1px;
+        width: calc(100% - 32px);
+        background: #D8D8D8;
+    }
 
     button {
         border: none;
@@ -42,30 +53,39 @@
     }
 
     .logo {
-        margin-left: 30px;
-        font-size: 30px;
-        font-weight: 700;
-        text-decoration: none;
-        color: #696969;
+        line-height: 20px;
+        font-size: 35px;
 
         &::first-letter {
             color: #FFD700;
         }
 
+        a {
+            font-family: 'Allerta Stencil', sans-serif;
+            text-decoration: none;
+            color: #696969;
 
+
+
+            @media (min-width: 320px) and (max-width: 1248px) {
+                font-size: calc(20px + (35 - 25) * ((100vw - 320px) / (1248 - 320)));
+            }
+        }
     }
 
     .menu {
         display: flex;
         position: relative;
+        align-items: center;
 
         .navigation {
             margin: 0;
-            width: 320px;
+            width: 500px;
             height: 20px;
             font-size: 20px;
             display: flex;
-            justify-content: space-around;
+            justify-content: left;
+            gap: 64px;
             align-items: center;
             border-right: 1px solid gray;
 
@@ -79,12 +99,13 @@
                 position: relative;
 
                 &::after {
-                  @extend %after__link;
+                    @extend %after__link;
                 }
 
                 &:hover {
-                   @extend %hover__line;
-            }}
+                    @extend %hover__line;
+                }
+            }
 
         }
 
@@ -126,15 +147,16 @@
 
         .search__form {
             position: absolute;
-            top: 25px;
-            right: 100px;
-            width: 250px;
-            height: 25px;
-            border-radius: 10px;
+            top: 30px;
+            right: 110px;
+            width: 280px;
+            height: 30px;
+            border-radius: 15px;
             background-color: #FFFFFF;
             border: 1px solid #696969;
             opacity: 0;
             transition: 0.5s;
+            z-index: 10;
 
             &:hover {
                 transform: scale(1.1);
@@ -148,8 +170,9 @@
 
             .search__input {
                 width: 80%;
-                height: 22px;
-                margin-left: 8px;
+                height: 25px;
+                margin-left: 15px;
+                font-size: 16px;
 
                 &::placeholder {
                     color: #707070;
@@ -160,8 +183,8 @@
                 height: 20px;
                 width: 20px;
                 position: absolute;
-                top: 1px;
-                right: 10px;
+                top: 2px;
+                right: 15px;
 
                 &:before {
                     content: url(/public/assets/svg/search.svg);
@@ -183,7 +206,7 @@
             background-repeat: no-repeat;
             background-size: contain;
             position: absolute;
-            right: 75px;
+            right: 60px;
             z-index: 10;
 
             &:hover {
@@ -195,7 +218,7 @@
 
         .nav__button {
             position: absolute;
-            right: 40px;
+            right: 20px;
             z-index: 10;
             width: 20px;
             height: 18px;
@@ -235,7 +258,7 @@
 
                 .nav__line {
                     background-color: #000000;
-                    
+
                 }
             }
 
@@ -264,17 +287,17 @@
 
         .popup {
             position: fixed;
-            height: 300px;
+            height: 350px;
             width: 250px;
             right: 0;
-            top: 20px;
+            top: 10px;
             z-index: 9;
             background-color: #FFFFFF;
             border: 1px solid #D8D8D8;
             border-radius: 5px;
             transform: translateX(110%);
             transition: transform 0.5s;
-            padding: 70px 10px 10px 20px;
+            padding: 70px 15px 10px 15px;
             display: flex;
             flex-direction: column;
 
@@ -292,6 +315,7 @@
                 margin: 0 auto;
                 border-radius: 5px;
                 background: #d8d8d8;
+                font-size: 16px;
 
                 .search__input,
                 .search__button {
@@ -337,11 +361,13 @@
                         text-decoration: none;
                         color: black;
                         position: relative;
-                        &::after{
+
+                        &::after {
                             @extend %after__link;
-                            top:22px;
+                            top: 25px;
                         }
-                        &:hover{
+
+                        &:hover {
                             @extend %hover__line;
                         }
                     }
@@ -356,13 +382,16 @@
                 position: relative;
                 font-size: 20px;
                 transition: 0.3s;
-                &:hover{
+
+                &:hover {
                     transform: scale(1.1);
                     transition: 0.3s;
                 }
             }
 
             .account__button {
+                margin-top: 24px;
+
                 &:before {
                     position: absolute;
                     bottom: 0;
@@ -389,11 +418,10 @@
 
     }
 
+    @media (max-width:768px) {
 
+        padding-top: 16px;
 
-
-
-    @media  (max-width:768px) {
         .menu {
             display: none;
         }
@@ -401,25 +429,28 @@
         .burger {
             display: flex;
             width: 100px;
-            justify-content: space-between;
+            align-items: center;
         }
     }
-    @media (max-width: 460px){
 
-        padding-top: 20px;
-        .logo{
-            font-size:25px;
+    @media (max-width: 460px) {
+
+
+        .logo {
             position: relative;
             z-index: 11;
         }
-        .burger{
-        .popup{
-           top: 0;
-            width: calc(100vw - 30px);
-            height: 100vh;
-            .search__form{
-                top:10px;
+
+        .burger {
+            .popup {
+                top: 0;
+                width: 100vw;
+                height: 100vh;
+
+                .search__form {
+                    top: 10px;
+                }
             }
-        }}
+        }
     }
 }
