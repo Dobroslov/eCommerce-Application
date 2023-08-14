@@ -1,11 +1,11 @@
 import React from 'react';
 
-import styles from './Main.module.scss';
+import styles from './main.module.scss';
 import MainPage from '../../pages/mainPage/mainPage';
 
 function Main() {
 	return (
-		<main>
+		<main className={styles.main__page}>
 			<div className={styles.container}>
 				<MainPage />
 			</div>
