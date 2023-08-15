@@ -56,10 +56,6 @@
 	flex-direction: column;
 	margin-top: 64px;
 	@include respons-property(margin-top, 21, 64);
-	// @media (max-width: 1248px) {
-	// 	.catalog {
-	// 		margin-top: calc(20px + (64 - 20) * ((100vh - 320px) / (1248 - 320)));
-	// 	}
 
 	&__title {
 		display: flex;
