@@ -5,7 +5,7 @@ import MainPage from '../../pages/mainPage/mainPage';
 
 function Main() {
 	return (
-		<main>
+		<main className={styles.main__page}>
 			<div className={styles.container}>
 				<MainPage />
 			</div>
