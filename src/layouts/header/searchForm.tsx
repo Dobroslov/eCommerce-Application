@@ -3,7 +3,7 @@ import header from './header.module.scss';
 
 interface Props {
     className:string,
-	onMouseLeave?: () => void;
+	onClick?: () => void;
 }
 function SearchForm({ ...props }:Props): React.JSX.Element {
 	return (
