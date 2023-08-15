@@ -1,6 +1,16 @@
+@import '../../styles/global';
+
 .main_products__list {
 	display: flex;
-	gap: 50px;
+	gap: 45px;
 	flex-wrap: wrap;
+	justify-content: space-between;
 	margin: 39px 0 330px 0;
+	@media (min-width: 300px) and (max-width: 1248px) {
+		@include respons-property(gap, 14, 20);
+	}
+
+	@media (max-width: 1067px) {
+		justify-content: space-evenly;
+	}
 }

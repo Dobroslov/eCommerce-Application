@@ -32,24 +32,26 @@ main {
 
 // Text style
 .title_h1 {
-	font-size: 3.3rem;
+	font-size: 33px;
+	@include adaptive-font-size($heading4, $heading1);
 }
 
 .title_h2 {
 	font-weight: 400;
-	font-size: 2.6rem;
+	font-size: 26px;
+	@include adaptive-font-size($heading5, $heading2);
 }
 
 .title_h3 {
 	font-weight: 400;
-	font-size: 2rem;
-	line-height: 1.34;
+	font-size: 20px;
+	@include adaptive-font-size($text-lage, $heading3);
 }
 
 .title_h4 {
 	font-weight: 500;
-	font-size: 2rem;
-	line-height: 1.3;
+	font-size: 20px;
+	@include adaptive-font-size($text-small, $heading4);
 }
 
 .title_h5 {
@@ -58,20 +60,10 @@ main {
 	line-height: 1;
 }
 
-.text_lage {
-	font-weight: 700;
-	font-size: 1.6rem;
-}
-
-.text_medium {
-	font-weight: 400;
-	font-size: 1.4rem;
-}
-
-.text_small {
-	font-weight: 400;
-	font-size: 1.2rem;
-	line-height: 1.66;
+@media (min-width: 320px) and (max-width: 1248px) {
+	main {
+		margin-top: calc(20px + (60 - 20) * ((100vh - 320px) / (1248 - 320)));
+	}
 }
 
 // @media (min-width: 320px) and (max-width: 1248px) {
