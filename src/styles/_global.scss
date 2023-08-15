@@ -77,3 +77,11 @@ main {
 // @media (min-width: 320px) and (max-width: 1248px) {
 //   font-size: calc(12px + (20 - 12) * ( (100vw - 320px) / ( 1248 - 320) ));
 // }
+
+.active {
+	color: red;
+}
+
+.nav__link_active {
+	color: blueviolet
+}
