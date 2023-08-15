@@ -60,6 +60,12 @@ main {
 	line-height: 1;
 }
 
+@media (min-width: 320px) and (max-width: 1248px) {
+	main {
+		margin-top: calc(20px + (60 - 20) * ((100vh - 320px) / (1248 - 320)));
+	}
+}
+
 // .text_lage {
 // 	font-weight: 700;
 // 	font-size: 1.6rem;

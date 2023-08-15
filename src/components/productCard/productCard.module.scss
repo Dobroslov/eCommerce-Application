@@ -1,6 +1,7 @@
 @import '../../styles/global';
 
 .product_card {
+	box-sizing: border-box;
 	width: 380px;
 	height: auto;
 	background-color: transparent;
@@ -8,9 +9,12 @@
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0);
 	transition: box-shadow 0.3s ease-in-out;
 
+	@media (min-width: 300px) and (max-width: 1248px) {
+		@include respons-property(width, 136, 380);
+	}
+
 	&:hover {
-		box-shadow: 11px 11px 19px -5px rgba(0,0,0,0.2);
-		border: 1px solid $dark-gray-light;
+		box-shadow: 11px 11px 19px -5px rgba(0, 0, 0, 0.2);
 		.product_card__link {
 			background-color: $light-gray;
 			visibility: visible;
@@ -23,6 +27,10 @@
 		height: 380px;
 		position: relative;
 		overflow: hidden;
+
+		@media (min-width: 300px) and (max-width: 1248px) {
+			@include respons-property(height, 136, 473);
+		}
 	}
 
 	&__link {
@@ -55,15 +63,12 @@
 	}
 
 	&__img {
-		width: 100%; // Ширина 100% для адаптивности
-		height: auto; // Высота автоматически рассчитывается
+		width: 100%;
+		height: auto;
 		position: absolute;
-		top: 50%; // Позиционируем верхний край картинки на середину контейнера
-		left: 50%; // Позиционируем левый край картинки на середину контейнера
-		transform: translate(
-			-50%,
-			-50%
-		); // Центрируем картинку относительно своего центра
-		transition: transform 0.3s ease-in-out; // Добавляем плавное изменение при уменьшении разрешения
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		transition: transform 0.3s ease-in-out;
 	}
 }

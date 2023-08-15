@@ -18,6 +18,13 @@
 		#{$start}px + (#{$end} - #{$start}) * ((100vw - 320px) / (1248 - 320))
 	);
 }
+
+@mixin respons-property($css-property, $start, $end) {
+	#{$css-property}: calc(
+		#{$start}px + (#{$end} - #{$start}) * ((100vw - 320px) / (1248 - 320))
+	);
+}
+
 // $start - начальный (минимальный) размер шрифта
 // $end - конечный (максимальный) размер шрифта
 
