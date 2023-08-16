@@ -1,0 +1,58 @@
+@import '/src/styles/global';
+
+
+.container {
+    height: calc(100vh - 200px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .content {
+        width:50%;
+        text-align: center;
+        .title {
+            @media (min-width: 320px) and (max-width: 1248px) {
+                @include respons-property(font-size, 20, 33);
+                @include respons-property(line-height, 20, 43);
+            }
+            font-weight: 500;
+            color:$black;
+            
+        }
+        .text{
+            @media (min-width: 320px) and (max-width: 1248px) {
+                @include respons-property(font-size, 12, 20);
+                @include respons-property(line-height, 12, 26);
+                @include respons-property(margin-top, 10, 30);
+                @include respons-property(margin-bottom, 30, 64);
+            }
+            color:#707070;
+        }
+        .button{
+            @media (min-width: 320px) and (max-width: 1248px) {
+                @include respons-property(font-size, 12, 16);
+                @include respons-property(height, 32, 53);
+                @include respons-property(width, 115, 187);
+            }
+            font-weight: 700;
+            background-color: transparent;
+            border: 1px solid $black;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: 0.3s;
+            &:hover{
+                color:$white;
+                background-color: $black;
+                transition: 0.3s;
+            }
+        }
+        
+
+    }
+    @media (max-width:768px) {
+        height: calc(100vh - 180px);
+    }
+    @media (max-width:460px) {
+        height: calc(100vh - 112px);
+    }
+}
