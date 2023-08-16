@@ -8,7 +8,7 @@ interface ISubmitButton {
 function SubmitButton(props: ISubmitButton): React.JSX.Element {
 	const { value } = props;
 	return (
-		<button className={s.button} type='button'>
+		<button className={s.button} type='submit'>
 			{value}
 		</button>
 	);

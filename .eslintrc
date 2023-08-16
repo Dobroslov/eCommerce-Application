@@ -56,20 +56,18 @@
         "react/prop-types": 0,
         "react/require-default-props": "off",
         "react/jsx-props-no-spreading": "off",
-      "jsx-a11y/label-has-associated-control": ["error", {
-        "required": {
-          "some": ["nesting", "id"]
-        }
-      }],
-      "jsx-a11y/label-has-for": ["error", {
-        "required": {
-          "some": ["nesting", "id"]
-        }
-      }],
+        "jsx-a11y/label-has-associated-control": "off",
+        "jsx-a11y/label-has-for": "off",
         "react/jsx-indent": [2, "tab"],
         "react/jsx-indent-props": [2, "tab"],
         "jsx-quotes": [2, "prefer-single"],
         "react/jsx-no-bind": "off",
-        "comma-dangle": [2, "always-multiline"]   
+        "comma-dangle": [2, "always-multiline"],
+        "object-curly-newline": ["error", {
+          "ObjectExpression": "always",
+          "ObjectPattern": { "multiline": true },
+          "ImportDeclaration": "never",
+          "ExportDeclaration": { "multiline": true, "minProperties": 3 }
+      }]   
     }
 }
