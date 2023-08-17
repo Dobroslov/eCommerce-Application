@@ -5,11 +5,11 @@ const useOnClickOutside = (
 	closeMenu: () => void,
 ) => {
 	useEffect(() => {
-		const close = (event: MouseEvent):void => {
+		const close = (event: MouseEvent): void => {
 			if (
-				ref.current
-        && event.target
-        && ref.current.contains(event.target as Node)
+				ref.current &&
+				event.target &&
+				ref.current.contains(event.target as Node)
 			) {
 				return;
 			}

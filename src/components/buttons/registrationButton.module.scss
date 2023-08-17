@@ -21,3 +21,13 @@
       font-weight: 400;
   }
 }
+
+.button:hover {
+  opacity: 0.8;
+  transition: opacity 0.3s ease 0s;
+}
+
+.button:active {
+  opacity: 1;
+  transition: opacity 0.3s ease 0s;
+}

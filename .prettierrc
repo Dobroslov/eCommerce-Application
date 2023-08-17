@@ -6,5 +6,6 @@
 	"semi": true,
 	"trailingComma": "all",
 	"useTabs": true,
-	"bracketSpacing": true
+	"bracketSpacing": true,
+	"printWidth": 130
 }
