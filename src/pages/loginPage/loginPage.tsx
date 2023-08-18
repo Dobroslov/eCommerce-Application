@@ -19,10 +19,10 @@ function LoginPage(): React.ReactElement {
 	const handleFirstNameChange = (value: string, id: string) => {
 		console.log(loginData);
 		switch (id) {
-			case 'email':
+			case 'emailLogin':
 				loginData.email = value;
 				break;
-			case 'password':
+			case 'passwordLogin':
 				loginData.password = value;
 				break;
 			default:
@@ -38,17 +38,33 @@ function LoginPage(): React.ReactElement {
 						<RegistrationSwitchButton value='Sign in' />
 						<RegistrationSwitchButton value='Register' />
 					</div>
-					<div className={s.inputs}>
-						<RegistrationInput placeholder='Email' type='email' onValueChange={handleFirstNameChange} id='email' />
-						<RegistrationInput onValueChange={handleFirstNameChange} placeholder='Password' type='password' id='password' />
-						<div className={s.remember}>
-							<input type='checkbox' id='checkbox-2' className={s.formCheckBox} />
-							<label htmlFor='checkbox-2' className={s.checkboxLabel}>
-								Remember me
-							</label>
+					<form className={s.form} action=''>
+						<div className={s.inputs}>
+							<RegistrationInput
+								placeholder='Email'
+								type='email'
+								onValueChange={handleFirstNameChange}
+								id='emailLogin'
+								errorMessage='It should be a valid email address!'
+								pattern='^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+							/>
+							<RegistrationInput
+								onValueChange={handleFirstNameChange}
+								placeholder='Password'
+								type='password'
+								id='passwordLogin'
+								errorMessage='It should be a valid email password!'
+								pattern='^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,20}$'
+							/>
+							<div className={s.remember}>
+								<input type='checkbox' id='checkbox-2' className={s.formCheckBox} />
+								<label htmlFor='checkbox-2' className={s.checkboxLabel}>
+									Remember me
+								</label>
+							</div>
+							<LoginButton onSubmit={loginData} value='Sign in' />
 						</div>
-						<LoginButton onSubmit={loginData} value='Sign in' />
-					</div>
+					</form>
 				</div>
 			</div>
 		</div>
