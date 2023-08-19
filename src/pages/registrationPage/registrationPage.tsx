@@ -71,7 +71,7 @@ function RegistrationPage(): React.ReactElement {
 	};
 
 	return (
-		<div>
+		<div className={s.registration}>
 			<div className={`${s.container} container`}>
 				<div className={s.body}>
 					<h1 className={s.title}>Registration</h1>
@@ -103,7 +103,7 @@ function RegistrationPage(): React.ReactElement {
 								onValueChange={handleInputChange}
 								id='email'
 								errorMessage='It should be a valid email address!'
-								pattern='^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+								pattern="^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
 							/>
 							<RegistrationInput
 								placeholder='Date of birth'
@@ -185,8 +185,8 @@ function RegistrationPage(): React.ReactElement {
 								pattern={password}
 							/>
 							<div className={s.remember}>
-								<input type='checkbox' id='checkbox-2' className={s.formCheckBox} />
-								<label htmlFor='checkbox-2' className={s.checkboxLabel}>
+								<input type='checkbox' id='checkbox-1' className={s.formCheckBox} />
+								<label htmlFor='checkbox-1' className={s.checkboxLabel}>
 									Remember me
 								</label>
 							</div>

@@ -30,7 +30,7 @@ function LoginPage(): React.ReactElement {
 	};
 
 	return (
-		<div>
+		<div className={s.login}>
 			<div className={`${s.container} container`}>
 				<div className={s.body}>
 					<h1 className={s.title}>My account</h1>
@@ -46,7 +46,7 @@ function LoginPage(): React.ReactElement {
 								onValueChange={handleFirstNameChange}
 								id='emailLogin'
 								errorMessage='It should be a valid email address!'
-								pattern='^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+								pattern="/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/"
 							/>
 							<RegistrationInput
 								onValueChange={handleFirstNameChange}

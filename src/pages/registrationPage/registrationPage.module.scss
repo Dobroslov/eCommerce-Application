@@ -1,6 +1,20 @@
+
+.registration {
+  padding-top: 128px;
+
+  @media (min-width: 320px) and (max-width: 1248px) {
+    padding-top: calc(24px + (128 - 24) * ( (100vw - 320px) / ( 1248 - 320) ));
+}
+}
+
 .container {
   display: flex;
   justify-content: center;
+  padding-top: 128px;
+
+  @media (min-width: 320px) and (max-width: 1248px) {
+    padding-top: calc(24px + (128 - 24) * ( (100vw - 320px) / ( 1248 - 320) ));
+}
 }
 
 .body {
