@@ -27,14 +27,6 @@ export interface IAddress {
 	country: string;
 }
 
-// export interface IUserLogin {
-// 	email: string;
-// 	password: string;
-// }
-
-// export interface IRegistrationForm {
-// 	login: string;
-// 	password: string;
-// 	userName: string;
-// 	userPhone: string;
-// }
+export interface ISubmitButton {
+	value: string;
+}

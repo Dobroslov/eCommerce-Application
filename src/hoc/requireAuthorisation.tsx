@@ -8,7 +8,14 @@ export default function RequireAuthorisation({ children }: { children: JSX.Eleme
 
 	if (!user) {
 		// проверка есть авторизация или нет
-		return <Navigate to='/login' state={{ from: location }} />;
+		return (
+			<Navigate
+				to='/login'
+				state={{
+					from: location,
+				}}
+			/>
+		);
 		// если авторизации нет, то перенаправляем на страницу логирования(авторизации),
 		// а state={{ from: location }} - нужен для того,
 		// чтоб мы вернулись обратно после того как логирование произойдёт

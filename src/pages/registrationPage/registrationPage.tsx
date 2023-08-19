@@ -3,27 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import style from './registrationPage.module.scss';
 import RegistrationSwitchButton from '../../components/buttons/registrationSwitchButton';
 import RegistrationInput from '../../components/inputs/registrationInput';
-import RegistrationButton from '../../components/buttons/registrationButton';
 import { createCustomer, getAnonimousToken } from '../../services/apiServices';
 import { IRegistrationForm } from '../../utils/types';
-
-// const registrationData: IRegistrationForm = {
-// 	firstName: '',
-// 	lastName: '',
-// 	email: '',
-// 	dateOfBirth: '',
-// 	addresses: [
-// 		{
-// 			city: '',
-// 			streetName: '',
-// 			streetNumber: '',
-// 			postalCode: '',
-// 			country: '',
-// 		},
-// 	],
-// 	password: '',
-// };
-// console.log(typeof registrationData);
+import SubmitButton from '../../components/buttons/submitButton';
 
 function RegistrationPage(): React.ReactElement {
 	// Проверка наличия токена в localStorage и получение анонимного токена при необходимости
@@ -107,6 +89,7 @@ function RegistrationPage(): React.ReactElement {
 				break;
 		}
 
+		console.log(updatedData);
 		// Обновляем состояние с обновленными данными
 		setRegistrationFormData(updatedData);
 	};
@@ -231,7 +214,7 @@ function RegistrationPage(): React.ReactElement {
 									Remember me
 								</label>
 							</div>
-							<RegistrationButton value='Register' />
+							<SubmitButton value='Register' />
 						</div>
 					</form>
 				</div>

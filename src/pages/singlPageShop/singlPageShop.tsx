@@ -15,7 +15,9 @@ export default function ShopSinglPageProduct(): React.ReactElement {
 	const [product, setProduct] = useState<IProductRespons | null>(null);
 
 	const goBack = () => navigate(-1);
-	const goHome = () => navigate('/', { replace: true });
+	const goHome = () => navigate('/', {
+		replace: true,
+	});
 	// const goForward = () => navigate(1); // вперёд по истории
 
 	useEffect(() => {

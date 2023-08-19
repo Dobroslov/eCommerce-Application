@@ -4,9 +4,9 @@ import style from './loginPage.module.scss';
 import useAuth from '../../hooks/useAuth';
 import RegistrationSwitchButton from '../../components/buttons/registrationSwitchButton';
 import RegistrationInput from '../../components/inputs/registrationInput';
-import LoginButton from '../../components/buttons/loginButton';
 import { getAnonimousToken } from '../../services/apiServices';
 import { IUserLogin } from '../../utils/types';
+import SubmitButton from '../../components/buttons/submitButton';
 
 // export default function LoginPage(): JSX.Element {
 // 	const navigate = useNavigate();
@@ -156,7 +156,7 @@ function LoginPage(): React.ReactElement {
 									Remember me
 								</label>
 							</div>
-							<LoginButton onSubmit={loginData} value='Sign in' />
+							<SubmitButton value='Sign in' />
 						</div>
 					</form>
 				</div>
