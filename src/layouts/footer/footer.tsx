@@ -12,16 +12,16 @@ function Footer(): React.JSX.Element {
 
 		<footer className={footer.footer}>
 			<div className={footer.container}>
-				<a href='https://rs.school/js/' className={footer.rss}><ReactSVG src={rsschool} className={footer.social__link} /></a>
+				<a href='https://rs.school/js/' aria-label='Visit rs.school' className={footer.rss}><ReactSVG src={rsschool} className={footer.social__link} /></a>
 				<p>© 2023 RSSchool. Created by Ctrl-C Ctrl-V gang.</p>
 				<div className={footer.social}>
 					<a href='https://www.linkedin.com/'>
 						{' '}
 						<ReactSVG src={linkedin} className={footer.social__link} />
 					</a>
-					<a href='https://www.facebook.com/'><ReactSVG src={facebook} className={footer.social__link} /></a>
-					<a href='https://www.instagram.com/'><ReactSVG src={instagram} className={footer.social__link} /></a>
-					<a href='https://twitter.com/'><ReactSVG src={twitter} className={footer.social__link} /></a>
+					<a href='https://www.facebook.com/' aria-label='Visit Facebook'><ReactSVG src={facebook} className={footer.social__link} /></a>
+					<a href='https://www.instagram.com/' aria-label='Visit instagram'><ReactSVG src={instagram} className={footer.social__link} /></a>
+					<a href='https://twitter.com/' aria-label='Visit twitter'><ReactSVG src={twitter} className={footer.social__link} /></a>
 
 				</div>
 			</div>
