@@ -13,19 +13,18 @@ function Navigation(): React.JSX.Element {
 			<li><a href='#top' className={header.nav__link}>Out Story</a></li> */}
 			<li>
 				<NavLink to='/'>Main page</NavLink>
-
 			</li>
 			<li>
-				<NavLink to='/login'>Registration page</NavLink>
-
+				<NavLink to='/registration'>Registration page</NavLink>
 			</li>
 			<li>
-				<NavLink to='/registration'>Login page</NavLink>
-
+				<NavLink to='/login'>Login page</NavLink>
 			</li>
 			<li>
 				<NavLink to='/shop'>Shop</NavLink>
-
+			</li>
+			<li>
+				<NavLink to='/account_page'>Account page</NavLink>
 			</li>
 			<li>
 				<NavLink to='*'>Not found</NavLink>

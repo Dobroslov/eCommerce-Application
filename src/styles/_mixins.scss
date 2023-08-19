@@ -7,12 +7,6 @@
 
 // Миксин для респонсив рамера шрифта
 
-@mixin adaptive-value($start, $end) {
-  @media (min-width: 320px) and (max-width: 1248px) {
-    font-size: calc(#{$start} + (#{$end} - #{$start}) * ((100vw - 320px) / (1248 - 320)));
-  }
-}
-
 @mixin adaptive-font-size($start, $end) {
 	font-size: calc(
 		#{$start}px + (#{$end} - #{$start}) * ((100vw - 320px) / (1248 - 320))
