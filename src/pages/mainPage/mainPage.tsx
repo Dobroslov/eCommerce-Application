@@ -1,7 +1,7 @@
 import React from 'react';
 import ProductCardsList from '../../components/productCardsList/productCardsList';
 import { IProductCard } from '../../utils/types';
-import MAIN_IMAGE from '../../../public/assets/images/main-girl-with-earings.jpg';
+// import MAIN_IMAGE from '../../../public/assets/images/main-girl-with-earings.jpg';
 
 import styles from './mainPage.module.scss';
 
@@ -16,6 +16,9 @@ function MainPage(): React.ReactElement {
 		{
 			id: 3, title: 'Card 3', image: 'gold_ring_2.jpg', price: 40, altImage: 'gold ring',
 		},
+		{
+			id: 4, title: 'Card 5', image: 'gold_ring_2.jpg', price: 40, altImage: 'gold ring',
+		},
 	];
 
 	function handleProductClick(id: number): void {
@@ -25,9 +28,9 @@ function MainPage(): React.ReactElement {
 	return (
 		<>
 			<div className={styles.main__img_container}>
-				<img className={styles.main__img} src={MAIN_IMAGE} alt='girl' />
+				{/* <img className={styles.main__img} src={MAIN_IMAGE} alt='girl' /> */}
 				<div className={styles.main__product_card_info}>
-					<h2 className={`${styles.title_h1} ${styles.main__title_light}`}>Gold bih hoops</h2>
+					<h2 className={`${styles.title_h1} ${styles.main__title_light}`}>Gold big hoops</h2>
 					<h3 className={`${styles.title_h2} ${styles.main__title_light}`}>$ 63.00</h3>
 				</div>
 			</div>

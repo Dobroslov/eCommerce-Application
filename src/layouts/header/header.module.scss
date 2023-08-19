@@ -434,8 +434,10 @@
     }
 
     @media (max-width: 460px) {
-
-
+position: fixed;
+z-index: 12;
+width:calc(100% - 32px);
+background: #FFFFFF;
         .logo {
             position: relative;
             z-index: 11;
