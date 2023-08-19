@@ -105,7 +105,9 @@ module.exports = {
 					options: {
 						presets: [
 							'@babel/preset-react',
-							['@babel/preset-env', { targets: 'defaults' }],
+							['@babel/preset-env', {
+								targets: 'defaults',
+							}],
 						],
 					},
 				},

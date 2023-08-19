@@ -1,0 +1,36 @@
+.button {
+  border: none;
+  outline: none;
+  background-color: #000;
+  color: #fff;
+  font-size: 16px;
+  letter-spacing: 2px;
+  font-weight: 500;
+  text-transform: uppercase;
+  padding: 16px 0;
+  border-radius: 4px;
+  cursor: pointer;
+
+  @media (min-width: 320px) and (max-width: 1248px) {
+    padding-top: calc(6px + (16 - 6) * ( (100vw - 320px) / ( 1248 - 320) ));
+    padding-bottom: calc(6px + (16 - 6) * ( (100vw - 320px) / ( 1248 - 320) ));
+    font-size: calc(12px + (16 - 12) * ( (100vw - 320px) / ( 1248 - 320) ));
+  }
+
+  @media (max-width: em(768)){
+      font-weight: 400;
+  }
+}
+
+@media (any-hover: hover){
+  .button:hover {
+    opacity: 0.8;
+    transition: opacity 0.3s ease 0s;
+  }
+}
+
+
+.button:active {
+  opacity: 1;
+  transition: opacity 0.3s ease 0s;
+}

@@ -1,0 +1,58 @@
+.inputBody {
+  position: relative;
+}
+
+.input {
+  width: 100%;
+  font-size: 16px;
+  border: none;
+  outline: none;
+  padding: 12px 0;
+
+  @media (min-width: 320px) and (max-width: 1248px) {
+    font-size: calc(12px + (16 - 12) * ( (100vw - 320px) / ( 1248 - 320) ));
+    padding-top: calc(6px + (12 - 6) * ( (100vw - 320px) / ( 1248 - 320) ));
+    padding-bottom: calc(6px + (12 - 6) * ( (100vw - 320px) / ( 1248 - 320) ));
+  }
+}
+
+.underline {
+  position: absolute;
+  height: 1px;
+  width: 100%;
+  left: 0;
+  bottom: 0;
+  background-color: #D8D8D8;
+}
+
+.error {
+  position: relative;
+  display: none;
+  font-size: 14px;
+  color: red;
+  @media (min-width: 320px) and (max-width: 1248px) {
+    font-size: calc(10px + (14 - 10) * ( (100vw - 320px) / ( 1248 - 320) ));
+  }
+}
+
+.error::before {
+  content: '❌';
+  position: absolute;
+  top: 7.5px;
+  left: -20px;
+  font-size: 12px;
+  @media (min-width: 320px) and (max-width: 1248px) {
+    font-size: calc(8px + (12 - 8) * ( (100vw - 320px) / ( 1248 - 320) ));
+    left: calc(-12px + (0 - 8) * ( (100vw - 320px) / ( 1248 - 320) ));
+    top: calc(6px + (7.5 - 6) * ( (100vw - 320px) / ( 1248 - 320) ));
+  }
+}
+
+.input:invalid[data-focused="true"] ~ .error {
+  display: block;
+  padding: 5px 0;
+}
+
+.input:invalid[data-focused="true"] ~ .underline {
+  background-color: red;
+}

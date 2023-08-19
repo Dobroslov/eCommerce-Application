@@ -10,18 +10,18 @@ export default function PrivateAccountPage() {
 
 	const handleLogout = () => {
 		if (auth.user) {
-			auth.signOut(() => navigate('/', { replace: true }));
+			auth.signOut(() => navigate('/', {
+				replace: true,
+			}));
 		}
 	};
 
 	return (
 		<div>
 			<h1>This accoutn page</h1>
-			{/* <p>
-				Welcome,
-				{' '}
-				{auth.user?.username}
-			</p> */}
+			<p>
+				{`Welcome, ${auth.user?.email}`}
+			</p>
 			<button type='button' onClick={handleLogout}>Log out</button>
 		</div>
 	);

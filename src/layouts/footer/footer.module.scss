@@ -1,0 +1,99 @@
+@import '/src/styles/global';
+
+.footer {
+    .container {
+        padding-top: 30px;
+        padding-bottom: 40px;
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        &::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 16px;
+            height: 1px;
+            width: calc(100% - 32px);
+            background: #D8D8D8;
+        }
+
+        .rss {
+            svg{
+                width: 80px;
+                height: 40px;
+            }
+            
+        }
+
+        .social__link {
+            svg {
+                fill: #707070;
+                transition: 0.3s;
+
+                &:hover {
+                    fill: #000000;
+                    transform: scale(1.1);
+                    transition: 0.3s;
+                }
+
+            }
+        }
+
+        p {
+            font-family: DM Sans;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 27px;
+            color: #707070;
+            font-size: 16px;
+        }
+
+        .social {
+            width: 160px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        @media (max-width:768px) {
+            padding-top: 16px;
+            padding-bottom: 19px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-areas: "rss social"
+                "year year";
+
+            .rss {
+                grid-area: rss;
+            }
+
+            p {
+                grid-area: year;
+                margin: 10px auto;
+            }
+
+            .social {
+                grid-area: social;
+                justify-self: end;
+                width: 120px;
+            }
+        }
+
+        @media (max-width: 460px) {
+            .rss{
+                width: 50px;
+                height: 30px;
+            }
+            .social__link,
+            p{
+                position: relative;
+                z-index: 11;
+            }
+            p{
+                font-size: 11px;
+            }
+        }
+    }
+
+}

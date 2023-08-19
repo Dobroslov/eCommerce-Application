@@ -65,7 +65,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 		//  пользователем можно было сделать переадресацию
 	};
 
-	const contextValue = useMemo(() => ({ user, signIn, signOut }), [user, signIn, signOut]);
+	const contextValue = useMemo(() => ({
+		user, signIn, signOut,
+	}), [user, signIn, signOut]);
 
 	return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;
 }

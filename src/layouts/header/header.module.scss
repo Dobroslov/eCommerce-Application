@@ -28,11 +28,11 @@
 }
 
 .container {
-	padding-top: 48px;
-	padding-bottom: 17px;
-	display: flex;
-	justify-content: space-between;
-	position: relative;
+    padding-top: 48px;
+    padding-bottom: 17px;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
 
 	&::after {
 		content: '';
@@ -416,11 +416,13 @@
 		}
 	}
 
-	@media (max-width: 460px) {
-		.logo {
-			position: relative;
-			z-index: 11;
-		}
+    @media (max-width: 460px) {
+
+
+        .logo {
+            position: relative;
+            z-index: 11;
+        }
 
 		.burger {
 			.popup {
