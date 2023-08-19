@@ -1,0 +1,202 @@
+import React, { useEffect, useState } from 'react';
+import s from './registrationPage.module.scss';
+import RegistrationSwitchButton from '../../components/buttons/registrationSwitchButton';
+import RegistrationInput from '../../components/inputs/registrationInput';
+import RegistrationButton from '../../components/buttons/registrationButton';
+import { createCustomer, getAnonimousToken } from '../../services/apiServices';
+import { IRegistration } from '../../utils/types';
+
+const registrationData: IRegistration = {
+	firstName: '',
+	lastName: '',
+	email: '',
+	dateOfBirth: '',
+	addresses: [
+		{
+			city: '',
+			streetName: '',
+			streetNumber: '',
+			postalCode: '',
+			country: '',
+		},
+	],
+	password: '',
+};
+console.log(typeof registrationData);
+
+function RegistrationPage(): React.ReactElement {
+	if (!localStorage.getItem('token')) {
+		getAnonimousToken();
+	}
+	const [selectedCountry, setSelectedCountry] = useState('RU');
+	const [password, setPassword] = useState('');
+
+	useEffect(() => {
+		registrationData.addresses[0].country = selectedCountry;
+	}, [selectedCountry]);
+
+	const handleInputChange = (value: string, id: string) => {
+		console.log(registrationData);
+		switch (id) {
+			case 'firstName':
+				registrationData.firstName = value;
+				break;
+			case 'lastName':
+				registrationData.lastName = value;
+				break;
+			case 'email':
+				registrationData.email = value;
+				break;
+			case 'date':
+				registrationData.dateOfBirth = value;
+				break;
+			case 'password':
+				registrationData.password = value;
+				setPassword(registrationData.password);
+				break;
+			case 'city':
+				registrationData.addresses[0].city = value;
+				break;
+			case 'streetName':
+				registrationData.addresses[0].streetName = value;
+				break;
+			case 'streetNumber':
+				registrationData.addresses[0].streetNumber = value;
+				break;
+			case 'postalCode':
+				registrationData.addresses[0].postalCode = value;
+				break;
+			default:
+		}
+	};
+
+	return (
+		<div className={s.registration}>
+			<div className={`${s.container} container`}>
+				<div className={s.body}>
+					<h1 className={s.title}>Registration</h1>
+					<div className={s.buttons}>
+						<RegistrationSwitchButton value='Sign in' />
+						<RegistrationSwitchButton value='Register' />
+					</div>
+					<form className={s.form} onSubmit={() => createCustomer(registrationData)}>
+						<div className={s.inputs}>
+							<RegistrationInput
+								placeholder='First name'
+								type='text'
+								onValueChange={handleInputChange}
+								id='firstName'
+								errorMessage="First name should be 3-16 characters and shoudn'nt include any special character"
+								pattern='^[A-Za-zА-Яа-я]{3,16}$'
+							/>
+							<RegistrationInput
+								placeholder='Last Name'
+								type='text'
+								onValueChange={handleInputChange}
+								id='lastName'
+								errorMessage="Last Name should be 3-16 characters and shoudn'nt include any special character"
+								pattern='^[A-Za-zА-Яа-я]{3,16}$'
+							/>
+							<RegistrationInput
+								placeholder='Email'
+								type='email'
+								onValueChange={handleInputChange}
+								id='email'
+								errorMessage='It should be a valid email address!'
+								pattern="^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
+							/>
+							<RegistrationInput
+								placeholder='Date of birth'
+								type='date'
+								onValueChange={handleInputChange}
+								id='date'
+								errorMessage='It should be a valid date!'
+								pattern='^\s*{10}$'
+							/>
+							<select
+								className={s.select}
+								value={selectedCountry}
+								onChange={(e) => setSelectedCountry(e.target.value)}
+								name='country'
+								id='country'
+							>
+								<option value='RU'>Russia</option>
+								<option value='BY'>Belarus</option>
+								<option value='UA'>Ukraine</option>
+								<option value='PL'>Poland</option>
+								<option value='CN'>China</option>
+								<option value='AM'>Armenia</option>
+								<option value='GE'>Georgia</option>
+								<option value='RO'>Romania</option>
+								<option value='NL'>Netherlands</option>
+								<option value='KZ'>Kazakhstan</option>
+								<option value='KG'>Kyrgyzstan</option>
+								<option value='DE'>Germany</option>
+								<option value='GR'>Greece</option>
+								<option value='EU'>Other</option>
+							</select>
+							<i className={s.underline} />
+							<RegistrationInput
+								placeholder='City'
+								type='text'
+								onValueChange={handleInputChange}
+								id='city'
+								errorMessage="City should be 3-16 characters and shoudn'nt include any special character"
+								pattern='^[A-Za-zА-Яа-я]{3,16}$'
+							/>
+							<RegistrationInput
+								placeholder='Street name'
+								type='text'
+								onValueChange={handleInputChange}
+								id='streetName'
+								errorMessage="Street name should be 3-16 characters and shoudn'nt include any special character"
+								pattern='^[A-Za-zА-Яа-я]{3,16}$'
+							/>
+							<RegistrationInput
+								placeholder='Street number'
+								type='number'
+								onValueChange={handleInputChange}
+								id='streetNumber'
+								errorMessage='Street number should contains only numbers'
+								pattern='^[0-9]$'
+							/>
+							<RegistrationInput
+								placeholder='Postal code'
+								type='number'
+								onValueChange={handleInputChange}
+								id='postalCode'
+								errorMessage='Street number should contains only numbers'
+								pattern='^[0-9]$'
+							/>
+							<RegistrationInput
+								onValueChange={handleInputChange}
+								placeholder='Password'
+								type='password'
+								id='password'
+								errorMessage='Password should be 6-20 characters and include at least 1 letter, 1 number and 1 special character'
+								pattern='^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,20}$'
+							/>
+							<RegistrationInput
+								onValueChange={handleInputChange}
+								placeholder='Copy your password'
+								type='password'
+								id='copy_password'
+								errorMessage="Passwords don't match!"
+								pattern={password}
+							/>
+							<div className={s.remember}>
+								<input type='checkbox' id='checkbox-1' className={s.formCheckBox} />
+								<label htmlFor='checkbox-1' className={s.checkboxLabel}>
+									Remember me
+								</label>
+							</div>
+							<RegistrationButton value='Register' />
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	);
+}
+
+export default RegistrationPage;
