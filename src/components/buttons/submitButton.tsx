@@ -7,7 +7,7 @@ function SubmitButton(
 ): React.JSX.Element {
 	const { value } = props;
 	return (
-		<button className={style.button} type='button'>
+		<button className={style.button} type='submit'>
 			{value}
 		</button>
 	);

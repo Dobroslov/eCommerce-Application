@@ -3,16 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import style from './registrationPage.module.scss';
 import RegistrationSwitchButton from '../../components/buttons/registrationSwitchButton';
 import RegistrationInput from '../../components/inputs/registrationInput';
-import { createCustomer, getAnonimousToken } from '../../services/apiServices';
+import { createCustomer } from '../../services/apiServices';
 import { IRegistrationForm } from '../../utils/types';
 import SubmitButton from '../../components/buttons/submitButton';
 
 function RegistrationPage(): React.ReactElement {
-	// Проверка наличия токена в localStorage и получение анонимного токена при необходимости
-	if (!localStorage.getItem('token')) {
-		getAnonimousToken();
-	}
-
 	const navigate = useNavigate();
 
 	// Создаем состояние для хранения значений полей формы
@@ -89,7 +84,6 @@ function RegistrationPage(): React.ReactElement {
 				break;
 		}
 
-		console.log(updatedData);
 		// Обновляем состояние с обновленными данными
 		setRegistrationFormData(updatedData);
 	};

@@ -8,68 +8,6 @@ import { getAnonimousToken } from '../../services/apiServices';
 import { IUserLogin } from '../../utils/types';
 import SubmitButton from '../../components/buttons/submitButton';
 
-// export default function LoginPage(): JSX.Element {
-// 	const navigate = useNavigate();
-// 	const location = useLocation();
-// 	const { signIn } = useAuth();
-
-// 	const fromPage = location.state?.from?.pathname || '/';
-
-// 	const [loginData, setLoginData] = useState<IUserLogin>({
-// 		email: '',
-// 		password: '',
-// 	});
-
-// 	function handleSubmit(e: FormEvent<HTMLFormElement>): void {
-// 		e.preventDefault();
-
-// 		signIn(
-// 			{
-// 				email: loginData.email,
-// 				password: loginData.password,
-// 			},
-// 			() => navigate(fromPage, {
-// 				replace: true,
-// 			}),
-// 		);
-// 	}
-
-// 	const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
-// 		const { name, value } = e.target;
-
-// 		setLoginData((prevData) => ({
-// 			...prevData,
-// 			[name]: value,
-// 		}));
-// 	};
-
-// 	return (
-// 		<div>
-// 			<h1>Login page</h1>
-// 			<form onSubmit={handleSubmit}>
-// 				<input
-// 					type='email'
-// 					name='email'
-// 					value={loginData.email}
-// 					onChange={handleInputChange}
-// 				/>
-// 				<input
-// 					type='password'
-// 					name='password'
-// 					value={loginData.password}
-// 					onChange={handleInputChange}
-// 				/>
-// 				<button type='submit'>Login</button>
-// 			</form>
-// 		</div>
-// 	);
-// }
-
-// const loginData: IUserLogin = {
-// 	email: '',
-// 	password: '',
-// };
-
 function LoginPage(): React.ReactElement {
 	const location = useLocation();
 	const navigate = useNavigate();
@@ -111,7 +49,11 @@ function LoginPage(): React.ReactElement {
 			},
 			() => {
 				if (location.state?.from) {
-					// Если есть информация о предыдущей странице, перейдите туда
+					// Если есть информация о предыдущей странице,
+					// перейдите туда (это для страницы пользователя,
+					// если он попытается сразу на неё перейти,
+					// то его перекинет на страницу логирования,
+					// после логирования обратно на страницу пользователя)
 					navigate(location.state.from, {
 						replace: true,
 					});
