@@ -4,7 +4,6 @@ import style from './loginPage.module.scss';
 import useAuth from '../../hooks/useAuth';
 import RegistrationSwitchButton from '../../components/buttons/registrationSwitchButton';
 import RegistrationInput from '../../components/inputs/registrationInput';
-import { getAnonimousToken } from '../../services/apiServices';
 import { IUserLogin } from '../../utils/types';
 import SubmitButton from '../../components/buttons/submitButton';
 
@@ -17,10 +16,6 @@ function LoginPage(): React.ReactElement {
 		email: '',
 		password: '',
 	});
-
-	if (!localStorage.getItem('token')) {
-		getAnonimousToken();
-	}
 
 	const handleInputChange = (value: string, id: string) => {
 		// управляемый инпут
@@ -71,7 +66,7 @@ function LoginPage(): React.ReactElement {
 				<div className={style.body}>
 					<h1 className={style.title}>My account</h1>
 					<div className={style.buttons}>
-						<RegistrationSwitchButton value='Sign in' />
+						<RegistrationSwitchButton value='Sign in' active='active' />
 						<RegistrationSwitchButton value='Register' />
 					</div>
 					<form className={style.form} onSubmit={handleSubmit}>
@@ -82,7 +77,7 @@ function LoginPage(): React.ReactElement {
 								onValueChange={handleInputChange}
 								id='emailLogin'
 								errorMessage='It should be a valid email address!'
-								pattern="/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/"
+								pattern='^(?!\s)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
 							/>
 							<RegistrationInput
 								onValueChange={handleInputChange}
@@ -90,7 +85,7 @@ function LoginPage(): React.ReactElement {
 								type='password'
 								id='passwordLogin'
 								errorMessage='It should be a valid email password!'
-								pattern='^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,20}$'
+								pattern='^(?!\s)(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$'
 							/>
 							<div className={style.remember}>
 								<input type='checkbox' id='checkbox-2' className={style.formCheckBox} />

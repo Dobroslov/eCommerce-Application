@@ -1,8 +1,8 @@
 .login {
-  padding-top: 128px;
+  margin-top: 128px;
 
   @media (min-width: 320px) and (max-width: 1248px) {
-    padding-top: calc(24px + (128 - 24) * ( (100vw - 320px) / ( 1248 - 320) ));
+    margin-top: calc(24px + (128 - 24) * ( (100vw - 320px) / ( 1248 - 320) ));
 }
 }
 

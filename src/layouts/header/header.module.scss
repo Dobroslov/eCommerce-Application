@@ -28,11 +28,11 @@
 }
 
 .container {
-    padding-top: 48px;
-    padding-bottom: 17px;
-    display: flex;
-    justify-content: space-between;
-    position: relative;
+	padding-top: 48px;
+	padding-bottom: 17px;
+	display: flex;
+	justify-content: space-between;
+	position: relative;
 
 	&::after {
 		content: '';
@@ -80,32 +80,19 @@
 		align-items: center;
 
 		.navigation {
-			margin: 0;
-			width: 500px;
 			height: 20px;
 			font-size: 20px;
 			display: flex;
-			justify-content: left;
 			gap: 64px;
 			align-items: center;
 			border-right: 1px solid gray;
+			padding: 0 15px;
+			@media (min-width: 760px) and (max-width: 1248px) {
+				gap: calc(20px + (60 - 40) * ((100vw - 760px) / (1248 - 760)));
+			}
 
 			li {
 				list-style-type: none;
-			}
-
-			.nav__link {
-				text-decoration: none;
-				color: #696969;
-				position: relative;
-
-				&::after {
-					@extend %after__link;
-				}
-
-				&:hover {
-					@extend %hover__line;
-				}
 			}
 		}
 
@@ -114,6 +101,12 @@
 			width: 100%;
 			display: flex;
 			justify-content: space-around;
+			padding-left: 15px;
+			gap: 5px;
+
+			.button__header {
+				padding: 6px 12px;
+			}
 
 			button {
 				color: #696969;
@@ -416,13 +409,11 @@
 		}
 	}
 
-    @media (max-width: 460px) {
-
-
-        .logo {
-            position: relative;
-            z-index: 11;
-        }
+	@media (max-width: 460px) {
+		.logo {
+			position: relative;
+			z-index: 11;
+		}
 
 		.burger {
 			.popup {

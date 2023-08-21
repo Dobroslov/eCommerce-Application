@@ -1,13 +1,13 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import header from './header.module.scss';
+import style from './header.module.scss';
 
 // const setActive = ({ isActive }) => (isActive ? `${header.nav__link}` : '');
 // const setActive = ({ isActive: }) => (isActive ? `${header.nav__link}` : '');
 
 function Navigation(): React.JSX.Element {
 	return (
-		<ul className={header.navigation}>
+		<ul className={style.navigation}>
 			{/* <li>
 				<a href='#top' className={header.nav__link}>
 					Shop
@@ -24,27 +24,25 @@ function Navigation(): React.JSX.Element {
 				</a>
 			</li> */}
 			<li>
-				<NavLink to='/'>Main page</NavLink>
+				<NavLink to='/' className={style.nav__link}>Main</NavLink>
 			</li>
 			<li>
-				<NavLink to='/registration'>Registration page</NavLink>
+				<NavLink to='/registration' className={style.nav__link}>Registration</NavLink>
 			</li>
 			<li>
-				<NavLink to='/login'>Login page</NavLink>
+				<NavLink to='/login' className={style.nav__link}>Login</NavLink>
 			</li>
 			<li>
-				<NavLink to='/shop'>Shop</NavLink>
+				<NavLink to='/shop' className={style.nav__link}>Shop</NavLink>
 			</li>
 			<li>
-				<NavLink to='/account_page'>Account page</NavLink>
+				<NavLink to='/account_page' className={style.nav__link}>My account</NavLink>
 			</li>
 			<li>
-				<NavLink to='*'>Not found</NavLink>
-				{/* // className={header.nav__link}
-				// activeClassName='nav__link_active' */}
+				<NavLink to='*' className={style.nav__link}>Not found</NavLink>
 			</li>
-
 		</ul>
 	);
 }
+
 export default Navigation;

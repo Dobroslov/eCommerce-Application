@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import s from './registrationInput.module.scss';
+import isValidUserAge from '../../utils/helpers';
 
 interface IRegistrationInput {
 	placeholder: string;
@@ -20,6 +21,10 @@ function RegistrationInput(props: IRegistrationInput): React.JSX.Element {
 		const newValue = e.target.value;
 		setValue(newValue);
 		onValueChange(newValue, id);
+
+		if (id === 'date' && !isValidUserAge(newValue)) {
+			onValueChange('', id);
+		}
 	};
 
 	return (

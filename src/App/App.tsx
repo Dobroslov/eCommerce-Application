@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import MainPage from '../pages/mainPage/mainPage';
 import LoginPage from '../pages/loginPage/loginPage';
@@ -12,8 +12,15 @@ import RequireAuthorisation from '../hoc/requireAuthorisation';
 import { AuthProvider } from '../hoc/authProvider';
 import './App.scss';
 import PrivateAccountPage from '../pages/accountPage/accountPage';
+import { getAnonimousToken } from '../services/apiServices';
 
 function App(): React.ReactElement {
+	if (!localStorage.getItem('token')) {
+		useEffect(() => {
+			getAnonimousToken();
+		}, []);
+	}
+
 	return (
 		<div className='wrapper'>
 			<AuthProvider>
