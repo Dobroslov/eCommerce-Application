@@ -14,15 +14,11 @@ import PrivateAccountPage from '../pages/accountPage/accountPage';
 import { getAnonimousToken } from '../services/apiServices';
 import Modal from '../components/modal/modal';
 
-
-
 function App(): React.ReactElement {
-
-
 	if (!localStorage.getItem('token')) {
 		useEffect(() => {
 			getAnonimousToken();
-		},[])
+		}, []);
 	}
 	return (
 		<div className='wrapper'>
@@ -55,7 +51,7 @@ function App(): React.ReactElement {
 					</Route>
 				</Routes>
 			</AuthProvider>
-			<Modal  />
+			<Modal />
 		</div>
 	);
 }

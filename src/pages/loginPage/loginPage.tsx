@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import style from './loginPage.module.scss';
 import useAuth from '../../hooks/useAuth';
 import RegistrationSwitchButton from '../../components/buttons/registrationSwitchButton';
 import RegistrationInput from '../../components/inputs/registrationInput';
-import { getAnonimousToken, getToken } from '../../services/apiServices';
 import { IUserLogin } from '../../utils/types';
 import SubmitButton from '../../components/buttons/submitButton';
 
@@ -72,14 +71,14 @@ function LoginPage(): React.ReactElement {
 					</div>
 					<form className={style.form} onSubmit={handleSubmit}>
 						<div className={style.inputs}>
-						<RegistrationInput
-                                placeholder='Email'
-                                type='email'
-                                onValueChange={handleInputChange}
-                                id='emailLogin'
-                                errorMessage='It should be a valid email address!'
-                                pattern='^(?!\s)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
-                            />
+							<RegistrationInput
+								placeholder='Email'
+								type='email'
+								onValueChange={handleInputChange}
+								id='emailLogin'
+								errorMessage='It should be a valid email address!'
+								pattern='^(?!\s)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+							/>
 							<RegistrationInput
 								onValueChange={handleInputChange}
 								placeholder='Password'

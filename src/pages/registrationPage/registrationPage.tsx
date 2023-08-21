@@ -1,11 +1,11 @@
-import React, { useState, FormEvent, useEffect } from 'react';
+import React, { useState, FormEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
 import style from './registrationPage.module.scss';
 import RegistrationSwitchButton from '../../components/buttons/registrationSwitchButton';
 import RegistrationInput from '../../components/inputs/registrationInput';
 import { createCustomer } from '../../services/apiServices';
 import { IRegistrationForm } from '../../utils/types';
 import SubmitButton from '../../components/buttons/submitButton';
-import { useNavigate } from 'react-router-dom';
 
 function RegistrationPage(): React.ReactElement {
 	const navigate = useNavigate();
@@ -111,7 +111,7 @@ function RegistrationPage(): React.ReactElement {
 								onValueChange={handleInputChange}
 								id='email'
 								errorMessage='It should be a valid email address!'
-								pattern="^(?!\s)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+								pattern='^(?!\s)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
 							/>
 							<RegistrationInput
 								placeholder='Date of birth'
