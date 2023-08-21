@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { NavigateFunction } from 'react-router-dom';
 import { IUserLogin, IRegistrationForm } from '../utils/types';
 import store from '../store/store';
 import { hideModal, showModal } from '../store/actions';
@@ -73,7 +74,8 @@ export async function checkToken(token: string): Promise<void> {
 		});
 }
 
-export async function createCustomer(params: IRegistrationForm, navigate: ()=>void): Promise<void> {
+export async function createCustomer(params: IRegistrationForm, navigate: NavigateFunction)
+: Promise<void> {
 	const token = localStorage.getItem('anonimous');
 	const data = JSON.stringify(params);
 	const url = `${API_URL}/${PROJECT_KEY}/customers`;

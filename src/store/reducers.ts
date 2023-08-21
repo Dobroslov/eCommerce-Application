@@ -10,7 +10,7 @@ const initialState: ModalState = {
 	modal: null,
 };
 
-function modalReducer(action: ModalAction, state = initialState): ModalState {
+function modalReducer(state = initialState, action: ModalAction): ModalState {
 	switch (action.type) {
 		case ModalActionTypes.ShowModal:
 			return {

@@ -70,6 +70,7 @@
           "ExportDeclaration": { "multiline": true, "minProperties": 3 }
       }],
       "no-param-reassign": ["error", { "props": false }],
-      "operator-linebreak": ["error", "after"]   
+      "operator-linebreak": ["error", "after"],
+      "default-param-last": 0
     }
 }
