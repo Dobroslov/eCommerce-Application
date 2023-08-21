@@ -1,4 +1,5 @@
-import React, { useState, FormEvent, useEffect } from 'react';
+import React, { useState, FormEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { createCustomer } from '../../services/apiServices';
 import RegistrationSwitchButton from '../../components/buttons/registrationSwitchButton';
 import RegistrationInput from '../../components/inputs/registrationInput';
@@ -8,6 +9,7 @@ import { IRegistrationForm } from '../../utils/types';
 import style from './registrationPage.module.scss';
 
 function RegistrationPage(): React.ReactElement {
+	const navigate = useNavigate();
 	// Создаем состояние для хранения значений полей формы
 	const [registrationFormData, setRegistrationFormData] = useState<IRegistrationForm>({
 		firstName: '',
@@ -29,8 +31,9 @@ function RegistrationPage(): React.ReactElement {
 	// Создаем состояние для выбранной страны
 	const [selectedCountry, setSelectedCountry] = useState('RU');
 
-	const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
+	const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
 		e.preventDefault();
+
 		await createCustomer(registrationFormData, navigate); // Передаем функцию navigate
 	};
 

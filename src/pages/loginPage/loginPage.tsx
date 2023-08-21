@@ -94,8 +94,6 @@ function LoginPage(): React.ReactElement {
 								</label>
 							</div>
 							<SubmitButton value='Sign in' />
-							{registrationError && <div className={style.error}>{registrationError}</div>}
-							{/* Сообщение об ошибке */}
 						</div>
 					</form>
 				</div>

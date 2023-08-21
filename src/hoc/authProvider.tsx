@@ -1,7 +1,6 @@
 import React, { createContext, useState, useMemo } from 'react';
 import { IUserLogin } from '../utils/types';
 import { getToken } from '../services/apiServices';
-import { getToken } from '../services/apiServices';
 
 export const AuthContext = createContext<{
 	user: IUserLogin | null;
