@@ -1,5 +1,5 @@
 import React from 'react';
-import style from './registrationSwitchButton.module.scss';
+import style from './submitButton.module.scss';
 import { ISubmitButton } from '../../utils/types';
 
 function SubmitButton(

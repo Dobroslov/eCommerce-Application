@@ -41,7 +41,7 @@ export async function getCustomerForId(id: string): Promise<void> {
 			console.log('getCustomerForId JSON.stringify(response.data)', JSON.stringify(response.data));
 		})
 		.catch((error) => {
-			console.log('getCustomerForId', error);
+			console.log('getCustomerForId error', error);
 			console.log(error);
 		});
 }
@@ -60,8 +60,9 @@ export async function getToken(params: IUserLogin): Promise<void> {
 			headers,
 		})
 		.then((response) => {
-			console.log('getToken response', response);
 			localStorage.setItem('token', response.data.access_token);
+			console.log('getToken', response);
+
 			getCustomerForId(response.data.scope.split(':')[2]);
 		})
 		.catch((error) => {
