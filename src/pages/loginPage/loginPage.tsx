@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import style from './loginPage.module.scss';
 import useAuth from '../../hooks/useAuth';
 import RegistrationSwitchButton from '../../components/buttons/registrationSwitchButton';
 import RegistrationInput from '../../components/inputs/registrationInput';
-import { getAnonimousToken } from '../../services/apiServices';
+import { getAnonimousToken, getToken } from '../../services/apiServices';
 import { IUserLogin } from '../../utils/types';
 import SubmitButton from '../../components/buttons/submitButton';
 
@@ -17,10 +17,6 @@ function LoginPage(): React.ReactElement {
 		email: '',
 		password: '',
 	});
-
-	if (!localStorage.getItem('token')) {
-		getAnonimousToken();
-	}
 
 	const handleInputChange = (value: string, id: string) => {
 		// управляемый инпут
@@ -76,21 +72,21 @@ function LoginPage(): React.ReactElement {
 					</div>
 					<form className={style.form} onSubmit={handleSubmit}>
 						<div className={style.inputs}>
-							<RegistrationInput
-								placeholder='Email'
-								type='email'
-								onValueChange={handleInputChange}
-								id='emailLogin'
-								errorMessage='It should be a valid email address!'
-								pattern="/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/"
-							/>
+						<RegistrationInput
+                                placeholder='Email'
+                                type='email'
+                                onValueChange={handleInputChange}
+                                id='emailLogin'
+                                errorMessage='It should be a valid email address!'
+                                pattern='^(?!\s)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+                            />
 							<RegistrationInput
 								onValueChange={handleInputChange}
 								placeholder='Password'
 								type='password'
 								id='passwordLogin'
 								errorMessage='It should be a valid email password!'
-								pattern='^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,20}$'
+								pattern='^(?!\s)(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$'
 							/>
 							<div className={style.remember}>
 								<input type='checkbox' id='checkbox-2' className={style.formCheckBox} />

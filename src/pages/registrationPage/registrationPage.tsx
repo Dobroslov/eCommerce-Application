@@ -1,11 +1,11 @@
-import React, { useState, FormEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, FormEvent, useEffect } from 'react';
 import style from './registrationPage.module.scss';
 import RegistrationSwitchButton from '../../components/buttons/registrationSwitchButton';
 import RegistrationInput from '../../components/inputs/registrationInput';
 import { createCustomer } from '../../services/apiServices';
 import { IRegistrationForm } from '../../utils/types';
 import SubmitButton from '../../components/buttons/submitButton';
+import { useNavigate } from 'react-router-dom';
 
 function RegistrationPage(): React.ReactElement {
 	const navigate = useNavigate();
@@ -33,17 +33,7 @@ function RegistrationPage(): React.ReactElement {
 
 	const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
 		e.preventDefault();
-
-		// Вызываем функцию для создания пользователя с данными из формы
-		try {
-			await createCustomer(registrationFormData);
-			// После успешной регистрации перенаправляем на главную страницу
-			navigate('/', {
-				replace: true,
-			});
-		} catch (error) {
-			console.error('Registration failed:', error);
-		}
+		await createCustomer(registrationFormData, navigate); // Передаем функцию navigate
 	};
 
 	const handleInputChange = (value: string, id: string) => {
@@ -121,7 +111,7 @@ function RegistrationPage(): React.ReactElement {
 								onValueChange={handleInputChange}
 								id='email'
 								errorMessage='It should be a valid email address!'
-								pattern="^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
+								pattern="^(?!\s)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
 							/>
 							<RegistrationInput
 								placeholder='Date of birth'
@@ -191,8 +181,8 @@ function RegistrationPage(): React.ReactElement {
 								placeholder='Password'
 								type='password'
 								id='password'
-								errorMessage='Password should be 6-20 characters and include at least 1 letter, 1 number and 1 special character'
-								pattern='^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,20}$'
+								errorMessage='Password should be 8 characters and include at least 1 letter, 1 number and 1 special character'
+								pattern='^(?!\s)(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$'
 							/>
 							<RegistrationInput
 								onValueChange={handleInputChange}

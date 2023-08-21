@@ -43,6 +43,8 @@
 
 import React, { createContext, useState, useMemo } from 'react';
 import { IUserLogin } from '../utils/types';
+import axios from 'axios';
+import { getToken } from '../services/apiServices';
 // import { IRegistrationForm } from '../utils/types';
 
 export const AuthContext = createContext<{
@@ -53,8 +55,8 @@ export const AuthContext = createContext<{
 export function AuthProvider({ children }: { children: React.ReactNode }) {
 	const [user, setUser] = useState<IUserLogin | null>(null);
 
-	const signIn = (newUser: IUserLogin, callback: () => void) => {
-		setUser(newUser); // добавить нового юзера
+	const signIn =  (newUser: IUserLogin, callback: () => void) => {
+		getToken(newUser)
 		callback();
 	};
 
