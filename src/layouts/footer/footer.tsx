@@ -19,7 +19,7 @@ function Footer(): React.JSX.Element {
 						{' '}
 						<ReactSVG src={linkedin} className={footer.social__link} />
 					</a>
-					<a href='https://www.facebook.com/' aria-label='Visit Facebook'><ReactSVG src={facebook} className={footer.social__link} /></a>
+					<a href='https://www.facebook.com/' aria-label='Visit facebook'><ReactSVG src={facebook} className={footer.social__link} /></a>
 					<a href='https://www.instagram.com/' aria-label='Visit instagram'><ReactSVG src={instagram} className={footer.social__link} /></a>
 					<a href='https://twitter.com/' aria-label='Visit twitter'><ReactSVG src={twitter} className={footer.social__link} /></a>
 

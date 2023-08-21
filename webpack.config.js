@@ -15,6 +15,7 @@ module.exports = {
 	devServer: {
 		port: 8000,
 		open: true,
+		historyApiFallback: true,
 	},
 	entry: ['@babel/polyfill', path.resolve(__dirname, 'src', 'index.tsx')],
 	output: {
@@ -22,6 +23,7 @@ module.exports = {
 		clean: true,
 		filename: '[name].[contenthash].js',
 		assetModuleFilename: 'assets/[hash][ext]',
+		publicPath: '/',
 	},
 	plugins: [
 		new HtmlWebpackPlugin({

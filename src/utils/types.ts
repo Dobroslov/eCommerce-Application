@@ -6,7 +6,7 @@ export interface IProductCard {
 	price: number;
 }
 
-export interface IRegistration {
+export interface IRegistrationForm {
 	firstName: string;
 	lastName: string;
 	email: string;
@@ -14,7 +14,7 @@ export interface IRegistration {
 	addresses: IAddress[];
 	password: string;
 }
-export interface ILogin {
+export interface IUserLogin {
 	email: string;
 	password: string;
 }
@@ -26,3 +26,12 @@ export interface IAddress {
 	postalCode: string;
 	country: string;
 }
+
+export interface ISubmitButton {
+	value: string;
+}
+export interface ModalProperties {
+	title: string;
+	description: string;
+	color:string
+  }

@@ -21,9 +21,9 @@ function Menu(): React.JSX.Element {
 		<div className={header.menu} ref={node}>
 			<Navigation />
 			<div className={header.cards}>
-				<HeaderButton area-label='Search' className={header.search} onClick={toggleSearch} />
-				<HeaderButton area-label='Basket' className={header.basket} />
-				<HeaderButton area-label='Profile' className={header.profile} />
+				<HeaderButton area-label='Search' className={`${header.search} ${header.button__header}`} onClick={toggleSearch} />
+				<HeaderButton area-label='Basket' className={`${header.basket} ${header.button__header}`} />
+				<HeaderButton area-label='Profile' className={`${header.profile} ${header.button__header}`} />
 			</div>
 			<SearchForm className={active ? `${header.search__form} ${header.open}` : header.search__form} />
 		</div>

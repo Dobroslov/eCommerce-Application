@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import style from './notFoundPage.module.scss';
 
 function NotFoundPage(): React.JSX.Element {
@@ -7,8 +8,10 @@ function NotFoundPage(): React.JSX.Element {
 			<div className={style.container}>
 				<div className={style.content}>
 					<h1 className={style.title}>404 ERROR</h1>
-					<p className={style.text}>This page not found; back to home and start again</p>
-					<button type='button' className={style.button}>HOMEPAGE</button>
+					<p className={style.text}>
+						This page was not found. Go back to the main page and start again
+					</p>
+					<Link to='/' className={style.button}>HOMEPAGE</Link>
 				</div>
 			</div>
 		</div>

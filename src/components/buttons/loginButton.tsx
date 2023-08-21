@@ -1,17 +1,14 @@
 import React from 'react';
-import s from './loginButton.module.scss';
-import { ILogin } from '../../utils/types';
-import { getToken } from '../../services/apiServices';
+import style from './loginButton.module.scss';
 
 interface ILoginButton {
 	value: string;
-	onSubmit: ILogin;
 }
 
 function LoginButton(props: ILoginButton): React.JSX.Element {
-	const { value, onSubmit } = props;
+	const { value } = props;
 	return (
-		<button onClick={() => getToken(onSubmit)} className={s.button} type='submit'>
+		<button className={style.button} type='submit'>
 			{value}
 		</button>
 	);

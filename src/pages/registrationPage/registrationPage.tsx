@@ -1,101 +1,110 @@
-import React, { useEffect, useState } from 'react';
-import s from './registrationPage.module.scss';
+import React, { useState, FormEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { createCustomer } from '../../services/apiServices';
 import RegistrationSwitchButton from '../../components/buttons/registrationSwitchButton';
 import RegistrationInput from '../../components/inputs/registrationInput';
-import RegistrationButton from '../../components/buttons/registrationButton';
-import { createCustomer, getAnonimousToken } from '../../services/apiServices';
-import { IRegistration } from '../../utils/types';
+import SubmitButton from '../../components/buttons/submitButton';
+import { IRegistrationForm } from '../../utils/types';
 
-const registrationData: IRegistration = {
-	firstName: '',
-	lastName: '',
-	email: '',
-	dateOfBirth: '',
-	addresses: [
-		{
-			city: '',
-			streetName: '',
-			streetNumber: '',
-			postalCode: '',
-			country: '',
-		},
-	],
-	password: '',
-};
-console.log(typeof registrationData);
+import style from './registrationPage.module.scss';
 
 function RegistrationPage(): React.ReactElement {
-	if (!localStorage.getItem('token')) {
-		getAnonimousToken();
-	}
-	const [selectedCountry, setSelectedCountry] = useState('RU');
-	const [password, setPassword] = useState('');
+	const navigate = useNavigate();
+	// Создаем состояние для хранения значений полей формы
+	const [registrationFormData, setRegistrationFormData] = useState<IRegistrationForm>({
+		firstName: '',
+		lastName: '',
+		email: '',
+		dateOfBirth: '',
+		addresses: [
+			{
+				city: '',
+				streetName: '',
+				streetNumber: '',
+				postalCode: '',
+				country: 'RU',
+			},
+		],
+		password: '',
+	});
 
-	useEffect(() => {
-		registrationData.addresses[0].country = selectedCountry;
-	}, [selectedCountry]);
+	// Создаем состояние для выбранной страны
+	const [selectedCountry, setSelectedCountry] = useState('RU');
+
+	const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
+		e.preventDefault();
+
+		await createCustomer(registrationFormData, navigate); // Передаем функцию navigate
+	};
 
 	const handleInputChange = (value: string, id: string) => {
-		console.log(registrationData);
+		// Клонируем текущее состояние, чтобы не изменять его напрямую
+		const updatedData = {
+			...registrationFormData,
+		};
+
 		switch (id) {
 			case 'firstName':
-				registrationData.firstName = value;
+				updatedData.firstName = value;
 				break;
 			case 'lastName':
-				registrationData.lastName = value;
+				updatedData.lastName = value;
 				break;
 			case 'email':
-				registrationData.email = value;
+				updatedData.email = value;
 				break;
 			case 'date':
-				registrationData.dateOfBirth = value;
+				updatedData.dateOfBirth = value;
 				break;
 			case 'password':
-				registrationData.password = value;
-				setPassword(registrationData.password);
+				updatedData.password = value;
 				break;
 			case 'city':
-				registrationData.addresses[0].city = value;
+				updatedData.addresses[0].city = value;
 				break;
 			case 'streetName':
-				registrationData.addresses[0].streetName = value;
+				updatedData.addresses[0].streetName = value;
 				break;
 			case 'streetNumber':
-				registrationData.addresses[0].streetNumber = value;
+				updatedData.addresses[0].streetNumber = value;
 				break;
 			case 'postalCode':
-				registrationData.addresses[0].postalCode = value;
+				updatedData.addresses[0].postalCode = value;
 				break;
 			default:
+				break;
 		}
+
+		// Обновляем состояние с обновленными данными
+		setRegistrationFormData(updatedData);
 	};
 
 	return (
-		<div className={s.registration}>
-			<div className={`${s.container} container`}>
-				<div className={s.body}>
-					<h1 className={s.title}>Registration</h1>
-					<div className={s.buttons}>
+		<div className={style.registration}>
+			<div className={`${style.container} container`}>
+				<div className={style.body}>
+					<h1 className={style.title}>Registration</h1>
+					<div className={style.buttons}>
 						<RegistrationSwitchButton value='Sign in' />
-						<RegistrationSwitchButton value='Register' />
+						<RegistrationSwitchButton value='Register' active='active' />
 					</div>
-					<form className={s.form} onSubmit={() => createCustomer(registrationData)}>
-						<div className={s.inputs}>
+					<form className={style.form} onSubmit={handleSubmit}>
+						<div className={style.inputs}>
 							<RegistrationInput
 								placeholder='First name'
 								type='text'
 								onValueChange={handleInputChange}
 								id='firstName'
-								errorMessage="First name should be 3-16 characters and shoudn'nt include any special character"
-								pattern='^[A-Za-zА-Яа-я]{3,16}$'
+								errorMessage="First name should be 1-16 characters and shoudn'nt include any special character"
+								pattern='^[A-Za-zА-Яа-я]{1,16}$'
 							/>
 							<RegistrationInput
 								placeholder='Last Name'
 								type='text'
 								onValueChange={handleInputChange}
 								id='lastName'
-								errorMessage="Last Name should be 3-16 characters and shoudn'nt include any special character"
-								pattern='^[A-Za-zА-Яа-я]{3,16}$'
+								errorMessage="Last Name should be 1-16 characters and shoudn'nt include any special character"
+								pattern='^[A-Za-zА-Яа-я]{1,16}$'
 							/>
 							<RegistrationInput
 								placeholder='Email'
@@ -103,7 +112,7 @@ function RegistrationPage(): React.ReactElement {
 								onValueChange={handleInputChange}
 								id='email'
 								errorMessage='It should be a valid email address!'
-								pattern="^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
+								pattern='^(?!\s)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
 							/>
 							<RegistrationInput
 								placeholder='Date of birth'
@@ -111,10 +120,9 @@ function RegistrationPage(): React.ReactElement {
 								onValueChange={handleInputChange}
 								id='date'
 								errorMessage='It should be a valid date!'
-								pattern='^\s*{10}$'
 							/>
 							<select
-								className={s.select}
+								className={style.select}
 								value={selectedCountry}
 								onChange={(e) => setSelectedCountry(e.target.value)}
 								name='country'
@@ -135,46 +143,46 @@ function RegistrationPage(): React.ReactElement {
 								<option value='GR'>Greece</option>
 								<option value='EU'>Other</option>
 							</select>
-							<i className={s.underline} />
 							<RegistrationInput
 								placeholder='City'
 								type='text'
 								onValueChange={handleInputChange}
 								id='city'
-								errorMessage="City should be 3-16 characters and shoudn'nt include any special character"
-								pattern='^[A-Za-zА-Яа-я]{3,16}$'
+								errorMessage="City should be 1-16 characters and shoudn'nt include any special character"
+								pattern='^[A-Za-zА-Яа-я]{1,16}$'
 							/>
 							<RegistrationInput
 								placeholder='Street name'
 								type='text'
 								onValueChange={handleInputChange}
 								id='streetName'
-								errorMessage="Street name should be 3-16 characters and shoudn'nt include any special character"
-								pattern='^[A-Za-zА-Яа-я]{3,16}$'
+								errorMessage="Street name should be 1-16 characters and shoudn'nt include any special character"
+								pattern='^[A-Za-zА-Яа-я]{1,16}$'
 							/>
 							<RegistrationInput
 								placeholder='Street number'
 								type='number'
 								onValueChange={handleInputChange}
 								id='streetNumber'
-								errorMessage='Street number should contains only numbers'
-								pattern='^[0-9]$'
+								errorMessage='Street number should contains only positive numbers'
+								pattern='^[0-9]+$'
 							/>
 							<RegistrationInput
 								placeholder='Postal code'
-								type='number'
+								type='text'
 								onValueChange={handleInputChange}
 								id='postalCode'
-								errorMessage='Street number should contains only numbers'
-								pattern='^[0-9]$'
+								errorMessage='The postal code must be like this ("12345" or
+								"12345-6789" or "K1M 1E3").'
+								pattern='^(?:\d{5}(?:-\d{4})?|[A-Z]\d[A-Z] \d[A-Z]\d)$'
 							/>
 							<RegistrationInput
 								onValueChange={handleInputChange}
 								placeholder='Password'
 								type='password'
 								id='password'
-								errorMessage='Password should be 6-20 characters and include at least 1 letter, 1 number and 1 special character'
-								pattern='^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,20}$'
+								errorMessage='Password should be 8-20 characters and include at least 1 letter, 1 number and 1 special character'
+								pattern='^(?!\s)(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,20}$'
 							/>
 							<RegistrationInput
 								onValueChange={handleInputChange}
@@ -182,15 +190,15 @@ function RegistrationPage(): React.ReactElement {
 								type='password'
 								id='copy_password'
 								errorMessage="Passwords don't match!"
-								pattern={password}
+								pattern={registrationFormData.password}
 							/>
-							<div className={s.remember}>
-								<input type='checkbox' id='checkbox-1' className={s.formCheckBox} />
-								<label htmlFor='checkbox-1' className={s.checkboxLabel}>
+							<div className={style.remember}>
+								<input type='checkbox' id='checkbox-1' className={style.formCheckBox} />
+								<label htmlFor='checkbox-1' className={style.checkboxLabel}>
 									Remember me
 								</label>
 							</div>
-							<RegistrationButton value='Register' />
+							<SubmitButton value='Register' />
 						</div>
 					</form>
 				</div>

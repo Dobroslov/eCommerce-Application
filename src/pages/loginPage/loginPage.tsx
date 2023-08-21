@@ -1,68 +1,99 @@
-import React from 'react';
-import s from './loginPage.module.scss';
+import React, { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import style from './loginPage.module.scss';
+import useAuth from '../../hooks/useAuth';
 import RegistrationSwitchButton from '../../components/buttons/registrationSwitchButton';
 import RegistrationInput from '../../components/inputs/registrationInput';
-import LoginButton from '../../components/buttons/loginButton';
-import { getAnonimousToken } from '../../services/apiServices';
-import { ILogin } from '../../utils/types';
-
-const loginData: ILogin = {
-	email: '',
-	password: '',
-};
+import { IUserLogin } from '../../utils/types';
+import SubmitButton from '../../components/buttons/submitButton';
 
 function LoginPage(): React.ReactElement {
-	if (!localStorage.getItem('token')) {
-		getAnonimousToken();
-	}
+	const location = useLocation();
+	const navigate = useNavigate();
+	const { signIn } = useAuth();
 
-	const handleFirstNameChange = (value: string, id: string) => {
-		console.log(loginData);
+	const [loginData, setLoginData] = useState<IUserLogin>({
+		email: '',
+		password: '',
+	});
+
+	const handleInputChange = (value: string, id: string) => {
+		// управляемый инпут
 		switch (id) {
 			case 'emailLogin':
-				loginData.email = value;
+				setLoginData({
+					...loginData, email: value,
+				});
 				break;
 			case 'passwordLogin':
-				loginData.password = value;
+				setLoginData({
+					...loginData, password: value,
+				});
 				break;
 			default:
 		}
 	};
 
+	const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+		e.preventDefault();
+
+		signIn(
+			{
+				email: loginData.email,
+				password: loginData.password,
+			},
+			() => {
+				if (location.state?.from) {
+					// Если есть информация о предыдущей странице,
+					// перейдите туда (это для страницы пользователя,
+					// если он попытается сразу на неё перейти,
+					// то его перекинет на страницу логирования,
+					// после логирования обратно на страницу пользователя)
+					navigate(location.state.from, {
+						replace: true,
+					});
+				} else {
+					// В противном случае перейдите на домашнюю страницу
+					navigate('/');
+				}
+			},
+		);
+	};
+
 	return (
-		<div className={s.login}>
-			<div className={`${s.container} container`}>
-				<div className={s.body}>
-					<h1 className={s.title}>My account</h1>
-					<div className={s.buttons}>
-						<RegistrationSwitchButton value='Sign in' />
+		<div className={style.login}>
+			<div className={`${style.container} container`}>
+				<div className={style.body}>
+					<h1 className={style.title}>My account</h1>
+					<div className={style.buttons}>
+						<RegistrationSwitchButton value='Sign in' active='active' />
 						<RegistrationSwitchButton value='Register' />
 					</div>
-					<form className={s.form} action=''>
-						<div className={s.inputs}>
+					<form className={style.form} onSubmit={handleSubmit}>
+						<div className={style.inputs}>
 							<RegistrationInput
 								placeholder='Email'
 								type='email'
-								onValueChange={handleFirstNameChange}
+								onValueChange={handleInputChange}
 								id='emailLogin'
 								errorMessage='It should be a valid email address!'
-								pattern="/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/"
+								pattern='^(?!\s)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
 							/>
 							<RegistrationInput
-								onValueChange={handleFirstNameChange}
+								onValueChange={handleInputChange}
 								placeholder='Password'
 								type='password'
 								id='passwordLogin'
 								errorMessage='It should be a valid email password!'
-								pattern='^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,20}$'
+								pattern='^(?!\s)(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$'
 							/>
-							<div className={s.remember}>
-								<input type='checkbox' id='checkbox-2' className={s.formCheckBox} />
-								<label htmlFor='checkbox-2' className={s.checkboxLabel}>
+							<div className={style.remember}>
+								<input type='checkbox' id='checkbox-2' className={style.formCheckBox} />
+								<label htmlFor='checkbox-2' className={style.checkboxLabel}>
 									Remember me
 								</label>
 							</div>
-							<LoginButton onSubmit={loginData} value='Sign in' />
+							<SubmitButton value='Sign in' />
 						</div>
 					</form>
 				</div>

@@ -2,6 +2,8 @@
 
 .main {
 	&__img_container {
+		margin-top: 60px;
+		@include respons-property(margin-top, 20, 60);
 		width: 100%;
 		height: 648px;
 		border-radius: 16px;
@@ -18,17 +20,6 @@
 			@include respons-property(background-position-x, -300, 1);
 		}
 	}
-
-	// &__img {
-	// 	width: 100%;
-	// 	height: 648px;
-	// 	@include respons-property(height, 200, 648);
-	// 	position: absolute;
-	// 	right: 0;
-	// 	top: 50%;
-	// 	transform: translateY(-50%);
-	// 	transition: transform 0.3s ease-in-out;
-	// }
 
 	&__title_light {
 		color: $white;

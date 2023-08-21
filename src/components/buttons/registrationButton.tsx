@@ -1,5 +1,5 @@
 import React from 'react';
-import s from './registrationButton.module.scss';
+import style from './registrationButton.module.scss';
 
 interface IRegistrationButton {
 	value: string;
@@ -8,7 +8,7 @@ interface IRegistrationButton {
 function RegistrationButton(props: IRegistrationButton): React.JSX.Element {
 	const { value } = props;
 	return (
-		<button className={s.button} type='submit'>
+		<button className={style.button} type='submit'>
 			{value}
 		</button>
 	);
