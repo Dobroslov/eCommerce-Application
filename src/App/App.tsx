@@ -7,12 +7,12 @@ import NotFoundPage from '../pages/notFoundPage/notFoundPage';
 import Layout from '../layouts/layout/layout';
 import ShopSinglPageProduct from '../pages/singlPageShop/singlPageShop';
 import Shop from '../pages/shop/shop';
-
 import RequireAuthorisation from '../hoc/requireAuthorisation';
 import { AuthProvider } from '../hoc/authProvider';
 import './App.scss';
 import PrivateAccountPage from '../pages/accountPage/accountPage';
 import { getAnonimousToken } from '../services/apiServices';
+import Modal from '../components/modal/modal';
 
 function App(): React.ReactElement {
 	if (!localStorage.getItem('token')) {
@@ -52,6 +52,7 @@ function App(): React.ReactElement {
 					</Route>
 				</Routes>
 			</AuthProvider>
+			<Modal />
 		</div>
 	);
 }

@@ -31,9 +31,7 @@ function RegistrationPage(): React.ReactElement {
 
 	const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
 		e.preventDefault();
-		useEffect(() => {
-			createCustomer(registrationFormData);
-		});
+		await createCustomer(registrationFormData, navigate); // Передаем функцию navigate
 	};
 
 	const handleInputChange = (value: string, id: string) => {

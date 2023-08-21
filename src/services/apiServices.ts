@@ -1,5 +1,8 @@
 import axios from 'axios';
+import { NavigateFunction } from 'react-router-dom';
 import { IUserLogin, IRegistrationForm } from '../utils/types';
+import store from '../store/store';
+import { hideModal, showModal } from '../store/actions';
 
 const PROJECT_KEY = 'glitter-magazine';
 const API_URL = 'https://api.europe-west1.gcp.commercetools.com';
@@ -26,26 +29,6 @@ export async function getAnonimousToken(): Promise<void> {
 		});
 }
 
-export async function getCustomerForId(id: string): Promise<void> {
-	const url = `${API_URL}/${PROJECT_KEY}/customers/${id}`;
-	const headers = {
-		'Content-Type': 'application/json',
-		Authorization: 'Bearer IYwFclVQVuxv9jY8O_eCGpBUhxsf0IXj',
-	};
-
-	await axios
-		.get(url, {
-			headers,
-		})
-		.then((response) => {
-			console.log('getCustomerForId JSON.stringify(response.data)', JSON.stringify(response.data));
-		})
-		.catch((error) => {
-			console.log('getCustomerForId error', error);
-			console.log(error);
-		});
-}
-
 export async function getToken(params: IUserLogin): Promise<void> {
 	const { email, password } = params;
 	const url = `${AUTH_URL}/oauth/${PROJECT_KEY}/customers/token?grant_type=password&username=${email}&password=${password}`;
@@ -61,12 +44,17 @@ export async function getToken(params: IUserLogin): Promise<void> {
 		})
 		.then((response) => {
 			localStorage.setItem('token', response.data.access_token);
-			console.log('getToken', response);
-
-			getCustomerForId(response.data.scope.split(':')[2]);
+			// getCustomerForId(response.data.scope.split(':')[2]);
+			store.dispatch(showModal({
+				title: 'Success', description: 'KJKZVNHJL', color: 'rgb(60, 179, 113,0.5)',
+			}));
+			setTimeout(() => { store.dispatch(hideModal()); }, 4000);
 		})
-		.catch((error) => {
-			console.log('getToken error', error);
+		.catch(() => {
+			store.dispatch(showModal({
+				title: 'Fault', description: 'khdasvkvhdkalhsdkh', color: 'rgb(227, 23, 23,0.5)',
+			}));
+			setTimeout(() => { store.dispatch(hideModal()); }, 4000);
 		});
 }
 
@@ -91,16 +79,47 @@ export async function checkToken(token: string): Promise<void> {
 		});
 }
 
-export async function createCustomer(params: IRegistrationForm): Promise<void> {
+export async function createCustomer(params: IRegistrationForm, navigate: NavigateFunction)
+: Promise<void> {
+	const token = localStorage.getItem('anonimous');
 	const data = JSON.stringify(params);
 	const url = `${API_URL}/${PROJECT_KEY}/customers`;
 	const headers = {
 		'Content-Type': 'application/json',
-		Authorization: 'Bearer IYwFclVQVuxv9jY8O_eCGpBUhxsf0IXj',
+		Authorization: `Bearer ${token}`,
 	};
+	await axios.post(url, data, {
+		headers,
+	}).then(() => {
+		store.dispatch(showModal({
+			title: 'Success', description: 'KJKZVNHJL', color: 'rgb(60, 179, 113,0.5)',
+		}));
+		setTimeout(() => { store.dispatch(hideModal()); }, 4000);
+		navigate('/', {
+			replace: true,
+		});
+	})
+		.catch(() => {
+			store.dispatch(showModal({
+				title: 'Fault', description: 'khdasvkvhdkalhsdkh', color: 'rgb(227, 23, 23,0.5)',
+			}));
+			setTimeout(() => { store.dispatch(hideModal()); }, 4000);
+		});
+}
+export async function getCustomerForId(id: string): Promise<void> {
+	const token = localStorage.getItem('token');
+	const url = `${API_URL}/${PROJECT_KEY}/customers/${id}`;
+	const headers = {
+		'Content-Type': 'application/json',
+		Authorization: `Bearer ${token}`,
+	};
+
 	await axios
-		.post(url, data, {
+		.get(url, {
 			headers,
+		})
+		.then((response) => {
+			console.log(JSON.stringify(response.data));
 		})
 		.catch((error) => {
 			console.log(error);

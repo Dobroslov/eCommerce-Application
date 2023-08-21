@@ -17,9 +17,6 @@ function LoginPage(): React.ReactElement {
 		password: '',
 	});
 
-	const [registrationError, setRegistrationError] = useState<string | null>(null);
-	// Состояние для сообщения об ошибке
-
 	const handleInputChange = (value: string, id: string) => {
 		// управляемый инпут
 		switch (id) {
@@ -46,8 +43,6 @@ function LoginPage(): React.ReactElement {
 				password: loginData.password,
 			},
 			() => {
-				// Успешная регистрация, сброс сообщения об ошибке
-				setRegistrationError(null);
 				if (location.state?.from) {
 					// Если есть информация о предыдущей странице,
 					// перейдите туда (это для страницы пользователя,

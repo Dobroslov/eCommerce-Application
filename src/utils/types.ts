@@ -30,3 +30,8 @@ export interface IAddress {
 export interface ISubmitButton {
 	value: string;
 }
+export interface ModalProperties {
+	title: string;
+	description: string;
+	color:string
+  }
