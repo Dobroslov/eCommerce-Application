@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import style from './loginPage.module.scss';
 import useAuth from '../../hooks/useAuth';
@@ -70,18 +70,20 @@ function LoginPage(): React.ReactElement | null {
 		);
 	};
 
-	// useEffect(() => {
-	// 	if (user) {
-	// 		// Только если пользователь успешно авторизовался, тогда выполняйте редирект
-	// 		if (location.state?.from) {
-	// 			navigate(location.state.from, {
-	// 				replace: true,
-	// 			});
-	// 		} else {
-	// 			navigate('/account_page');
-	// 		}
-	// 	}
-	// }, [user, location.state, navigate]);
+	useEffect(() => {
+		if (user) {
+			// Только если пользователь успешно авторизовался, тогда выполняйте редирект
+			if (location.state?.from) {
+				navigate(location.state.from, {
+					replace: true,
+				});
+			} else {
+				navigate('/account_page');
+			}
+		}
+	}, [user, location.state, navigate]);
+
+	console.log('Current user:', user);
 
 	return (
 		<div className={style.login}>
