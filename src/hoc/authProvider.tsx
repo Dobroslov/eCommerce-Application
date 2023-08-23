@@ -14,11 +14,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
 	function signIn(newUser: IUserLogin, callback: () => void) {
 		getToken(newUser).then(() => {
-			setUser(newUser);
-			callback();
+			const token = localStorage.getItem('token');
+			const userString = localStorage.getItem('userData');
+			if (userString && token) {
+				const { email } = JSON.parse(userString);
+				console.log('file: authProvider.tsx:21 ~ getToken ~ email:', email);
+				setUser({
+					email,
+				});
+				console.log('file: authProvider.tsx:14 ~ AuthProvider ~ user:', user);
+				callback();
+			}
 		})
 			.catch(() => {
+				setUser(null);
 				console.log('signIn error');
+				callback();
 			});
 	}
 
