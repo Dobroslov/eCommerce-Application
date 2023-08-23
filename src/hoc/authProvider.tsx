@@ -4,39 +4,50 @@ import { getToken } from '../services/apiServices';
 
 export const AuthContext = createContext<{
 	user: IUserLogin | null;
-	signIn:(newUser: IUserLogin, callback: () => void) => void;
-	signInError: (error: Error) => void;
+	autoSignIn:(email: string, callback: () => void) => void
+	signIn: (newUser: IUserLogin, callback: () => void) => void;
 	signOut: (callback: () => void) => void;
 		} | null>(null);
-
-function signInError(error: Error) {
-	// Обработка ошибки аутентификации
-	console.error('Ошибка аутентификации:', error);
-}
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
 	const [user, setUser] = useState<IUserLogin | null>(null);
 
 	function signIn(newUser: IUserLogin, callback: () => void) {
 		getToken(newUser).then(() => {
-			getToken(newUser);
+			setUser(newUser);
 			callback();
 		})
-			.catch((error) => {
-				signInError(error);
+			.catch(() => {
+				console.log('signIn error');
 			});
 	}
 
 	function signOut(callback: () => void) {
 		setUser(null); // юзера больше нет, делаю переадресацию
+		localStorage.removeItem('token');
+		localStorage.removeItem('userData');
 		callback();
-		// ожидается функция navigate, чтоб после работы с
-		// пользователем можно было сделать переадресацию
+		// в callback() функция navigate, для разлогинивания
+		// пользователя можно было сделать переадресацию на главную
+	}
+
+	function autoSignIn(email: string, callback: () => void) {
+		const userEmail = localStorage.getItem('userData');
+		const userToken = localStorage.getItem('token');
+		const userData = {
+			email,
+		};
+
+		if (userEmail && userToken) {
+			// Если есть сохраненная почта и токен, выполните "автоматическую" авторизацию
+			setUser(userData);
+			callback();
+		}
 	}
 
 	const contextValue = useMemo(() => ({
-		user, signIn, signOut, signInError,
-	}), [user, signIn, signOut, signInError]);
+		user, signIn, signOut, autoSignIn,
+	}), [user, signIn, signOut, autoSignIn]);
 
 	return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;
 }

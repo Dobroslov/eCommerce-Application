@@ -1,3 +1,5 @@
+@import '/src/styles/mixins';
+
 .inputBody {
 	position: relative;
 }
@@ -5,15 +7,12 @@
 .input {
 	width: 100%;
 	font-size: 16px;
+	@include respons-property(font-size, 12, 16);
 	border: none;
 	outline: none;
 	padding: 12px 0;
-
-	@media (min-width: 320px) and (max-width: 1248px) {
-		font-size: calc(12px + (16 - 12) * ((100vw - 320px) / (1248 - 320)));
-		padding-top: calc(6px + (12 - 6) * ((100vw - 320px) / (1248 - 320)));
-		padding-bottom: calc(6px + (12 - 6) * ((100vw - 320px) / (1248 - 320)));
-	}
+	@include respons-property(padding-top, 6, 12);
+	@include respons-property(padding-bottom, 6, 12);
 }
 
 .underline {
@@ -29,10 +28,8 @@
 	position: relative;
 	display: none;
 	font-size: 14px;
+	@include respons-property(font-size, 10, 14);	
 	color: #d82700;
-	@media (min-width: 320px) and (max-width: 1248px) {
-		font-size: calc(10px + (14 - 10) * ((100vw - 320px) / (1248 - 320)));
-	}
 }
 
 .error::before {
@@ -41,8 +38,8 @@
 	top: 7.5px;
 	left: -20px;
 	font-size: 12px;
+	@include respons-property(font-size, 8, 12);
 	@media (min-width: 320px) and (max-width: 1248px) {
-		font-size: calc(8px + (12 - 8) * ((100vw - 320px) / (1248 - 320)));
 		left: calc(-12px + (0 - 8) * ((100vw - 320px) / (1248 - 320)));
 		top: calc(6px + (7.5 - 6) * ((100vw - 320px) / (1248 - 320)));
 	}
@@ -60,9 +57,12 @@
 .toggle_visible_password {
 	position: absolute;
 	width: 85px;
+	@include respons-property(width, 75, 85);
 	height: 30px;
+	@include respons-property(height, 20, 30);
 	right: 4px;
 	top: 8px;
+	@include respons-property(top, 4, 8);
 	bottom: 4px;
 	z-index: 10;
 	border-radius: 4px;
@@ -75,6 +75,7 @@
 	text-align: center;
 	vertical-align: middle;
 	font-size: 12px;
+	@include respons-property(font-size, 10, 12);
 	font-weight: 600;
 	text-transform: uppercase;
 	border: none;

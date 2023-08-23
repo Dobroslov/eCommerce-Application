@@ -1,19 +1,15 @@
+@import '/src/styles/mixins';
+
 .registration {
 	padding-top: 128px;
-
-	@media (min-width: 320px) and (max-width: 1248px) {
-		padding-top: calc(24px + (128 - 24) * ((100vw - 320px) / (1248 - 320)));
-	}
+	@include respons-property(padding-top, 24, 128);
 }
 
 .container {
 	display: flex;
 	justify-content: center;
 	margin-top: 128px;
-
-	@media (min-width: 320px) and (max-width: 1248px) {
-		margin-top: calc(24px + (128 - 24) * ((100vw - 320px) / (1248 - 320)));
-	}
+	@include respons-property(margin-top, 24, 128);
 }
 
 .body {
@@ -23,21 +19,16 @@
 	flex-direction: column;
 	align-items: center;
 	padding-bottom: 326px;
-
-	@media (min-width: 320px) and (max-width: 1248px) {
-		max-width: calc(288px + (500 - 288) * ((100vw - 320px) / (1248 - 320)));
-		padding-bottom: calc(90px + (326 - 90) * ((100vw - 320px) / (1248 - 320)));
-	}
+	@include respons-property(max-width, 288, 500);
+	@include respons-property(padding-bottom, 90, 326);
 }
 
 .title {
 	font-size: 33px;
 	font-weight: 500;
 	padding-bottom: 64px;
-	@media (min-width: 320px) and (max-width: 1248px) {
-		font-size: calc(20px + (33 - 20) * ((100vw - 320px) / (1248 - 320)));
-		padding-bottom: calc(24px + (64 - 24) * ((100vw - 320px) / (1248 - 320)));
-	}
+	@include respons-property(font-size, 20, 33);
+	@include respons-property(padding-bottom, 24, 64);
 }
 
 .buttons {
@@ -48,11 +39,8 @@
 	padding: 5px;
 	column-gap: 5px;
 	margin-bottom: 114px;
-
-	@media (min-width: 320px) and (max-width: 1248px) {
-		font-size: calc(20px + (33 - 20) * ((100vw - 320px) / (1248 - 320)));
-		margin-bottom: calc(82px + (114 - 82) * ((100vw - 320px) / (1248 - 320)));
-	}
+	@include respons-property(font-size, 20, 33);
+	@include respons-property(margin-bottom, 50, 114);
 }
 
 .inputs {
@@ -73,22 +61,16 @@
 	outline: none;
 	padding: 12px 0;
 	border-bottom: 1px solid #d8d8d8;
-
-	@media (min-width: 320px) and (max-width: 1248px) {
-		font-size: calc(12px + (16 - 12) * ((100vw - 320px) / (1248 - 320)));
-		padding-top: calc(6px + (12 - 6) * ((100vw - 320px) / (1248 - 320)));
-		padding-bottom: calc(6px + (12 - 6) * ((100vw - 320px) / (1248 - 320)));
-	}
+	@include respons-property(font-size, 12, 16);
+	@include respons-property(padding-top, 6, 12);
+	@include respons-property(padding-bottom, 6, 12);
 }
 
 .remember {
 	display: flex;
 	align-items: center;
 	font-size: 16px;
-
-	@media (min-width: 320px) and (max-width: 1248px) {
-		font-size: calc(12px + (16 - 12) * ((100vw - 320px) / (1248 - 320)));
-	}
+	@include respons-property(font-size, 12, 16);
 }
 
 .formCheckBox {

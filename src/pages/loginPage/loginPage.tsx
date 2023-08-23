@@ -7,7 +7,7 @@ import RegistrationInput from '../../components/inputs/registrationInput';
 import { IUserLogin } from '../../utils/types';
 import SubmitButton from '../../components/buttons/submitButton';
 
-function LoginPage(): React.ReactElement {
+function LoginPage(): React.ReactElement | null {
 	const location = useLocation();
 	const navigate = useNavigate();
 	const { signIn } = useAuth();
@@ -18,7 +18,6 @@ function LoginPage(): React.ReactElement {
 	});
 
 	const handleInputChange = (value: string, id: string) => {
-		// управляемый инпут
 		switch (id) {
 			case 'emailLogin':
 				setLoginData({
@@ -84,7 +83,7 @@ function LoginPage(): React.ReactElement {
 								placeholder='Password'
 								type='password'
 								id='passwordLogin'
-								errorMessage='It should be a valid email password!'
+								errorMessage='It should be a valid password!'
 								pattern='^(?!\s)(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$'
 							/>
 							<div className={style.remember}>

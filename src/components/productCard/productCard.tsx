@@ -7,16 +7,16 @@ interface IProductCardItem extends IProductCard {
 }
 
 function ProductCard(props: IProductCardItem): React.JSX.Element {
-	const { title, image, price, id, altImage, handleProductClick } = props;
+	const { title, price, id, handleProductClick } = props;
+	// const cardImgStyle = {
+	// backgroundImage: `url('/public/assets/images/${image}')`,
+	// backgroundColor: '#ff0000',
+	// };
 
 	return (
 		<li className={styles.product_card}>
 			<div className={styles.product_card__img_container}>
-				<img
-					className={styles.product_card__img}
-					src={`./assets/images/${image}`}
-					alt={altImage}
-				/>
+				{/* <div className={styles.product_card__img_container} style={cardImgStyle}> */}
 				<a
 					href='#{product-id}'
 					className={`${styles.product_card__link} ${styles.text_lage}`}

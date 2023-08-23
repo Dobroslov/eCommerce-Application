@@ -34,7 +34,12 @@ function RegistrationPage(): React.ReactElement {
 	const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
 		e.preventDefault();
 
-		await createCustomer(registrationFormData, navigate); // Передаем функцию navigate
+		try {
+			await createCustomer(registrationFormData, navigate);
+		} catch (error) {
+			console.error('Error handleSubmit:', error);
+			// Обработайте ошибку, если что-то пошло не так
+		}
 	};
 
 	const handleInputChange = (value: string, id: string) => {
@@ -119,7 +124,7 @@ function RegistrationPage(): React.ReactElement {
 								type='date'
 								onValueChange={handleInputChange}
 								id='date'
-								errorMessage='It should be a valid date!'
+								errorMessage='Need a user over the age of 13 ;-)'
 							/>
 							<select
 								className={style.select}
