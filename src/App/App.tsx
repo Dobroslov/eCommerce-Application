@@ -11,7 +11,7 @@ import Shop from '../pages/shop/shop';
 import RequireAuthorisation from '../hoc/requireAuthorisation';
 import './App.scss';
 import PrivateAccountPage from '../pages/accountPage/accountPage';
-import { getAnonimousToken } from '../services/apiServices';
+import { getAnonimousToken, getProducts } from '../services/apiServices';
 import Modal from '../components/modal/modal';
 import useAuth from '../hooks/useAuth';
 
@@ -19,6 +19,9 @@ function App(): React.ReactElement {
 	const { user, autoSignIn } = useAuth();
 	const location = useLocation();
 	const navigate = useNavigate();
+	useEffect(() => {
+		getProducts();
+	}, []);
 
 	useEffect(() => {
 		if (!user && !localStorage.getItem('token')) {
@@ -40,7 +43,6 @@ function App(): React.ReactElement {
 			});
 		}
 	}, []);
-
 	return (
 		<div className='wrapper'>
 			<Routes>

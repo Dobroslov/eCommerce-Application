@@ -72,3 +72,12 @@ export interface IUserDataRespons {
 	stores: string[];
 	authenticationMode: string;
 }
+export 	interface IProduct {
+	id:string,
+	name:string,
+	description:string,
+	image:string,
+	currencyCode:string,
+	price:string
+
+}
