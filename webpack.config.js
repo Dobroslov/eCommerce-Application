@@ -2,6 +2,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 
 const mode = process.env.NODE_ENV || 'development';
 const devMode = mode === 'development';
@@ -31,6 +32,17 @@ module.exports = {
 		}),
 		new MiniCssExtractPlugin({
 			filename: '[name].[contenthash].css',
+		}),
+		new CopyPlugin({
+			patterns: [
+				// {
+				// 	from: path.resolve(__dirname, 'src', 'shared', 'assets'),
+				// 	to: path.resolve(__dirname, 'dist', 'assets'),
+				// },
+				{
+					from: path.resolve(__dirname, '_redirects'), to: path.resolve(__dirname, 'dist'),
+				},
+			],
 		}),
 	],
 	module: {
@@ -82,7 +94,7 @@ module.exports = {
 								enabled: false,
 							},
 							pngquant: {
-								quality: [0.65, 0.90],
+								quality: [0.65, 0.9],
 								speed: 4,
 							},
 							gifsicle: {
@@ -105,14 +117,16 @@ module.exports = {
 					options: {
 						presets: [
 							'@babel/preset-react',
-							['@babel/preset-env', {
-								targets: 'defaults',
-							}],
+							[
+								'@babel/preset-env',
+								{
+									targets: 'defaults',
+								},
+							],
 						],
 					},
 				},
 			},
-
 		],
 	},
 	resolve: {

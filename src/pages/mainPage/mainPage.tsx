@@ -17,7 +17,13 @@ function MainPage(): React.ReactElement {
 			id: 3, title: 'Card 3', image: 'gold_ring_2.jpg', price: 40, altImage: 'gold ring',
 		},
 		{
-			id: 4, title: 'Card 5', image: 'gold_ring_2.jpg', price: 40, altImage: 'gold ring',
+			id: 4, title: 'Card 4', image: 'gold_ring_2.jpg', price: 40, altImage: 'gold ring',
+		},
+		{
+			id: 5, title: 'Card 5', image: 'gold_ring_2.jpg', price: 40, altImage: 'gold ring',
+		},
+		{
+			id: 6, title: 'Card 6', image: 'gold_ring_2.jpg', price: 40, altImage: 'gold ring',
 		},
 	];
 

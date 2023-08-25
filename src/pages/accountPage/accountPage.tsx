@@ -2,27 +2,27 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
 
-export default function PrivateAccountPage() {
-	console.log('file: accountPage.tsx:7 ~ AccountPage ~ auth:');
+import style from './accountPage.module.scss';
 
-	const auth = useAuth();
+export default function PrivateAccountPage() {
+	const { user, signOut } = useAuth();
 	const navigate = useNavigate();
 
 	const handleLogout = () => {
-		if (auth.user) {
-			auth.signOut(() => navigate('/', {
+		if (user) {
+			signOut(() => navigate('/', {
 				replace: true,
 			}));
 		}
 	};
 
 	return (
-		<div>
-			<h1>This accoutn page</h1>
-			<p>
-				{`Welcome, ${auth.user?.email}`}
+		<div className={style.account__page}>
+			<h2 className={style.title_h2}>This your accounе page</h2>
+			<p className={style.title_h3}>
+				{`Welcome, ${user?.email}`}
 			</p>
-			<button type='button' onClick={handleLogout}>Log out</button>
+			<button className={style.button} type='button' onClick={handleLogout}>Log out</button>
 		</div>
 	);
 }

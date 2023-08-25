@@ -7,10 +7,10 @@ import RegistrationInput from '../../components/inputs/registrationInput';
 import { IUserLogin } from '../../utils/types';
 import SubmitButton from '../../components/buttons/submitButton';
 
-function LoginPage(): React.ReactElement {
+function LoginPage(): React.ReactElement | null {
 	const location = useLocation();
 	const navigate = useNavigate();
-	const { signIn } = useAuth();
+	const { user, signIn } = useAuth();
 
 	const [loginData, setLoginData] = useState<IUserLogin>({
 		email: '',
@@ -18,7 +18,6 @@ function LoginPage(): React.ReactElement {
 	});
 
 	const handleInputChange = (value: string, id: string) => {
-		// управляемый инпут
 		switch (id) {
 			case 'emailLogin':
 				setLoginData({
@@ -43,18 +42,16 @@ function LoginPage(): React.ReactElement {
 				password: loginData.password,
 			},
 			() => {
-				if (location.state?.from) {
-					// Если есть информация о предыдущей странице,
-					// перейдите туда (это для страницы пользователя,
-					// если он попытается сразу на неё перейти,
-					// то его перекинет на страницу логирования,
-					// после логирования обратно на страницу пользователя)
-					navigate(location.state.from, {
-						replace: true,
-					});
-				} else {
-					// В противном случае перейдите на домашнюю страницу
-					navigate('/');
+				console.log('handleSubmit', user);
+				if (user) {
+					// Только если пользователь успешно авторизовался, тогда выполняйте редирект
+					if (location.state?.from) {
+						navigate(location.state.from, {
+							replace: true,
+						});
+					} else {
+						navigate('/account_page');
+					}
 				}
 			},
 		);
@@ -84,7 +81,7 @@ function LoginPage(): React.ReactElement {
 								placeholder='Password'
 								type='password'
 								id='passwordLogin'
-								errorMessage='It should be a valid email password!'
+								errorMessage='It should be a valid password!'
 								pattern='^(?!\s)(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$'
 							/>
 							<div className={style.remember}>

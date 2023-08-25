@@ -16,7 +16,7 @@ export interface IRegistrationForm {
 }
 export interface IUserLogin {
 	email: string;
-	password: string;
+	password?: string;
 }
 
 export interface IAddress {
@@ -33,5 +33,42 @@ export interface ISubmitButton {
 export interface ModalProperties {
 	title: string;
 	description: string;
-	color:string
-  }
+	color: string;
+}
+
+export interface IUserDataRespons {
+	id: string;
+	version: number;
+	versionModifiedAt: string;
+	lastMessageSequenceNumber: number;
+	createdAt: string;
+	lastModifiedAt: string;
+	lastModifiedBy: {
+		isPlatformClient: boolean;
+		user: {
+			typeId: string;
+			id: string;
+		};
+	};
+	createdBy: {
+		isPlatformClient: boolean;
+		user: {
+			typeId: string;
+			id: string;
+		};
+	};
+	email: string;
+	firstName: string;
+	lastName: string;
+	middleName: string;
+	title: string;
+	salutation: string;
+	dateOfBirth: string;
+	password: string;
+	addresses: string[];
+	shippingAddressIds: string[];
+	billingAddressIds: string[];
+	isEmailVerified: boolean;
+	stores: string[];
+	authenticationMode: string;
+}
