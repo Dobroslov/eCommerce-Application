@@ -53,35 +53,9 @@ function LoginPage(): React.ReactElement | null {
 						navigate('/account_page');
 					}
 				}
-				// if (location.state?.from) {
-				// 	// Если есть информация о предыдущей странице,
-				// 	// перейдите туда (это для страницы пользователя,
-				// 	// если он попытается сразу на неё перейти,
-				// 	// то его перекинет на страницу логирования,
-				// 	// после логирования обратно на страницу пользователя)
-				// 	navigate(location.state.from, {
-				// 		replace: true,
-				// 	});
-				// } else {
-				// 	// В противном случае перейдите на домашнюю страницу
-				// 	navigate('/');
-				// }
 			},
 		);
 	};
-
-	// useEffect(() => {
-	// 	if (user) {
-	// 		// Только если пользователь успешно авторизовался, тогда выполняйте редирект
-	// 		if (location.state?.from) {
-	// 			navigate(location.state.from, {
-	// 				replace: true,
-	// 			});
-	// 		} else {
-	// 			navigate('/account_page');
-	// 		}
-	// 	}
-	// }, [user, location.state, navigate]);
 
 	return (
 		<div className={style.login}>
