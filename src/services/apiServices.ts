@@ -42,14 +42,15 @@ export async function createCustomer(
 	};
 
 	try {
-		await axios.post(url, data, {
+		const user = await axios.post(url, data, {
 			headers,
-		});
+		}).then((response) => response.data);
+
 		// Показать модальное окно "Success" с задержкой
 		store.dispatch(
 			showModal({
 				title: 'Success',
-				description: 'User successfully registered',
+				description: `User ${user.customer.firstName} ${user.customer.lastName} successfully registered`,
 				color: 'rgb(60, 179, 113,0.5)',
 			}),
 		);
@@ -63,11 +64,12 @@ export async function createCustomer(
 		}, 4000);
 	} catch (error) {
 		if (axios.isAxiosError(error)) {
+			console.log(error);
 			// Показать модальное окно "Fault" в случае ошибки запроса
 			store.dispatch(
 				showModal({
 					title: 'Fault',
-					description: 'Error while registering user. Please try again later.',
+					description: error.response?.data.message,
 					color: 'rgb(227, 23, 23,0.5)',
 				}),
 			);
@@ -82,7 +84,7 @@ export async function createCustomer(
 	}
 }
 
-export async function getCustomerForId(id: string): Promise<void> {
+export async function getCustomerForId(id: string) { // eslint-disable-line consistent-return
 	const token = localStorage.getItem('token');
 	const url = `${API_URL}/${PROJECT_KEY}/customers/${id}`;
 	const headers = {
@@ -97,6 +99,7 @@ export async function getCustomerForId(id: string): Promise<void> {
 
 		const responseData = response.data;
 		localStorage.setItem('userData', JSON.stringify(responseData));
+		return responseData;
 	} catch (error) {
 		console.error('Error getting customer data:', error);
 	}
@@ -115,13 +118,13 @@ export async function getToken(params: IUserLogin): Promise<void> {
 		.post(url, data, {
 			headers,
 		})
-		.then((response) => {
+		.then(async (response) => {
 			localStorage.setItem('token', response.data.access_token);
-			getCustomerForId(response.data.scope.split(':')[2]);
+			const user = await getCustomerForId(response.data.scope.split(':')[2]);
 			store.dispatch(
 				showModal({
 					title: 'Success',
-					description: 'You have successfully logged in',
+					description: `Welcome ${user.firstName} ${user.lastName} `,
 					color: 'rgb(60, 179, 113,0.5)',
 				}),
 			);
@@ -129,11 +132,11 @@ export async function getToken(params: IUserLogin): Promise<void> {
 				store.dispatch(hideModal());
 			}, 4000);
 		})
-		.catch(() => {
+		.catch((error) => {
 			store.dispatch(
 				showModal({
 					title: 'Fault',
-					description: 'Incorrect login or password',
+					description: error.response?.data.message,
 					color: 'rgb(227, 23, 23,0.5)',
 				}),
 			);
