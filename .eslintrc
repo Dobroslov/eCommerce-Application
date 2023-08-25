@@ -71,6 +71,8 @@
       }],
       "no-param-reassign": ["error", { "props": false }],
       "operator-linebreak": ["error", "after"],
-      "default-param-last": 0
+      "default-param-last": 0,
+      "no-spaced-func":"off",
+      "func-call-spacing":"off"
     }
 }

@@ -1,0 +1,68 @@
+@import './../../styles/mixins';
+
+.body {
+display: grid;
+grid-template-columns: 262px 1fr;
+justify-content: space-between;
+gap: 35px;
+@media (max-width: 768px){
+  grid-template-columns: 1fr;
+}
+}
+
+.products {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  justify-content: space-between;
+  justify-items: center;
+  @media (max-width: 1240px){
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media (min-width: 320px) and (max-width: 1240px) {
+    @include respons-property(gap, 16, 24);
+  }
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.image{
+  padding-bottom: 24px;
+  @media (min-width: 320px) and (max-width: 1240px) {
+    @include respons-property(padding-bottom, 6, 24);
+  }
+}
+
+img {
+  height: 300px;
+  width: 100%;
+  border-radius: 4px;
+  object-fit: fill;
+  @media (min-width: 320px) and (max-width: 1240px) {
+    @include respons-property(height, 136, 300);
+    @include respons-property(width, 136, 300);
+  }
+}
+
+.title {
+  font-size: 20px;
+  color: #000;
+  padding-bottom: 16px;
+  flex: 1 1 auto;
+  @media (min-width: 320px) and (max-width: 1240px) {
+    @include respons-property(font-size, 14, 20);
+    @include respons-property(padding-bottom, 4, 16);
+  }
+}
+
+.price {
+  font-size: 20px;
+  color: #A18A68;
+  @media (min-width: 320px) and (max-width: 1240px) {
+    @include respons-property(font-size, 14, 20);
+  }
+}
