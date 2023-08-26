@@ -1,4 +1,8 @@
-import { ModalProperties } from '../utils/types';
+import { IProduct, ModalProperties } from '../utils/types';
+
+export enum DataActionTypes{
+AddProducts = 'ADD'
+}
 
 export enum ModalActionTypes {
     ShowModal,
@@ -7,6 +11,10 @@ export enum ModalActionTypes {
 export interface ModalAction {
     type: ModalActionTypes;
     payload?: ModalProperties;
+  }
+export interface DataAction {
+    type: DataActionTypes;
+    payload?: IProduct[];
   }
 
 export function hideModal(): ModalAction {
@@ -18,6 +26,12 @@ export function hideModal(): ModalAction {
 export function showModal(payload: ModalProperties): ModalAction {
 	return {
 		type: ModalActionTypes.ShowModal,
+		payload,
+	};
+}
+export function addProducts(payload:IProduct[]) {
+	return {
+		type: DataActionTypes.AddProducts,
 		payload,
 	};
 }
