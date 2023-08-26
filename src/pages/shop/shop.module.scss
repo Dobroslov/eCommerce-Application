@@ -1,13 +1,31 @@
 @import './../../styles/mixins';
 
-.body {
-display: grid;
-grid-template-columns: 262px 1fr;
-justify-content: space-between;
-gap: 35px;
-@media (max-width: 768px){
-  grid-template-columns: 1fr;
+.catalog {
+  margin-top: 96px;
+  margin-bottom: 96px;
+  @media (min-width: 320px) and (max-width: 1240px) {
+    @include respons-property(margin-top, 24, 96);
+    @include respons-property(margin-bottom, 24, 96);
+  }
 }
+
+.catalogTitle {
+  font-size: 33px;
+  padding-bottom: 40px;
+  @media (min-width: 320px) and (max-width: 1240px) {
+    @include respons-property(font-size, 20, 33);
+    @include respons-property(padding-bottom, 15, 40);
+  }
+}
+
+.body {
+  display: grid;
+  grid-template-columns: 262px 1fr;
+  justify-content: space-between;
+  gap: 35px;
+  @media (max-width: 768px){
+    grid-template-columns: 1fr;
+  }
 }
 
 .products {
@@ -42,9 +60,14 @@ img {
   width: 100%;
   border-radius: 4px;
   object-fit: fill;
-  @media (min-width: 320px) and (max-width: 1240px) {
-    @include respons-property(height, 136, 300);
-    @include respons-property(width, 136, 300);
+  @media (min-width: 768px) and (max-width: 1240px) {
+    @include respons-property(height, 140, 300);
+    @include respons-property(width, 140, 300);
+  }
+
+  @media (min-width: 320px) and (max-width: 768px) {
+    @include respons-property(height, 136, 600);
+    @include respons-property(width, 136, 600);
   }
 }
 

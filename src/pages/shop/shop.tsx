@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import style from './shop.module.scss';
+import Filter from './filter/filter';
 // import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 interface IProduct {
@@ -53,9 +54,9 @@ export default function Shop(): React.ReactElement {
 
 	return (
 		<section className={style.catalog}>
-			<h1>Shop The Latest</h1>
+			<h1 className={style.catalogTitle}>Shop The Latest</h1>
 			<div className={style.body}>
-				<div className={style.filters}>123</div>
+				<Filter />
 				<div className={style.products}>
 					{/* <button type='button' onClick={goBack}>Back</button> */}
 					{/* <button type='button' onClick={goHome}>Home</button> */}

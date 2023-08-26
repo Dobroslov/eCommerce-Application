@@ -1,0 +1,95 @@
+.filter {
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+}
+
+.search {
+  display: flex;
+  align-items: center;
+}
+
+.select {
+  font-size: 14px;
+  padding: 10px 5px;
+  border: #d8d8d8 1px solid;
+}
+
+.searchButton {
+  background-color: inherit;
+  border: none;
+  outline: none;
+}
+
+.searchImage {
+  height: 47px;
+  width: 30px;
+  border-radius: 0px;
+  border-bottom: #d8d8d8 1px solid;
+}
+
+.price {
+  font-size: 14px;
+  color: #707070;
+}
+
+.onSaleBody {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.onSaleBody p {
+  font-size: 16px;
+}
+
+
+.switch {
+  display: flex;
+  position: relative;
+  width: 40px;
+  height: 24px;
+  background-color: inherit;
+  align-self: flex-end;
+}
+
+.onSale {
+  height: 0;
+  width: 0;
+  opacity: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  border-radius: 24px;
+  background-color: #707070;
+  transition: 0.4s;
+}
+
+.slider::before {
+  content: '';
+  position: absolute;
+  cursor: pointer;
+  left: 4px;
+  bottom: 4px;
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background-color: #fff;
+  transition: 0.4s;
+}
+
+.onSale:checked + .slider {
+  background-color: gold;
+  transition: 0.4s;
+}
+
+.onSale:checked + .slider::before {
+  transform: translateX(100%);
+  transition: 0.4s;
+}

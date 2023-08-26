@@ -57,6 +57,7 @@
         "react/require-default-props": "off",
         "react/jsx-props-no-spreading": "off",
         "jsx-a11y/label-has-associated-control": "off",
+        "jsx-a11y/control-has-associated-label": "off",
         "jsx-a11y/label-has-for": "off",
         "react/jsx-indent": [2, "tab"],
         "react/jsx-indent-props": [2, "tab"],
