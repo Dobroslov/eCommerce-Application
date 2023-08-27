@@ -22,10 +22,10 @@ export default function Filter(): React.ReactElement {
 				/>
 			</div>
 			<select className={style.select} name='Sort' id=''>
-				<option value=''>Sort by newest</option>
-				<option value=''>Sort by latest</option>
-				<option value=''>Sort from A to Z</option>
-				<option value=''>Sort from Z to A</option>
+				<option value='createdAt desc'>Sort by newest</option>
+				<option value='createdAt asc'>Sort by latest</option>
+				<option value='?sort=masterData.current.name.en-US+asc'>Sort from A to Z</option>
+				<option value='?sort=masterData.current.name.en-US+desc'>Sort from Z to A</option>
 				<option value=''>Sort by price: high to low</option>
 				<option value=''>Sort by price: low to high</option>
 			</select>
