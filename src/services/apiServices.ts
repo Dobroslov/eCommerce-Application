@@ -175,9 +175,9 @@ export async function checkToken(token: string): Promise<{ email: string; active
 	// return customer;
 }
 
-export async function getSortingProducts(limit: number, offset: number, sort: string, order: string) { // eslint-disable-line consistent-return
+export function getSortingProducts(limit: number, offset: number, sort: string, order: string): Promise<void | IProduct[]> { // eslint-disable-line consistent-return
 	let token = '';
-	const sortData:ISorting = {
+	const sortData: ISorting = {
 		sortLimit: limit,
 		sortOffset: offset,
 		sorting: sort,
@@ -200,10 +200,9 @@ export async function getSortingProducts(limit: number, offset: number, sort: st
 		'Content-Type': 'application/json',
 		Authorization: `Bearer ${token}`,
 	};
-	try {
-		const response = await axios.get(url, {
-			headers,
-		});
+	const products = axios.get(url, {
+		headers,
+	}).then((response) => {
 		response.data.results.forEach((product:
 			{
 				id: string;
@@ -225,9 +224,59 @@ export async function getSortingProducts(limit: number, offset: number, sort: st
 			};
 			productsArr.push(productValues);
 		});
-
 		return productsArr;
-	} catch (error) {
-		console.log(error);
+	})
+		.catch((error) => {
+			console.log(error);
+		});
+	return products;
+}
+
+export function getFilterByPrice(limit: number, offset: number, from: number, to: number): Promise<void | IProduct[]> { // eslint-disable-line consistent-return
+	let token = '';
+	if (!localStorage.getItem('token')) {
+		token = localStorage.getItem('anonimous') as string;
+	} else {
+		token = localStorage.getItem('token') as string;
 	}
+	const productsArr: IProduct[] = [];
+
+	const url = `https://api.europe-west1.gcp.commercetools.com/glitter-magazine/product-projections/search?limit=${limit}&offset=${offset}&filter=variants.price.centAmount:range (${from} to ${to})`;
+	const headers: {
+		'Content-Type': string;
+		Authorization: string;
+	} = {
+		'Content-Type': 'application/json',
+		Authorization: `Bearer ${token}`,
+	};
+	const products = axios.get(url, {
+		headers,
+	}).then((response) => {
+		response.data.results.forEach((product:
+			{
+				id: string;
+				name: { [x: string]: string; };
+				description: { [x: string]: string; };
+				variants: {
+					images: { url: string }[];
+					prices: { value: { centAmount: number, currencyCode: string }; }[];
+				}[];
+			}) => {
+			const productValues: IProduct = {
+				id: product.id,
+				name: product.name['en-US'],
+				description: product.description['en-US'],
+				image: product.variants[0].images[0].url,
+				currencyCode: product.variants[0].prices[0].value.currencyCode,
+				price: (product.variants[0].prices[0].value.centAmount / 100)
+					.toFixed(2) as string,
+			};
+			productsArr.push(productValues);
+		});
+		return productsArr;
+	})
+		.catch((error) => {
+			console.log(error);
+		});
+	return products;
 }

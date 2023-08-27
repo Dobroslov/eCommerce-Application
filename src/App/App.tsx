@@ -11,20 +11,22 @@ import Shop from '../pages/shop/shop';
 import RequireAuthorisation from '../hoc/requireAuthorisation';
 import './App.scss';
 import PrivateAccountPage from '../pages/accountPage/accountPage';
-import { getAnonimousToken, getSortingProducts } from '../services/apiServices';
+import { getAnonimousToken, getFilterByPrice } from '../services/apiServices';
 import Modal from '../components/modal/modal';
 import useAuth from '../hooks/useAuth';
-import store from '../store/store';
+// import store from '../store/store';
 
 function App(): React.ReactElement {
 	const { user, autoSignIn } = useAuth();
 	const location = useLocation();
 	const navigate = useNavigate();
-	useEffect(() => {
-		getSortingProducts(4, 0, 'price', 'desc').then((products) => {
-			console.log(products);
 
-			console.log(store.getState().data);
+	//	const selected = store.getState().data.data;
+	// console.log(selected?.sortLimit);
+
+	useEffect(() => {
+		getFilterByPrice(4, 0, 4000, 4000).then((products) => {
+			console.log(products);
 		})
 			.catch((error) => error);
 	}, []);
