@@ -11,7 +11,7 @@ const initialState: DataState = {
 
 function dataReducer(state = initialState, action:DataAction): DataState {
 	switch (action.type) {
-		case DataActionTypes.addProducts:
+		case DataActionTypes.AddProducts:
 			return {
 				...state,
 				data: action.payload,
