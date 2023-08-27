@@ -42,9 +42,11 @@ export async function createCustomer(
 	};
 
 	try {
-		const user = await axios.post(url, data, {
-			headers,
-		}).then((response) => response.data);
+		const user = await axios
+			.post(url, data, {
+				headers,
+			})
+			.then((response) => response.data);
 
 		// Показать модальное окно "Success" с задержкой
 		store.dispatch(
@@ -84,7 +86,8 @@ export async function createCustomer(
 	}
 }
 
-export async function getCustomerForId(id: string) { // eslint-disable-line consistent-return
+// eslint-disable-next-line consistent-return
+export async function getCustomerForId(id: string) {
 	const token = localStorage.getItem('token');
 	const url = `${API_URL}/${PROJECT_KEY}/customers/${id}`;
 	const headers = {
@@ -175,9 +178,15 @@ export async function checkToken(token: string): Promise<{ email: string; active
 	// return customer;
 }
 
-export async function getSortingProducts(limit: number, offset: number, sort: string, order: string) { // eslint-disable-line consistent-return
+// eslint-disable-next-line consistent-return
+export async function getSortingProducts(
+	limit: number | string,
+	offset: number | string,
+	sort: string,
+	order: string,
+) {
 	let token = '';
-	const sortData:ISorting = {
+	const sortData: ISorting = {
 		sortLimit: limit,
 		sortOffset: offset,
 		sorting: sort,
@@ -204,27 +213,27 @@ export async function getSortingProducts(limit: number, offset: number, sort: st
 		const response = await axios.get(url, {
 			headers,
 		});
-		response.data.results.forEach((product:
-			{
+		response.data.results.forEach(
+			(product: {
 				id: string;
-				name: { [x: string]: string; };
-				description: { [x: string]: string; };
+				name: { [x: string]: string };
+				description: { [x: string]: string };
 				variants: {
 					images: { url: string }[];
-					prices: { value: { centAmount: number, currencyCode: string }; }[];
+					prices: { value: { centAmount: number; currencyCode: string } }[];
 				}[];
 			}) => {
-			const productValues: IProduct = {
-				id: product.id,
-				name: product.name['en-US'],
-				description: product.description['en-US'],
-				image: product.variants[0].images[0].url,
-				currencyCode: product.variants[0].prices[0].value.currencyCode,
-				price: (product.variants[0].prices[0].value.centAmount / 100)
-					.toFixed(2) as string,
-			};
-			productsArr.push(productValues);
-		});
+				const productValues: IProduct = {
+					id: product.id,
+					name: product.name['en-US'],
+					description: product.description['en-US'],
+					image: product.variants[0].images[0].url,
+					currencyCode: product.variants[0].prices[0].value.currencyCode,
+					price: (product.variants[0].prices[0].value.centAmount / 100).toFixed(2) as string,
+				};
+				productsArr.push(productValues);
+			},
+		);
 
 		return productsArr;
 	} catch (error) {

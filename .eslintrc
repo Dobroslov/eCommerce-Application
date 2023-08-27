@@ -57,6 +57,7 @@
         "react/require-default-props": "off",
         "react/jsx-props-no-spreading": "off",
         "react/jsx-one-expression-per-line": "off",
+        "react/jsx-wrap-multilines": "off",
         "jsx-a11y/label-has-associated-control": "off",
         "jsx-a11y/control-has-associated-label": "off",
         "jsx-a11y/label-has-for": "off",

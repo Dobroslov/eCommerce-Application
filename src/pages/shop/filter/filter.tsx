@@ -5,29 +5,31 @@ import style from './filter.module.scss';
 import DefaultInput from '../../../components/inputs/defaultInput';
 // import { Link, useLocation, useNavigate } from 'react-router-dom';
 
-const handleInputChange = (value: string, id: string) => {
-	console.log(value, id);
-};
+interface ISort {
+	onValueChange: (value: string) => void;
+}
 
-export default function Filter(): React.ReactElement {
+export default function Filter(props: ISort): React.ReactElement {
+	const { onValueChange } = props;
 	const [value, setValue] = useState<number[]>([30, 1200]);
+
+	const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		const newValue = e.target.value;
+		onValueChange(newValue);
+	};
+
 	return (
 		<div className={style.filter}>
 			<div className={style.search}>
-				<DefaultInput
-					placeholder='Search...'
-					type='text'
-					onValueChange={handleInputChange}
-					id='1'
-				/>
+				<DefaultInput placeholder='Search...' type='text' id='1' />
 			</div>
-			<select className={style.select} name='Sort' id=''>
-				<option value='createdAt desc'>Sort by newest</option>
-				<option value='createdAt asc'>Sort by latest</option>
-				<option value='?sort=masterData.current.name.en-US+asc'>Sort from A to Z</option>
-				<option value='?sort=masterData.current.name.en-US+desc'>Sort from Z to A</option>
-				<option value=''>Sort by price: high to low</option>
-				<option value=''>Sort by price: low to high</option>
+			<select onChange={handleSortChange} className={style.select} name='Sort' id=''>
+				<option value='9 0 createdAt desc'>Sort by newest</option>
+				<option value='9 0 createdAt asc'>Sort by latest</option>
+				<option value='9 0 name.en-Us asc'>Sort from A to Z</option>
+				<option value='9 0 name.en-Us desc'>Sort from Z to A</option>
+				<option value='9 0 price desc'>Sort by price: high to low</option>
+				<option value='9 0 price asc'>Sort by price: low to high</option>
 			</select>
 			<ReactSlider
 				className={style.slider}

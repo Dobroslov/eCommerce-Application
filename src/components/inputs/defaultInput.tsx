@@ -6,22 +6,19 @@ import IMAGE from '../../../public/assets/svg/search.svg';
 interface IRegistrationInput {
 	placeholder: string;
 	type: string;
-	onValueChange: (value: string, id: string) => void;
 	id: string;
 }
 
 function DefaultInput(props: IRegistrationInput): React.JSX.Element {
-	const { placeholder, type, onValueChange, id } = props;
+	const { placeholder, type, id } = props;
 	const [value, setValue] = useState('');
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const newValue = e.target.value;
 		setValue(newValue);
-		onValueChange(newValue, id);
 
 		if (id === 'date' && !isValidUserAge(newValue)) {
 			setValue('');
-			onValueChange('', id);
 		}
 	};
 
