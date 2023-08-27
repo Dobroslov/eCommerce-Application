@@ -11,20 +11,20 @@ import Shop from '../pages/shop/shop';
 import RequireAuthorisation from '../hoc/requireAuthorisation';
 import './App.scss';
 import PrivateAccountPage from '../pages/accountPage/accountPage';
-import { getAnonimousToken, getProducts } from '../services/apiServices';
+import { getAnonimousToken, getSortingProducts } from '../services/apiServices';
 import Modal from '../components/modal/modal';
 import useAuth from '../hooks/useAuth';
-// import store from '../store/store';
+import store from '../store/store';
 
 function App(): React.ReactElement {
 	const { user, autoSignIn } = useAuth();
 	const location = useLocation();
 	const navigate = useNavigate();
 	useEffect(() => {
-		getProducts(2, 0, 'price', 'desc').then((products) => {
+		getSortingProducts(4, 0, 'price', 'desc').then((products) => {
 			console.log(products);
 
-			// console.log(store.getState().data);
+			console.log(store.getState().data);
 		})
 			.catch((error) => error);
 	}, []);

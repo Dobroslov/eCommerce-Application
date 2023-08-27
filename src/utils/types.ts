@@ -81,3 +81,10 @@ export 	interface IProduct {
 	price:string
 
 }
+export interface ISorting{
+
+		sortLimit:number,
+		sortOffset:number,
+		sorting:string,
+		sortOrder:string
+	}
