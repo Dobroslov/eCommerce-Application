@@ -21,7 +21,7 @@ function App(): React.ReactElement {
 	const location = useLocation();
 	const navigate = useNavigate();
 	useEffect(() => {
-		getProducts().then((products) => {
+		getProducts(2, 0, 'price', 'desc').then((products) => {
 			console.log(products);
 
 			// console.log(store.getState().data);

@@ -175,7 +175,7 @@ export async function checkToken(token: string): Promise<{ email: string; active
 	// return customer;
 }
 
-export async function getProducts() { // eslint-disable-line consistent-return
+export async function getProducts(limit: number, offset: number, sort: string, order: string) { // eslint-disable-line consistent-return
 	let token = '';
 	if (!localStorage.getItem('token')) {
 		token = localStorage.getItem('anonimous') as string;
@@ -184,7 +184,8 @@ export async function getProducts() { // eslint-disable-line consistent-return
 	}
 	const productsArr: IProduct[] = [];
 
-	const url = 'https://api.europe-west1.gcp.commercetools.com/glitter-magazine/products';
+	const url = `https://api.europe-west1.gcp.commercetools.com/glitter-magazine/product-projections/search?limit=${limit}&offset=${offset}&sort=${sort} ${order}`;
+
 	const headers: {
 		'Content-Type': string;
 		Authorization: string;
@@ -198,27 +199,21 @@ export async function getProducts() { // eslint-disable-line consistent-return
 		});
 		response.data.results.forEach((product:
 			{
-				id: string; masterData:
-				{
-					current: {
-						name: { [x: string]: string; };
-						description: { [x: string]: string; };
-						variants: {
-							images: { url: string; }[];
-							prices: {
-								value: { centAmount: number, currencyCode: string };
-							}[];
-						}[];
-					};
-				};
+				id: string;
+				name: { [x: string]: string; };
+				description: { [x: string]: string; };
+				variants: {
+					images: { url: string }[];
+					prices: { value: { centAmount: number, currencyCode: string }; }[];
+				}[];
 			}) => {
 			const productValues: IProduct = {
 				id: product.id,
-				name: product.masterData.current.name['en-US'],
-				description: product.masterData.current.description['en-US'],
-				image: product.masterData.current.variants[0].images[0].url,
-				currencyCode: product.masterData.current.variants[0].prices[0].value.currencyCode,
-				price: (product.masterData.current.variants[0].prices[0].value.centAmount / 100)
+				name: product.name['en-US'],
+				description: product.description['en-US'],
+				image: product.variants[0].images[0].url,
+				currencyCode: product.variants[0].prices[0].value.currencyCode,
+				price: (product.variants[0].prices[0].value.centAmount / 100)
 					.toFixed(2) as string,
 			};
 			productsArr.push(productValues);
