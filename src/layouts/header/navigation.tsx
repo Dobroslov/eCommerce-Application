@@ -32,15 +32,15 @@ function Navigation(): React.JSX.Element {
 			<li>
 				<NavLink to='/login' className={style.nav__link}>Login</NavLink>
 			</li>
-			{/* <li>
+			<li>
 				<NavLink to='/shop' className={style.nav__link}>Shop</NavLink>
-			</li> */}
+			</li>
 			<li>
 				<NavLink to='/account_page' className={style.nav__link}>My account</NavLink>
 			</li>
-			<li>
+			{/* <li>
 				<NavLink to='*' className={style.nav__link}>Not found</NavLink>
-			</li>
+			</li> */}
 		</ul>
 	);
 }

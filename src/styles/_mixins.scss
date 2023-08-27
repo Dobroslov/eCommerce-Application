@@ -11,8 +11,14 @@
 	font-size: calc(#{$start}px + (#{$end} - #{$start}) * ((100vw - 320px) / (1248 - 320)));
 }
 
+// @mixin respons-property($css-property, $start, $end) {
+// 	#{$css-property}: calc(#{$start}px + (#{$end} - #{$start}) * ((100vw - 320px) / (1248 - 320)));
+// }
+
 @mixin respons-property($css-property, $start, $end) {
-	#{$css-property}: calc(#{$start}px + (#{$end} - #{$start}) * ((100vw - 320px) / (1248 - 320)));
+	@media (min-width: 320px) and (max-width: 1248px) {
+		#{$css-property}: calc(#{$start}px + (#{$end} - #{$start}) * ((100vw - 320px) / (1248 - 320)));
+	}
 }
 
 // $css-property - свойство стилей которое надо сделать respons (margin, padding, gap, whidth, height...)

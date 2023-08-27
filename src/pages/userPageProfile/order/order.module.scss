@@ -1,0 +1,8 @@
+@import '/src/styles/mixins';
+
+.title_h3 {
+	text-align: center;
+	font-weight: 500;
+	font-size: 14px;
+	@include respons-property(font-size, 10, 16);
+}

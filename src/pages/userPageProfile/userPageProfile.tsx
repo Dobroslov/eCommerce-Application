@@ -1,10 +1,10 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
+import LayoutUserPage from '../../layouts/layoutUserPage/layoutUserPage';
+import style from './userPageProfile.module.scss';
 
-import style from './accountPage.module.scss';
-
-export default function PrivateAccountPage() {
+export default function userPageProfile() {
 	const { user, signOut } = useAuth();
 	const navigate = useNavigate();
 
@@ -17,11 +17,8 @@ export default function PrivateAccountPage() {
 	};
 
 	return (
-		<div className={style.account__page}>
-			<h2 className={style.title_h2}>This your accounе page</h2>
-			<p className={style.title_h3}>
-				{`Welcome, ${user?.email}`}
-			</p>
+		<div className={style.user__page}>
+			<LayoutUserPage />
 			<button className={style.button} type='button' onClick={handleLogout}>Log out</button>
 		</div>
 	);

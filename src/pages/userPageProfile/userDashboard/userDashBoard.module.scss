@@ -1,0 +1,73 @@
+@import '../../../styles/mixins';
+
+.title_h3 {
+	font-weight: 500;
+	font-size: 14px;
+	@include respons-property(font-size, 10, 16);
+}
+
+.title_h4 {
+	font-weight: 500;
+	font-size: 16px;
+	@include respons-property(font-size, 12, 16);
+}
+
+.span_accent {
+	color: #e0bf02;
+	&:hover {
+		color: #8c7702;
+	}
+}
+
+// .user__page {
+// 	display: flex;
+// 	justify-content: space-between;
+// 	flex-direction: column;
+// 	align-items: center;
+// 	margin: 96px 0;
+// 	gap: 40px;
+// }
+
+// .title_h2 {
+// 	font-weight: 400;
+// 	font-size: 33px;
+// 	@include adaptive-font-size(20, 33);
+// 	text-align: center;
+// 	margin: 0 20px;
+// }
+
+// .title_h3 {
+// 	font-weight: 400;
+// 	font-size: 20px;
+// 	@include adaptive-font-size(14, 20);
+// 	text-align: center;
+// 	margin: 0 0 20px 0;
+// 	color: #5f5f5f;
+// }
+
+// .button {
+// 	align-items: center;
+// 	width: max-content;
+// 	padding: 5px 40px;
+// 	font-size: 20px;
+// 	border-radius: 8px;
+// 	border: none;
+// 	outline: none;
+// 	transition: background-color 0.3s ease 0s;
+// 	cursor: pointer;
+// 	color: white;
+// 	background-color: #000000;
+
+// 	@media (min-width: 320px) and (max-width: 1248px) {
+// 		font-size: calc(12px + (20 - 12) * ((100vw - 320px) / (1248 - 320)));
+// 		padding-top: calc(4px + (12 - 4) * ((100vw - 320px) / (1248 - 320)));
+// 		padding-bottom: calc(4px + (12 - 4) * ((100vw - 320px) / (1248 - 320)));
+// 	}
+// }
+
+// @media (any-hover: hover) {
+// 	.button:hover {
+// 		background-color: #363636;
+// 		transition: background-color 0.3s ease 0s;
+// 	}
+// }
