@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { NavigateFunction } from 'react-router-dom';
-import { IUserLogin, IRegistrationForm } from '../utils/types';
+import { IUserLogin, IRegistrationForm, IProduct } from '../utils/types';
 import store from '../store/store';
-import { hideModal, showModal } from '../store/actions';
+import { addProducts, hideModal, showModal } from '../store/actions';
 
 const PROJECT_KEY = 'glitter-magazine';
 const API_URL = 'https://api.europe-west1.gcp.commercetools.com';
@@ -61,7 +61,7 @@ export async function createCustomer(
 			navigate('/', {
 				replace: true,
 			});
-		}, 4000);
+		}, 5000);
 	} catch (error) {
 		if (axios.isAxiosError(error)) {
 			console.log(error);
@@ -76,7 +76,7 @@ export async function createCustomer(
 
 			setTimeout(() => {
 				store.dispatch(hideModal());
-			}, 4000);
+			}, 5000);
 
 			console.error('Axios Error:', error);
 		}
@@ -130,7 +130,7 @@ export async function getToken(params: IUserLogin): Promise<void> {
 			);
 			setTimeout(() => {
 				store.dispatch(hideModal());
-			}, 4000);
+			}, 5000);
 		})
 		.catch((error) => {
 			store.dispatch(
@@ -142,7 +142,7 @@ export async function getToken(params: IUserLogin): Promise<void> {
 			);
 			setTimeout(() => {
 				store.dispatch(hideModal());
-			}, 4000);
+			}, 5000);
 		});
 }
 
@@ -173,4 +173,59 @@ export async function checkToken(token: string): Promise<{ email: string; active
 		});
 
 	// return customer;
+}
+
+export async function getProducts() { // eslint-disable-line consistent-return
+	let token = '';
+	if (!localStorage.getItem('token')) {
+		token = localStorage.getItem('anonimous') as string;
+	} else {
+		token = localStorage.getItem('token') as string;
+	}
+	const productsArr: IProduct[] = [];
+
+	const url = 'https://api.europe-west1.gcp.commercetools.com/glitter-magazine/products';
+	const headers: {
+		'Content-Type': string;
+		Authorization: string;
+	} = {
+		'Content-Type': 'application/json',
+		Authorization: `Bearer ${token}`,
+	};
+	try {
+		const response = await axios.get(url, {
+			headers,
+		});
+		response.data.results.forEach((product:
+			{
+				id: string; masterData:
+				{
+					current: {
+						name: { [x: string]: string; };
+						description: { [x: string]: string; };
+						variants: {
+							images: { url: string; }[];
+							prices: {
+								value: { centAmount: number, currencyCode: string };
+							}[];
+						}[];
+					};
+				};
+			}) => {
+			const productValues: IProduct = {
+				id: product.id,
+				name: product.masterData.current.name['en-US'],
+				description: product.masterData.current.description['en-US'],
+				image: product.masterData.current.variants[0].images[0].url,
+				currencyCode: product.masterData.current.variants[0].prices[0].value.currencyCode,
+				price: (product.masterData.current.variants[0].prices[0].value.centAmount / 100)
+					.toFixed(2) as string,
+			};
+			productsArr.push(productValues);
+		});
+		store.dispatch(addProducts(productsArr));
+		return productsArr;
+	} catch (error) {
+		console.log(error);
+	}
 }
