@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { NavigateFunction } from 'react-router-dom';
-import { IUserLogin, IRegistrationForm, IProduct } from '../utils/types';
+import { IUserLogin, IRegistrationForm, IProduct, ISorting } from '../utils/types';
 import store from '../store/store';
-import { addProducts, hideModal, showModal } from '../store/actions';
+import { addSort, hideModal, showModal } from '../store/actions';
 
 const PROJECT_KEY = 'glitter-magazine';
 const API_URL = 'https://api.europe-west1.gcp.commercetools.com';
@@ -175,8 +175,15 @@ export async function checkToken(token: string): Promise<{ email: string; active
 	// return customer;
 }
 
-export async function getProducts(limit: number, offset: number, sort: string, order: string) { // eslint-disable-line consistent-return
+export async function getSortingProducts(limit: number, offset: number, sort: string, order: string) { // eslint-disable-line consistent-return
 	let token = '';
+	const sortData:ISorting = {
+		sortLimit: limit,
+		sortOffset: offset,
+		sorting: sort,
+		sortOrder: order,
+	};
+	store.dispatch(addSort(sortData));
 	if (!localStorage.getItem('token')) {
 		token = localStorage.getItem('anonimous') as string;
 	} else {
@@ -218,7 +225,7 @@ export async function getProducts(limit: number, offset: number, sort: string, o
 			};
 			productsArr.push(productValues);
 		});
-		store.dispatch(addProducts(productsArr));
+
 		return productsArr;
 	} catch (error) {
 		console.log(error);
