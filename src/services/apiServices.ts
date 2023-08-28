@@ -316,3 +316,48 @@ export function getProductForId(id: string) {
 		});
 	return product;
 }
+
+export function changePassword(currPass: string, newPass: string) {
+	const user = localStorage.getItem('userData') as string;
+	const { id, version } = JSON.parse(user);
+	const token = localStorage.getItem('token');
+	const data = JSON.stringify({
+		id,
+		version,
+		currentPassword: `${currPass}`,
+		newPassword: `${newPass}`,
+	});
+	const headers = {
+		'Content-Type': 'application/json', Authorization: `Bearer ${token}`,
+	};
+	const url = 'https://api.europe-west1.gcp.commercetools.com/glitter-magazine/customers/password';
+	axios.post(url, data, {
+		headers,
+	})
+		.then((response) => {
+			const responseData = response.data;
+			localStorage.setItem('userData', JSON.stringify(responseData));
+			store.dispatch(
+				showModal({
+					title: 'Success',
+					description: 'Password changed successfully',
+					color: 'rgb(60, 179, 113,0.5)',
+				}),
+			);
+			setTimeout(() => {
+				store.dispatch(hideModal());
+			}, 5000);
+		})
+		.catch((error) => {
+			store.dispatch(
+				showModal({
+					title: 'Fault',
+					description: error.response?.data.message,
+					color: 'rgb(227, 23, 23,0.5)',
+				}),
+			);
+			setTimeout(() => {
+				store.dispatch(hideModal());
+			}, 5000);
+		});
+}
