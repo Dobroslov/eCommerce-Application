@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { NavigateFunction } from 'react-router-dom';
-import { IUserLogin, IRegistrationForm, IProduct, ISorting } from '../utils/types';
+import { IUserLogin, IRegistrationForm, IProduct } from '../utils/types';
 import store from '../store/store';
-import { addSort, hideModal, showModal } from '../store/actions';
+import { hideModal, showModal } from '../store/actions';
 
 const PROJECT_KEY = 'glitter-magazine';
 const API_URL = 'https://api.europe-west1.gcp.commercetools.com';
@@ -177,13 +177,7 @@ export async function checkToken(token: string): Promise<{ email: string; active
 
 export function getSortingProducts(limit: number, offset: number, sort: string, order: string): Promise<void | IProduct[]> { // eslint-disable-line consistent-return
 	let token = '';
-	const sortData: ISorting = {
-		sortLimit: limit,
-		sortOffset: offset,
-		sorting: sort,
-		sortOrder: order,
-	};
-	store.dispatch(addSort(sortData));
+	// store.dispatch(addSort(sortData));
 	if (!localStorage.getItem('token')) {
 		token = localStorage.getItem('anonimous') as string;
 	} else {
@@ -279,4 +273,46 @@ export function getFilterByPrice(limit: number, offset: number, from: number, to
 			console.log(error);
 		});
 	return products;
+}
+export function getProductForId(id: string) {
+	let token = '';
+	if (!localStorage.getItem('token')) {
+		token = localStorage.getItem('anonimous') as string;
+	} else {
+		token = localStorage.getItem('token') as string;
+	}
+
+	const url = `https://api.europe-west1.gcp.commercetools.com/glitter-magazine/product-projections/${id}`;
+	const headers: {
+		'Content-Type': string;
+		Authorization: string;
+	} = {
+		'Content-Type': 'application/json',
+		Authorization: `Bearer ${token}`,
+	};
+	const product = axios.get(url, {
+		headers,
+	}).then((response) => {
+		const imagesArr: string[] = [];
+		response.data.variants[0].images.forEach((image: { url: string; }) => {
+			imagesArr.push(image.url);
+		});
+		const productData = {
+			name: response.data.name['en-US'],
+			images: imagesArr,
+			description: response.data.description['en-US'],
+			currencyCode: response.data.variants[0].prices[0].value.currencyCode,
+			price: (response.data.variants[0].prices[0].value.centAmount / 100).toFixed(2) as string,
+			color: response.data.variants[0].attributes[0].value[0],
+			weight: response.data.variants[0].attributes[1].value,
+			stone: response.data.variants[0].attributes[2].value[0],
+			standard: response.data.variants[0].attributes[3].value,
+			metall: response.data.variants[0].attributes[4].value[0],
+		};
+		return productData;
+	})
+		.catch((error) => {
+			console.log(error);
+		});
+	return product;
 }
