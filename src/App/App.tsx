@@ -11,14 +11,24 @@ import Shop from '../pages/shop/shop';
 import RequireAuthorisation from '../hoc/requireAuthorisation';
 import './App.scss';
 import PrivateAccountPage from '../pages/accountPage/accountPage';
-import { getAnonimousToken } from '../services/apiServices';
+import { getAnonimousToken, getProductForId } from '../services/apiServices';
 import Modal from '../components/modal/modal';
 import useAuth from '../hooks/useAuth';
-
+// import store from '../store/store';
 function App(): React.ReactElement {
 	const { user, autoSignIn } = useAuth();
 	const location = useLocation();
 	const navigate = useNavigate();
+	//	const selected = store.getState().data.data;
+	// console.log(selected?.sortLimit);
+
+	useEffect(() => {
+		getProductForId('30414562-54b1-4a22-8dfb-edd63a7d3d0f')
+			.then((product) => {
+				console.log(product);
+			})
+			.catch((error) => error);
+	}, []);
 	useEffect(() => {
 		if (!user && !localStorage.getItem('token')) {
 			getAnonimousToken();
