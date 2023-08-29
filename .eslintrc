@@ -7,6 +7,9 @@
       }
     }
   },
+  "globals": {
+    "JSX": "readonly"
+},
     "parser": "@typescript-eslint/parser",
     "plugins": ["prettier", "import",
     "@typescript-eslint"
@@ -53,6 +56,8 @@
         "@typescript-eslint/no-use-before-define": ["error"],
         "indent": [2, "tab", { "SwitchCase": 1, "VariableDeclarator": 1 }],
         "no-tabs": 0,
+        "implicit-arrow-linebreak": "off",
+        "function-paren-newline": "off",
         "react/prop-types": 0,
         "react/require-default-props": "off",
         "react/jsx-props-no-spreading": "off",
@@ -66,7 +71,7 @@
         "jsx-quotes": [2, "prefer-single"],
         "react/jsx-no-bind": "off",
         "comma-dangle": [2, "always-multiline"],
-        "object-curly-newline": ["error", {
+        "object-curly-newline": ["off", {
           "ObjectExpression": "always",
           "ObjectPattern": { "multiline": true },
           "ImportDeclaration": "never",

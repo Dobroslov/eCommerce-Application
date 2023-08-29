@@ -86,3 +86,16 @@ export interface ISorting {
 	sorting: string;
 	sortOrder: string;
 }
+
+export interface IProductbyId {
+	name: string;
+	images: string[];
+	description: string;
+	currencyCode: string;
+	price: string;
+	color: string;
+	weight: number;
+	stone: boolean;
+	standard: number;
+	metall: string;
+}

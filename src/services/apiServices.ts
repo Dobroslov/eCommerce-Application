@@ -179,8 +179,8 @@ export async function checkToken(token: string): Promise<{ email: string; active
 }
 
 export function getSortingProducts(
-	limit: number,
-	offset: number,
+	limit: number | string,
+	offset: number | string,
 	sort: string,
 	order: string,
 ): Promise<void | IProduct[]> {
@@ -293,7 +293,21 @@ export function getFilterByPrice(
 		});
 	return products;
 }
-export function getProductForId(id: string) {
+
+interface IProductbyId {
+	name: string;
+	images: string[];
+	description: string;
+	currencyCode: string;
+	price: string;
+	color: string;
+	weight: number;
+	stone: boolean;
+	standard: number;
+	metall: string;
+}
+
+export function getProductForId(id: string): Promise<void | IProductbyId> {
 	let token = '';
 	if (!localStorage.getItem('token')) {
 		token = localStorage.getItem('anonimous') as string;

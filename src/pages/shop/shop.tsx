@@ -37,7 +37,7 @@ export default function Shop(): React.ReactElement {
 
 	return (
 		<section className={style.catalog}>
-			<h1 className={style.catalogTitle}>Shop The Latest</h1>
+			<h3 className={style.catalogTitle}>Shop The Latest</h3>
 			<div className={style.body}>
 				<Filter onValueChange={handleSortChange} />
 				<div className={style.products}>

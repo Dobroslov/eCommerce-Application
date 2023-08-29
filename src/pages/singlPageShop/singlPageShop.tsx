@@ -1,42 +1,60 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-
-interface IProductRespons {
-	body?: string;
-	id?: number;
-	title?: string;
-	userId?: number;
-}
+import { useParams } from 'react-router-dom';
+import { getProductForId } from '../../services/apiServices';
+import CarouselCompound from '../../components/slider/carouselCompound/carouselCompound';
+import style from './singlPageShop.module.scss';
+import { IProductbyId } from '../../utils/types';
 
 export default function ShopSinglPageProduct(): React.ReactElement {
 	const { id } = useParams(); // получаем параметры ссылки
-	const navigate = useNavigate();
 	// два параметра: 1)куда перенаправить пользователя 2)
-	const [product, setProduct] = useState<IProductRespons | null>(null);
-
-	const goBack = () => navigate(-1);
-	const goHome = () => navigate('/', {
-		replace: true,
+	const [product, setProduct] = useState<IProductbyId>({
+		name: '',
+		images: [''],
+		description: '',
+		currencyCode: '',
+		price: '',
+		color: '',
+		weight: 1,
+		stone: true,
+		standard: 1,
+		metall: '',
 	});
 	// const goForward = () => navigate(1); // вперёд по истории
 
 	useEffect(() => {
-		fetch(`https://jsonplaceholder.typicode.com/posts/${id}`)
-			.then((res) => res.json())
-			.then((data: IProductRespons) => setProduct(data));
+		if (id) {
+			getProductForId(id)
+				.then((data) => {
+					if (data) {
+						setProduct(data);
+					} else {
+						console.error('No data received from API');
+					}
+				})
+				.catch((error) => {
+					console.error('API request failed:', error);
+				});
+		}
 	}, [id]);
 
 	return (
 		<div>
-			<button type='button' onClick={goBack}>Back</button>
-			<button type='button' onClick={goHome}>Home</button>
-			<h2>Карточка продукта (для примера пост)</h2>
-			{product && (
-				<>
-					<h2>{product.title}</h2>
-					<p>{product.body}</p>
-				</>
-			)}
+			<div className={style.mainContainer}>
+				<CarouselCompound>
+					{product.images.map((image) => (
+						<CarouselCompound.CarouselPage>
+							<div className={`${style.item}`}>
+								<img
+									src={image}
+									alt=''
+									onError={() => console.error`(Failed to load image: ${image})`}
+								/>
+							</div>
+						</CarouselCompound.CarouselPage>
+					))}
+				</CarouselCompound>
+			</div>
 		</div>
 	);
 }
