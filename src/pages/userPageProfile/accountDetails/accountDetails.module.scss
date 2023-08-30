@@ -10,10 +10,9 @@
 
 .title_h3 {
 	font-weight: 400;
-	font-size: 20px;
-	@include respons-property(font-size, 16, 20);
-	margin-bottom: 40px;
-	@include respons-property(margin-bottom, 25, 40);
+	font-size: 26px;
+	@include respons-property(font-size, 16, 26);
+	margin: 20px 0;
 }
 
 .container {
@@ -29,7 +28,7 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	padding-bottom: 326px;
+	padding-bottom: 50px;
 	@include respons-property(max-width, 288, 500);
 	@include respons-property(padding-bottom, 90, 326);
 }

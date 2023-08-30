@@ -22,7 +22,7 @@
 		width: 100%;
 		background: #d8d8d8;
 	}
-	@media (min-width: 600px) and (max-width: 1248px) {
+	@media (min-width: 320px) and (max-width: 1248px) {
 		gap: calc(20px + (49 - 29) * ((100vw - 760px) / (1248 - 760)));
 	}
 }

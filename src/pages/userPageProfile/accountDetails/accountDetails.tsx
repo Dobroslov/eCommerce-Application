@@ -1,63 +1,73 @@
-import React, { FormEvent } from 'react';
-import RegistrationInput from '../../../components/inputs/registrationInput';
+import React, { FormEvent, useEffect, useState } from 'react';
+import ChangeInput from '../../../components/inputs/changeInput/changeInput';
 import SubmitButton from '../../../components/buttons/submitButton';
 
 import style from './accountDetails.module.scss';
 
-export default function AccountDetails(): React.ReactElement {
-	const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
-		e.preventDefault();
+interface IUpdateUserData {
+	firstName: string;
+	lastName: string;
+	email: string;
+	id: string;
+}
 
-		try {
-			// await createCustomer(registrationFormData, navigate);
-		} catch (error) {
-			console.error('Error handleSubmit:', error);
-			// Обработайте ошибку, если что-то пошло не так
+export default function AccountDetails(): React.ReactElement {
+	const [userData, setUserData] = useState<IUpdateUserData>({
+		firstName: '',
+		lastName: '',
+		email: '',
+		id: '',
+	});
+
+	// const [isDataChanged, setIsDataChanged] = useState<boolean>(false);
+	// const [oldPassword, setOldPassword] = useState<string>('');
+
+	// При загрузке компонента загружаем данные из Local Storage
+	useEffect(() => {
+		const storedUserData = localStorage.getItem('userData');
+		if (storedUserData) {
+			const parsedUserData = JSON.parse(storedUserData);
+
+			setUserData({
+				firstName: parsedUserData.firstName || '',
+				lastName: parsedUserData.lastName || '',
+				email: parsedUserData.email || '',
+				id: parsedUserData.id || '',
+			});
 		}
+
+		// setIsDataChanged(false);
+	}, []);
+
+	useEffect(() => {
+		console.log(userData);
+	}, [userData]);
+
+	const handleInputChange = (id: string, newValue: string): void => {
+		setUserData((prevUserData) => ({
+			...prevUserData,
+			[id]: newValue,
+		}));
+		// setIsDataChanged(true);
 	};
 
-	const handleInputChange = () => {
-		console.log('handleInputChange');
+	// const handlePasswordChange = (newValue: string): void => {
+	// 	setOldPassword(newValue);
+	// };
 
-		// Клонируем текущее состояние, чтобы не изменять его напрямую
-		// const updatedData = {
-		// 	...registrationFormData,
-		// };
+	const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
+		e.preventDefault();
+		console.log('handleSubmit', userData);
 
-		// switch (id) {
-		// 	case 'firstName':
-		// 		updatedData.firstName = value;
-		// 		break;
-		// 	case 'lastName':
-		// 		updatedData.lastName = value;
-		// 		break;
-		// 	case 'email':
-		// 		updatedData.email = value;
-		// 		break;
-		// 	case 'date':
-		// 		updatedData.dateOfBirth = value;
-		// 		break;
-		// 	case 'password':
-		// 		updatedData.password = value;
-		// 		break;
-		// 	case 'city':
-		// 		updatedData.addresses[0].city = value;
-		// 		break;
-		// 	case 'streetName':
-		// 		updatedData.addresses[0].streetName = value;
-		// 		break;
-		// 	case 'streetNumber':
-		// 		updatedData.addresses[0].streetNumber = value;
-		// 		break;
-		// 	case 'postalCode':
-		// 		updatedData.addresses[0].postalCode = value;
-		// 		break;
-		// 	default:
-		// 		break;
-		// }
+		try {
+			// const updatedFields: Partial<IUpdateUserData> = {
+			// };
 
-		// Обновляем состояние с обновленными данными
-		// setRegistrationFormData(updatedData);
+			// setIsDataChanged(false);
+		} catch (error) {
+			console.error('Error handleSubmit:', error);
+			// Ошибка, если что-то пошло не так
+		}
 	};
 
 	return (
@@ -67,31 +77,34 @@ export default function AccountDetails(): React.ReactElement {
 					<h2 className={style.title_h2}>Account details</h2>
 					<form className={style.form} onSubmit={handleSubmit}>
 						<div className={style.inputs}>
-							<RegistrationInput
+							<ChangeInput
 								placeholder='First name'
 								type='text'
 								onValueChange={handleInputChange}
 								id='firstName'
 								errorMessage="First name should be 1-16 characters and shoudn'nt include any special character"
 								pattern='^[A-Za-zА-Яа-я]{1,16}$'
+								valueInput={userData.firstName}
 							/>
-							<RegistrationInput
+							<ChangeInput
 								placeholder='Last Name'
 								type='text'
 								onValueChange={handleInputChange}
 								id='lastName'
 								errorMessage="Last Name should be 1-16 characters and shoudn'nt include any special character"
 								pattern='^[A-Za-zА-Яа-я]{1,16}$'
+								valueInput={userData.lastName}
 							/>
-							<RegistrationInput
+							<ChangeInput
 								placeholder='Email'
 								type='email'
 								onValueChange={handleInputChange}
 								id='email'
 								errorMessage='It should be a valid email address!'
 								pattern='^(?!\s)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+								valueInput={userData.email}
 							/>
-							{/* <RegistrationInput
+							{/* <ChangeInput
 								placeholder='Date of birth'
 								type='date'
 								onValueChange={handleInputChange}
@@ -101,30 +114,30 @@ export default function AccountDetails(): React.ReactElement {
 
 							<h3 className={style.title_h3}>Password change</h3>
 
-							<RegistrationInput
+							{/* <ChangeInput
 								onValueChange={handleInputChange}
 								placeholder='Current password (leave blank to leave unchanged)'
 								type='password'
 								id='password'
 								errorMessage='The entered password does`t match the current password'
-								pattern='' // todo добавить текущий пароль
+								pattern='^[A-Za-zА-Яа-я]{1,16}$' // todo добавить текущий пароль
 							/>
-							<RegistrationInput
-								onValueChange={handleInputChange}
+							<ChangeInput
+								onValueChange={handlePasswordChange}
 								placeholder='New password (leave blank to leave unchanged)'
 								type='password'
-								id='copy_password'
+								id='newPassword'
 								errorMessage="Passwords don't match!"
-								pattern='^(?!\s)(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,20}$'
+	pattern='^(?!\s)(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,20}$'
 							/>
-							<RegistrationInput
-								onValueChange={handleInputChange}
+							<ChangeInput
+								onValueChange={handlePasswordChange}
 								placeholder='Confirm new password'
 								type='password'
-								id='copy_password'
+								id='newCopyPassword'
 								errorMessage="Passwords don't match!"
 							// pattern={registrationFormData.password}
-							/>
+							/> */}
 							<div className={style.remember}>
 								<input type='checkbox' id='checkbox-1' className={style.formCheckBox} />
 								<label htmlFor='checkbox-1' className={style.checkboxLabel}>
