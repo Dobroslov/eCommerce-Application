@@ -51,7 +51,9 @@ function CarouselCompound({ children }: CarouselProps) {
 			}}
 		>
 			<div className={style.container}>
-				<button type='button' className={style.arrow_left_button} onClick={handleLeftArrowClick} />
+				<button type='button' className={style.arrow_left_button} onClick={handleLeftArrowClick}>
+					❮
+				</button>
 				<div className={style.window} ref={windowElementRef}>
 					<div
 						className={style.allPagesContainer}
@@ -62,11 +64,9 @@ function CarouselCompound({ children }: CarouselProps) {
 						{children}
 					</div>
 				</div>
-				<button
-					type='button'
-					className={style.arrow_right_button}
-					onClick={handleRightArrowClick}
-				/>
+				<button type='button' className={style.arrow_right_button} onClick={handleRightArrowClick}>
+					❯
+				</button>
 			</div>
 		</CarouselContext.Provider>
 	);
