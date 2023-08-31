@@ -49,17 +49,20 @@
 }
 
 .image {
-  padding-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 24px;
   @media (min-width: 320px) and (max-width: 1240px) {
-    @include respons-property(padding-bottom, 6, 24);
+    @include respons-property(margin-bottom, 6, 24);
   }
 }
 
 .image img {
   height: 300px;
-  width: 100%;
+  width: 300px;
   border-radius: 4px;
-  object-fit: fill;
+  object-fit: cover;
+  pointer-events: none;
   @media (min-width: 768px) and (max-width: 1240px) {
     @include respons-property(height, 140, 300);
     @include respons-property(width, 140, 300);
@@ -87,5 +90,66 @@
   color: #A18A68;
   @media (min-width: 320px) and (max-width: 1240px) {
     @include respons-property(font-size, 14, 20);
+  }
+}
+
+.image:hover .showDetails {
+  display: flex;
+  transform: translateY(0%);
+  transition: transform ease 0.3s;
+}
+
+.showDetails {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  bottom: 0;
+  left: 0;
+  color: #000;
+  font-size: 16px;
+  background-color: rgba($color: #000000, $alpha: 0.1);
+  height: 20%;
+  width: 100%;
+  transition: transform ease 0.3s;
+  transform: translateY(100%);
+  @media (min-width: 320px) and (max-width: 1240px) {
+    @include respons-property(font-size, 12, 16);
+  }
+}
+
+.itemModal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  height: 100%;
+}
+
+.itemModal img {
+  width: 300px;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  @media (min-width: 320px) and (max-width: 1240px) {
+    @include respons-property(min-width, 320, 500);
+    }
+}
+
+.showDetailsModal {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  bottom: 0;
+  left: 0;
+  color: #000;
+  font-size: 16px;
+  background-color: rgba($color: #000000, $alpha: 0.1);
+  height: 20%;
+  width: 100%;
+  transition: transform ease 0.3s;
+  @media (min-width: 320px) and (max-width: 1240px) {
+    @include respons-property(font-size, 12, 16);
   }
 }

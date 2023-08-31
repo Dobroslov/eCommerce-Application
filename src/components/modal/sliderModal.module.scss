@@ -1,0 +1,55 @@
+@import '/src/styles/mixins';
+.modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh; 
+  width: 100vw;
+  background-color: rgba($color: #000000, $alpha: 0.4);
+  position: fixed;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: all ease 0.5s;
+}
+
+.modalActive {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh; 
+  width: 100vw;
+  background-color: rgba($color: #000000, $alpha: 0.4);
+  position: fixed;
+  top: 0;
+  left: 0;
+  opacity: 1;
+  pointer-events: all;
+  transition: all ease 0.5s;
+  z-index: 10;
+}
+
+//====================================================================================================
+
+.content {
+  border-radius: 12px;
+  background-color: #fff;
+  width: 500px;
+  transform: scale(0.5);
+  transition: all ease 0.4s;
+  @media (min-width: 320px) and (max-width: 1240px) {
+    @include respons-property(width, 300, 500);
+    }
+}
+
+.contentActive {
+  border-radius: 12px;
+  background-color: #fff;
+  width: 500px;
+  transform: scale(1);
+  transition: all ease 0.4s;
+  @media (min-width: 320px) and (max-width: 1240px) {
+    @include respons-property(width, 300, 500);
+    }
+}
