@@ -285,20 +285,20 @@ export function getProductForId(id: string) {
 		headers,
 	}).then((response) => {
 		const imagesArr: string[] = [];
-		response.data.variants[0].images.forEach((image: { url: string; }) => {
+		response.data.masterVariant.images.forEach((image: { url: string; }) => {
 			imagesArr.push(image.url);
 		});
 		const productData = {
 			name: response.data.name['en-US'],
 			images: imagesArr,
 			description: response.data.description['en-US'],
-			currencyCode: response.data.variants[0].prices[0].value.currencyCode,
-			price: (response.data.variants[0].prices[0].value.centAmount / 100).toFixed(2) as string,
-			color: response.data.variants[0].attributes[0].value[0],
-			weight: response.data.variants[0].attributes[1].value,
-			stone: response.data.variants[0].attributes[2].value[0],
-			standard: response.data.variants[0].attributes[3].value,
-			metall: response.data.variants[0].attributes[4].value[0],
+			currencyCode: response.data.masterVariant.prices[0].value.currencyCode,
+			price: (response.data.masterVariant.prices[0].value.centAmount / 100).toFixed(2) as string,
+			color: response.data.masterVariant.attributes[0].value[0],
+			weight: response.data.masterVariant.attributes[1].value,
+			stone: response.data.masterVariant.attributes[2].value[0],
+			standard: response.data.masterVariant.attributes[3].value,
+			metall: response.data.masterVariant.attributes[4].value[0],
 		};
 		return productData;
 	})
