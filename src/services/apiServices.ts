@@ -213,18 +213,18 @@ export function getSortingProducts(
 					id: string;
 					name: { [x: string]: string };
 					description: { [x: string]: string };
-					variants: {
+					masterVariant: {
 						images: { url: string }[];
 						prices: { value: { centAmount: number; currencyCode: string } }[];
-					}[];
+					};
 				}) => {
 					const productValues: IProduct = {
 						id: product.id,
 						name: product.name['en-US'],
 						description: product.description['en-US'],
-						image: product.variants[0].images[0].url,
-						currencyCode: product.variants[0].prices[0].value.currencyCode,
-						price: (product.variants[0].prices[0].value.centAmount / 100).toFixed(2) as string,
+						image: product.masterVariant.images[0].url,
+						currencyCode: product.masterVariant.prices[0].value.currencyCode,
+						price: (product.masterVariant.prices[0].value.centAmount / 100).toFixed(2) as string,
 					};
 					productsArr.push(productValues);
 				},
@@ -237,12 +237,7 @@ export function getSortingProducts(
 	return products;
 }
 
-export function getFilterByPrice(
-	limit: number,
-	offset: number,
-	from: number,
-	to: number,
-): Promise<void | IProduct[]> {
+export function getFilter(limit = 9, offset = 0, filter: string): Promise<void | IProduct[]> {
 	// eslint-disable-line consistent-return
 	let token = '';
 	if (!localStorage.getItem('token')) {
@@ -252,7 +247,7 @@ export function getFilterByPrice(
 	}
 	const productsArr: IProduct[] = [];
 
-	const url = `https://api.europe-west1.gcp.commercetools.com/glitter-magazine/product-projections/search?limit=${limit}&offset=${offset}&filter=variants.price.centAmount:range (${from} to ${to})`;
+	const url = `https://api.europe-west1.gcp.commercetools.com/glitter-magazine/product-projections/search?limit=${limit}&offset=${offset}${filter}`;
 	const headers: {
 		'Content-Type': string;
 		Authorization: string;
@@ -270,18 +265,18 @@ export function getFilterByPrice(
 					id: string;
 					name: { [x: string]: string };
 					description: { [x: string]: string };
-					variants: {
+					masterVariant: {
 						images: { url: string }[];
 						prices: { value: { centAmount: number; currencyCode: string } }[];
-					}[];
+					};
 				}) => {
 					const productValues: IProduct = {
 						id: product.id,
 						name: product.name['en-US'],
 						description: product.description['en-US'],
-						image: product.variants[0].images[0].url,
-						currencyCode: product.variants[0].prices[0].value.currencyCode,
-						price: (product.variants[0].prices[0].value.centAmount / 100).toFixed(2) as string,
+						image: product.masterVariant.images[0].url,
+						currencyCode: product.masterVariant.prices[0].value.currencyCode,
+						price: (product.masterVariant.prices[0].value.centAmount / 100).toFixed(2) as string,
 					};
 					productsArr.push(productValues);
 				},
@@ -350,4 +345,119 @@ export function getProductForId(id: string): Promise<void | IProductbyId> {
 			console.log(error);
 		});
 	return product;
+}
+
+export function changePassword(currPass: string, newPass: string) {
+	const user = localStorage.getItem('userData') as string;
+	const { id, version } = JSON.parse(user);
+	const token = localStorage.getItem('token');
+	const data = JSON.stringify({
+		id,
+		version,
+		currentPassword: `${currPass}`,
+		newPassword: `${newPass}`,
+	});
+	const headers = {
+		'Content-Type': 'application/json',
+		Authorization: `Bearer ${token}`,
+	};
+	const url = 'https://api.europe-west1.gcp.commercetools.com/glitter-magazine/customers/password';
+	axios
+		.post(url, data, {
+			headers,
+		})
+		.then((response) => {
+			const responseData = response.data;
+			localStorage.setItem('userData', JSON.stringify(responseData));
+			store.dispatch(
+				showModal({
+					title: 'Success',
+					description: 'Password changed successfully',
+					color: 'rgb(60, 179, 113,0.5)',
+				}),
+			);
+			setTimeout(() => {
+				store.dispatch(hideModal());
+			}, 5000);
+		})
+		.catch((error) => {
+			store.dispatch(
+				showModal({
+					title: 'Fault',
+					description: error.response?.data.message,
+					color: 'rgb(227, 23, 23,0.5)',
+				}),
+			);
+			setTimeout(() => {
+				store.dispatch(hideModal());
+			}, 5000);
+		});
+}
+
+export function changeCustomerValues(
+	firstName: string,
+	lastName: string,
+	email: string,
+	dateOfBirth: string,
+) {
+	const user = localStorage.getItem('userData') as string;
+	const { id, version } = JSON.parse(user);
+	const token = localStorage.getItem('token');
+	const headers = {
+		'Content-Type': 'application/json',
+		Authorization: `Bearer ${token}`,
+	};
+	const url = `https://api.europe-west1.gcp.commercetools.com/glitter-magazine/customers/${id}`;
+	const data = {
+		version,
+		actions: [
+			{
+				action: 'changeEmail',
+				email,
+			},
+			{
+				action: 'setFirstName',
+				firstName,
+			},
+			{
+				action: 'setLastName',
+				lastName,
+			},
+			{
+				action: 'setDateOfBirth',
+				dateOfBirth,
+			},
+		],
+	};
+	axios
+		.post(url, data, {
+			headers,
+		})
+		.then((response) => {
+			console.log(response);
+			const responseData = response.data;
+			localStorage.setItem('userData', JSON.stringify(responseData));
+			store.dispatch(
+				showModal({
+					title: 'Success',
+					description: 'Data changed successfully',
+					color: 'rgb(60, 179, 113,0.5)',
+				}),
+			);
+			setTimeout(() => {
+				store.dispatch(hideModal());
+			}, 5000);
+		})
+		.catch((error) => {
+			store.dispatch(
+				showModal({
+					title: 'Fault',
+					description: error.response?.data.message,
+					color: 'rgb(227, 23, 23,0.5)',
+				}),
+			);
+			setTimeout(() => {
+				store.dispatch(hideModal());
+			}, 5000);
+		});
 }
