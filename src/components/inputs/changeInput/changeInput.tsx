@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+// import isValidUserAge from '../../../utils/helpers';
 import style from './changeInput.module.scss';
 
 interface IChangeInput {
@@ -8,7 +9,7 @@ interface IChangeInput {
 	id: string;
 	errorMessage?: string;
 	pattern?: string;
-	valueInput?: string;
+	initValue?: string;
 }
 
 export default function ChangeInput(props: IChangeInput): React.JSX.Element {
@@ -19,17 +20,21 @@ export default function ChangeInput(props: IChangeInput): React.JSX.Element {
 		id,
 		errorMessage,
 		pattern,
-		valueInput,
+		initValue,
 	} = props;
-	const [value, setValue] = useState(valueInput || '');
+
+	console.log('file: changeInput.tsx:25 ~ ChangeInput ~ initValue:', initValue, typeof initValue);
+
 	const [isFocused, setIsFocused] = useState(false);
 	const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-	// const ref = useRef(null);
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const newValue = e.target.value;
-		setValue(newValue);
 		onValueChange(newValue, id);
+
+		// if (id === 'date' && !isValidUserAge(newValue)) {
+		// 	onValueChange(newValue, id);
+		// }
 	};
 
 	const togglePasswordVisibility = () => {
@@ -42,11 +47,9 @@ export default function ChangeInput(props: IChangeInput): React.JSX.Element {
 				className={style.input}
 				type={isPasswordVisible ? 'text' : type}
 				placeholder={placeholder}
-				value={value}
+				value={initValue}
 				onChange={handleChange}
 				id={id}
-				required
-				// ref={ref}
 				onFocus={() => setIsFocused(true)}
 				data-focused={isFocused}
 				pattern={pattern}
