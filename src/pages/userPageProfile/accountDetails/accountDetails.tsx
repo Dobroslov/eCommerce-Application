@@ -109,32 +109,31 @@ export default function AccountDetails(): React.ReactElement {
 						/>
 
 						<h3 className={style.title_h3}>Password change</h3>
-						{/*
-							<ChangeInput
-								onValueChange={handleInputChange}
-								placeholder='Current password (leave blank to leave unchanged)'
-								type='password'
-								id='password'
-								initValue={oldPassword}
-								errorMessage='The entered password does`t match the current password'
-								pattern='^[A-Za-zА-Яа-я]{1,16}$' // todo добавить текущий пароль
-							/>
-							<ChangeInput
-								onValueChange={handleInputChange}
-								placeholder='New password (leave blank to leave unchanged)'
-								type='password'
-								id='newPassword'
-								errorMessage="Passwords don't match!"
-pattern='^(?!\s)(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,20}$'
-							/>
-							<ChangeInput
-								onValueChange={handleInputChange}
-								placeholder='Confirm new password'
-								type='password'
-								id='newCopyPassword'
-								errorMessage="Passwords don't match!"
-								// pattern={password}
-							/> */}
+
+						<ChangeInput
+							onValueChange={handleInputChange}
+							placeholder='Current password (leave blank to leave unchanged)'
+							type='password'
+							id='password'
+							errorMessage='The entered password does`t match the current password'
+							pattern='^[A-Za-zА-Яа-я]{1,16}$' // todo добавить текущий пароль
+						/>
+						<ChangeInput
+							onValueChange={handleInputChange}
+							placeholder='New password (leave blank to leave unchanged)'
+							type='password'
+							id='newPassword'
+							errorMessage="Passwords don't match!"
+							pattern='^(?!\s)(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,20}$'
+						/>
+						<ChangeInput
+							onValueChange={handleInputChange}
+							placeholder='Confirm new password'
+							type='password'
+							id='newCopyPassword'
+							errorMessage="Passwords don't match!"
+						// pattern={password}
+						/>
 						<div className={style.remember}>
 							<input type='checkbox' id='checkbox-1' className={style.formCheckBox} />
 							<label htmlFor='checkbox-1' className={style.checkboxLabel}>
