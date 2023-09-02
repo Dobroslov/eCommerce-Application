@@ -197,23 +197,19 @@ export function getSortingProducts(limit: number, offset: number, sort: string, 
 	const products = axios.get(url, {
 		headers,
 	}).then((response) => {
-		response.data.results.forEach((product:
-			{
-				id: string;
-				name: { [x: string]: string; };
-				description: { [x: string]: string; };
-				variants: {
-					images: { url: string }[];
-					prices: { value: { centAmount: number, currencyCode: string }; }[];
-				}[];
-			}) => {
+		response.data.results.forEach((product: {
+			id: string;
+			name: { [x: string]: string; };
+			description: { [x: string]: string; };
+			masterVariant: { images: { url: string; }[]; prices: { value: { centAmount: number; currencyCode: string }; }[]; };
+		}) => {
 			const productValues: IProduct = {
 				id: product.id,
 				name: product.name['en-US'],
 				description: product.description['en-US'],
-				image: product.variants[0].images[0].url,
-				currencyCode: product.variants[0].prices[0].value.currencyCode,
-				price: (product.variants[0].prices[0].value.centAmount / 100)
+				image: product.masterVariant.images[0].url,
+				currencyCode: product.masterVariant.prices[0].value.currencyCode,
+				price: (product.masterVariant.prices[0].value.centAmount / 100)
 					.toFixed(2) as string,
 			};
 			productsArr.push(productValues);
@@ -246,23 +242,17 @@ export function getFilterByPrice(limit: number, offset: number, from: number, to
 	const products = axios.get(url, {
 		headers,
 	}).then((response) => {
-		response.data.results.forEach((product:
-			{
-				id: string;
-				name: { [x: string]: string; };
-				description: { [x: string]: string; };
-				variants: {
-					images: { url: string }[];
-					prices: { value: { centAmount: number, currencyCode: string }; }[];
-				}[];
-			}) => {
+		response.data.results.forEach((product: {
+			id: string; name: { [x: string]: string; };
+			description: { [x: string]: string; };
+			masterVariant: { images: { url: string; }[]; prices: { value: { centAmount: number; currencyCode: string }; }[]; }; }) => {
 			const productValues: IProduct = {
 				id: product.id,
 				name: product.name['en-US'],
 				description: product.description['en-US'],
-				image: product.variants[0].images[0].url,
-				currencyCode: product.variants[0].prices[0].value.currencyCode,
-				price: (product.variants[0].prices[0].value.centAmount / 100)
+				image: product.masterVariant.images[0].url,
+				currencyCode: product.masterVariant.prices[0].value.currencyCode,
+				price: (product.masterVariant.prices[0].value.centAmount / 100)
 					.toFixed(2) as string,
 			};
 			productsArr.push(productValues);

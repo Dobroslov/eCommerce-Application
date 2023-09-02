@@ -22,11 +22,6 @@ function App(): React.ReactElement {
 	//	const selected = store.getState().data.data;
 	// console.log(selected?.sortLimit);
 	useEffect(() => {
-		// if (localStorage.getItem('userData')) {
-		// changePassword('current','new') смена пароля
-		// }
-	}, []);
-	useEffect(() => {
 		if (!user && !localStorage.getItem('token')) {
 			getAnonimousToken();
 		}
