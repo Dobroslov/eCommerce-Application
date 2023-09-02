@@ -222,7 +222,7 @@ export function getSortingProducts(limit: number, offset: number, sort: string, 
 	return products;
 }
 
-export function getFilterByPrice(limit: number, offset: number, from: number, to: number): Promise<void | IProduct[]> { // eslint-disable-line consistent-return
+export function getFilter(limit = 9, offset = 0, filter: string): Promise<void | IProduct[]> { // eslint-disable-line consistent-return
 	let token = '';
 	if (!localStorage.getItem('token')) {
 		token = localStorage.getItem('anonimous') as string;
@@ -231,7 +231,7 @@ export function getFilterByPrice(limit: number, offset: number, from: number, to
 	}
 	const productsArr: IProduct[] = [];
 
-	const url = `https://api.europe-west1.gcp.commercetools.com/glitter-magazine/product-projections/search?limit=${limit}&offset=${offset}&filter=variants.price.centAmount:range (${from} to ${to})`;
+	const url = `https://api.europe-west1.gcp.commercetools.com/glitter-magazine/product-projections/search?limit=${limit}&offset=${offset}${filter}`;
 	const headers: {
 		'Content-Type': string;
 		Authorization: string;
