@@ -245,7 +245,8 @@ export function getFilterByPrice(limit: number, offset: number, from: number, to
 		response.data.results.forEach((product: {
 			id: string; name: { [x: string]: string; };
 			description: { [x: string]: string; };
-			masterVariant: { images: { url: string; }[]; prices: { value: { centAmount: number; currencyCode: string }; }[]; }; }) => {
+			masterVariant: { images: { url: string; }[]; prices: { value: { centAmount: number; currencyCode: string }; }[]; };
+		}) => {
 			const productValues: IProduct = {
 				id: product.id,
 				name: product.name['en-US'],
@@ -338,6 +339,64 @@ export function changePassword(currPass: string, newPass: string) {
 				store.dispatch(hideModal());
 			}, 5000);
 		})
+		.catch((error) => {
+			store.dispatch(
+				showModal({
+					title: 'Fault',
+					description: error.response?.data.message,
+					color: 'rgb(227, 23, 23,0.5)',
+				}),
+			);
+			setTimeout(() => {
+				store.dispatch(hideModal());
+			}, 5000);
+		});
+}
+
+export function changeCustomerValues(firstName: string, lastName: string, email: string, dateOfBirth: string) {
+	const user = localStorage.getItem('userData') as string;
+	const { id, version } = JSON.parse(user);
+	const token = localStorage.getItem('token');
+	const headers = {
+		'Content-Type': 'application/json', Authorization: `Bearer ${token}`,
+	};
+	const url = `https://api.europe-west1.gcp.commercetools.com/glitter-magazine/customers/${id}`;
+	const data = {
+		version,
+		actions: [{
+			action: 'changeEmail',
+			email,
+		},
+		{
+			action: 'setFirstName',
+			firstName,
+		},
+		{
+			action: 'setLastName',
+			lastName,
+		},
+		{
+			action: 'setDateOfBirth',
+			dateOfBirth,
+		}],
+	};
+	axios.post(url, data, {
+		headers,
+	}).then((response) => {
+		console.log(response);
+		const responseData = response.data;
+		localStorage.setItem('userData', JSON.stringify(responseData));
+		store.dispatch(
+			showModal({
+				title: 'Success',
+				description: 'Data changed successfully',
+				color: 'rgb(60, 179, 113,0.5)',
+			}),
+		);
+		setTimeout(() => {
+			store.dispatch(hideModal());
+		}, 5000);
+	})
 		.catch((error) => {
 			store.dispatch(
 				showModal({
