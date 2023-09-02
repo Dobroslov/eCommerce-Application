@@ -31,7 +31,7 @@ export default function Shop(): React.ReactElement {
 				if (data) {
 					setImages(data.images);
 				} else {
-					console.error('No data received from API');
+					console.log('No data received from API');
 				}
 			})
 			.catch((error) => {
@@ -66,7 +66,7 @@ export default function Shop(): React.ReactElement {
 					{/* <button type='button' onClick={goBack}>Back</button> */}
 					{/* <button type='button' onClick={goHome}>Home</button> */}
 					{products.map((product) => (
-						<div className={style.item}>
+						<div key={product.id} className={style.item}>
 							<div className={style.image}>
 								<div
 									onClick={() => {

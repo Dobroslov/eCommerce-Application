@@ -29,6 +29,7 @@ export interface IAddress {
 
 export interface ISubmitButton {
 	value: string;
+	onclick(): void;
 }
 export interface ModalProperties {
 	title: string;
