@@ -72,3 +72,19 @@ export interface IUserDataRespons {
 	stores: string[];
 	authenticationMode: string;
 }
+export 	interface IProduct {
+	id:string,
+	name:string,
+	description:string,
+	image:string,
+	currencyCode:string,
+	price:string
+
+}
+export interface ISorting{
+
+		sortLimit:number,
+		sortOffset:number,
+		sorting:string,
+		sortOrder:string
+	}

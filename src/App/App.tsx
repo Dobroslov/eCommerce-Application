@@ -4,7 +4,6 @@ import { Routes, Route, useNavigate, useLocation, Navigate } from 'react-router-
 import { getAnonimousToken } from '../services/apiServices';
 import useAuth from '../hooks/useAuth';
 import RequireAuthorisation from '../hoc/requireAuthorisation';
-
 import MainPage from '../pages/mainPage/mainPage';
 import Layout from '../layouts/layout/layout';
 import LoginPage from '../pages/loginPage/loginPage';
@@ -22,11 +21,14 @@ import NotFoundPage from '../pages/notFoundPage/notFoundPage';
 import Modal from '../components/modal/modal';
 
 import './App.scss';
+// import store from '../store/store';
 
 function App(): React.ReactElement {
 	const { user, autoSignIn } = useAuth();
 	const location = useLocation();
 	const navigate = useNavigate();
+	//	const selected = store.getState().data.data;
+	// console.log(selected?.sortLimit);
 
 	useEffect(() => {
 		if (!user && !localStorage.getItem('token')) {

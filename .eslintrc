@@ -71,6 +71,7 @@
       }],
       "no-param-reassign": ["error", { "props": false }],
       "operator-linebreak": ["error", "after"],
-      "default-param-last": 0
+      "default-param-last": 0,
+      "max-len": ["error", { "code": 200 }]
     }
 }
