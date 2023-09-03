@@ -367,6 +367,11 @@ export function changePassword(currPass: string, newPass: string) {
 		.then((response) => {
 			const responseData = response.data;
 			localStorage.setItem('userData', JSON.stringify(responseData));
+			const param:IUserLogin = {
+				email: response.data.email,
+				password: newPass,
+			};
+			getToken(param);
 			store.dispatch(
 				showModal({
 					title: 'Success',

@@ -40,7 +40,6 @@ function App(): React.ReactElement {
 			});
 		}
 	}, []);
-
 	return (
 		<div className='wrapper'>
 			<Routes>
