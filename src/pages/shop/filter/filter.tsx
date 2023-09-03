@@ -7,25 +7,93 @@ import SubmitButton from '../../../components/buttons/submitButton';
 // import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 interface Ifilter {
-	filterString: string[];
-	addNewProperty(property: string): void;
-	removeProperty(property: string): void;
+	resultArray: string[];
+	metallProperty: string[];
+	metallValue: string[];
+	stoneProperty: string[];
+	stoneValue: string[];
+	addMetallProperty(property: string): void;
+	removeMetallProperty(property: string): void;
+	addMetallValue(property: string): void;
+	removeMetallValue(property: string): void;
+	addStoneProperty(property: string): void;
+	removeStoneProperty(property: string): void;
+	addStoneValue(property: string): void;
+	removeStoneValue(property: string): void;
 }
 
 const filterObject: Ifilter = {
-	filterString: [],
+	resultArray: [],
+	metallProperty: [],
+	metallValue: [],
+	stoneProperty: [],
+	stoneValue: [],
 
-	addNewProperty(property) {
-		this.filterString.push(property);
-		console.log(this.filterString);
+	addMetallProperty(string) {
+		const property = string.split(' ');
+		if (this.metallProperty.length < 1) {
+			this.metallProperty.push(property[0]);
+		}
+		console.log(this.metallProperty);
 	},
 
-	removeProperty(property) {
-		const index = this.filterString.indexOf(property);
+	removeMetallProperty(string) {
+		const property = string.split(' ');
+		const index = this.metallProperty.indexOf(property[0]);
 		if (index > -1) {
-			this.filterString.splice(index, 1);
+			this.metallProperty.splice(index, 1);
 		}
-		console.log(this.filterString);
+		console.log(this.metallProperty);
+	},
+
+	addMetallValue(string) {
+		const value = string.split(' ');
+		if (this.metallValue.indexOf(value[1]) === -1) {
+			this.metallValue.push(value[1]);
+		}
+		console.log(this.metallValue);
+	},
+
+	removeMetallValue(string) {
+		const value = string.split(' ');
+		const index = this.metallValue.indexOf(value[1]);
+		if (index > -1) {
+			this.metallValue.splice(index, 1);
+		}
+		console.log(this.metallValue);
+	},
+
+	addStoneProperty(string) {
+		const property = string.split(' ');
+		if (this.stoneProperty.length < 1) {
+			this.stoneProperty.push(property[0]);
+		}
+		console.log(this.stoneProperty);
+	},
+
+	removeStoneProperty(string) {
+		const property = string.split(' ');
+		const index = this.stoneProperty.indexOf(property[0]);
+		if (index > -1) {
+			this.stoneProperty.splice(index, 1);
+		}
+		console.log(this.stoneProperty);
+	},
+	addStoneValue(string) {
+		const value = string.split(' ');
+		if (this.stoneValue.indexOf(value[1]) === -1) {
+			this.stoneValue.push(value[1]);
+		}
+		console.log(this.stoneValue);
+	},
+
+	removeStoneValue(string) {
+		const value = string.split(' ');
+		const index = this.stoneValue.indexOf(value[1]);
+		if (index > -1) {
+			this.stoneValue.splice(index, 1);
+		}
+		console.log(this.stoneValue);
 	},
 };
 
@@ -36,27 +104,61 @@ interface ISort {
 export default function Filter(props: ISort): React.ReactElement {
 	const { onValueChange } = props;
 	const [value, setValue] = useState<number[]>([30, 1200]);
-	const [sort, setSorting] = useState<string>('createdAt+desc');
+	const [sort, setSorting] = useState<string>('&createdAt+desc');
 
 	const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const newValue = e.target.value;
-		onValueChange(newValue);
 		setSorting(newValue);
 	};
 
 	const handleCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
-		if (e.target.checked && !filterObject.filterString.includes(e.target.value)) {
-			filterObject.addNewProperty(e.target.value);
+		if (e.target.checked) {
+			switch (e.target.name) {
+				case 'metall':
+					filterObject.addMetallProperty(e.target.value);
+					filterObject.addMetallValue(e.target.value);
+					break;
+				case 'stone':
+					filterObject.addStoneProperty(e.target.value);
+					filterObject.addStoneValue(e.target.value);
+					break;
+				default:
+					console.log(filterObject);
+			}
 		} else {
-			filterObject.removeProperty(e.target.value);
+			switch (e.target.name) {
+				case 'metall':
+					filterObject.removeMetallValue(e.target.value);
+					if (filterObject.metallValue.length <= 0) {
+						filterObject.removeMetallProperty(e.target.value);
+					}
+					break;
+				case 'stone':
+					filterObject.removeStoneValue(e.target.value);
+					if (filterObject.stoneValue.length <= 0) {
+						filterObject.removeStoneProperty(e.target.value);
+					}
+					break;
+				default:
+					console.log(filterObject);
+			}
 		}
 	};
 
 	const handleApplyFilters = () => {
-		filterObject.addNewProperty(sort);
-		filterObject.addNewProperty(
-			`&filter=variants.price.centAmount:range (${value[0]} to ${value[1]})`,
+		const priceRange = `&filter=variants.price.centAmount:range (${value[0]} to ${value[1]})`;
+		const metallValues = filterObject.metallValue.join(',');
+		const stoneValues = filterObject.stoneValue.join(',');
+		const result = filterObject.resultArray.concat(
+			filterObject.metallProperty,
+			metallValues,
+			filterObject.stoneProperty,
+			stoneValues,
+			priceRange,
+			sort,
 		);
+		onValueChange(result.join(''));
+		console.log(result.join(''));
 	};
 
 	return (
@@ -91,46 +193,46 @@ export default function Filter(props: ISort): React.ReactElement {
 			</div>
 			<p>Metall</p>
 			<div className={style.inputTitle}>
-				<label htmlFor='gold'>
+				<label htmlFor='metall'>
 					gold
 					<input
 						onChange={handleCheckbox}
 						value='&filter=variants.attributes.metall: "gold"'
 						type='checkbox'
-						name='gold'
+						name='metall'
 						id='gold'
 					/>
 				</label>
-				<label htmlFor='silver'>
+				<label htmlFor='metall'>
 					silver
 					<input
 						onChange={handleCheckbox}
 						value='&filter=variants.attributes.metall: "silver"'
 						type='checkbox'
-						name='silver'
+						name='metall'
 						id='silver'
 					/>
 				</label>
 			</div>
 			<p>Stones</p>
 			<div className={style.inputTitle}>
-				<label htmlFor='wstone'>
+				<label htmlFor='stone'>
 					with stones
 					<input
 						type='checkbox'
 						onChange={handleCheckbox}
 						value='&filter=variants.attributes.stone: true'
-						name='wstone'
+						name='stone'
 						id='wstone'
 					/>
 				</label>
-				<label htmlFor='nstone'>
+				<label htmlFor='stone'>
 					no stones
 					<input
 						type='checkbox'
 						onChange={handleCheckbox}
 						value='&filter=variants.attributes.stone: false'
-						name='nstone'
+						name='stone'
 						id='nstone'
 					/>
 				</label>

@@ -4,20 +4,16 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import style from './shop.module.scss';
 import Filter from './filter/filter';
-import { getProductForId, getSortingProducts } from '../../services/apiServices';
-import { IProduct } from '../../utils/types';
+import { getFilter, getProductForId } from '../../services/apiServices';
 import SliderModal from '../../components/modal/sliderModal';
 import CarouselCompound from '../../components/slider/carouselCompound/carouselCompound';
+import { IProduct } from '../../utils/types';
 // import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 export default function Shop(): React.ReactElement {
 	const [products, setProducts] = useState<IProduct[]>([]);
-	const [sorting, setSorting] = useState<string>('createdAt');
-	const [sortLimit, setSortLimit] = useState<string>('9');
-	const [sortOrder, setSortOrder] = useState<string>('desc');
-	const [sortOffset, setSortOffset] = useState<string>('0');
-
 	const [modalActive, setModalActive] = useState(false);
+	const [filter, setFilter] = useState('');
 	const [id, setId] = useState('1');
 	const [images, setImages] = useState<string[]>([]);
 
@@ -39,23 +35,19 @@ export default function Shop(): React.ReactElement {
 			});
 	}, [id]);
 
-	const handleSortChange = (value: string) => {
-		console.log(value);
-		const sortArray = value.split(' ');
-		setSortLimit(sortArray[0]);
-		setSortOffset(sortArray[1]);
-		setSorting(sortArray[2]);
-		setSortOrder(sortArray[3]);
+	const handleSortChange = (filterData: string) => {
+		console.log(filterData);
+		setFilter(filterData);
 	};
 
 	useEffect(() => {
-		getSortingProducts(sortLimit, sortOffset, sorting, sortOrder)
+		getFilter(9, 0, filter)
 			.then((data) => {
 				console.log(data);
 				if (data) setProducts(data);
 			})
 			.catch((error) => error);
-	}, [sorting, sortOrder]);
+	}, [filter]);
 
 	return (
 		<section className={style.catalog}>
