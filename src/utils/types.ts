@@ -29,6 +29,7 @@ export interface IAddress {
 
 export interface ISubmitButton {
 	value: string;
+	isDisabled?: boolean;
 }
 export interface ModalProperties {
 	title: string;
@@ -72,19 +73,30 @@ export interface IUserDataRespons {
 	stores: string[];
 	authenticationMode: string;
 }
-export 	interface IProduct {
-	id:string,
-	name:string,
-	description:string,
-	image:string,
-	currencyCode:string,
-	price:string
 
+export interface IUpdatePassword {
+	oldPassword: string;
+	newPassword: string;
 }
-export interface ISorting{
 
-		sortLimit:number,
-		sortOffset:number,
-		sorting:string,
-		sortOrder:string
-	}
+export interface IUpdateUserData {
+	firstName: string;
+	lastName: string;
+	email: string;
+	dateOfBirth: string;
+	id: string;
+}
+export interface IProduct {
+	id: string;
+	name: string;
+	description: string;
+	image: string;
+	currencyCode: string;
+	price: string;
+}
+export interface ISorting {
+	sortLimit: number;
+	sortOffset: number;
+	sorting: string;
+	sortOrder: string;
+}

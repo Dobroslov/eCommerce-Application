@@ -1,6 +1,12 @@
 import axios from 'axios';
 import { NavigateFunction } from 'react-router-dom';
-import { IUserLogin, IRegistrationForm, IProduct } from '../utils/types';
+import { IUserLogin,
+	IRegistrationForm,
+	IProduct,
+	IUpdatePassword,
+	IUpdateUserData,
+	IUserDataRespons } from '../utils/types';
+
 import store from '../store/store';
 import { hideModal, showModal } from '../store/actions';
 
@@ -42,9 +48,11 @@ export async function createCustomer(
 	};
 
 	try {
-		const user = await axios.post(url, data, {
-			headers,
-		}).then((response) => response.data);
+		const user = await axios
+			.post(url, data, {
+				headers,
+			})
+			.then((response) => response.data);
 
 		// Показать модальное окно "Success" с задержкой
 		store.dispatch(
@@ -84,7 +92,8 @@ export async function createCustomer(
 	}
 }
 
-export async function getCustomerForId(id: string) { // eslint-disable-line consistent-return
+export async function getCustomerForId(id: string): Promise<IUserDataRespons | undefined> {
+	// eslint-disable-line consistent-return
 	const token = localStorage.getItem('token');
 	const url = `${API_URL}/${PROJECT_KEY}/customers/${id}`;
 	const headers = {
@@ -97,11 +106,12 @@ export async function getCustomerForId(id: string) { // eslint-disable-line cons
 			headers,
 		});
 
-		const responseData = response.data;
+		const responseData: IUserDataRespons = response.data;
 		localStorage.setItem('userData', JSON.stringify(responseData));
 		return responseData;
 	} catch (error) {
 		console.error('Error getting customer data:', error);
+		return undefined; // Вернуть undefined в случае ошибки
 	}
 }
 
@@ -121,13 +131,19 @@ export async function getToken(params: IUserLogin): Promise<void> {
 		.then(async (response) => {
 			localStorage.setItem('token', response.data.access_token);
 			const user = await getCustomerForId(response.data.scope.split(':')[2]);
-			store.dispatch(
-				showModal({
-					title: 'Success',
-					description: `Welcome ${user.firstName} ${user.lastName} `,
-					color: 'rgb(60, 179, 113,0.5)',
-				}),
-			);
+			if (user) {
+				// Проверка на undefined
+				store.dispatch(
+					showModal({
+						title: 'Success',
+						description: `Welcome ${user.firstName} ${user.lastName} `,
+						color: 'rgb(60, 179, 113,0.5)',
+					}),
+				);
+			} else {
+				// Обработка случая, когда user === undefined
+				console.error('Failed to get user data.');
+			}
 			setTimeout(() => {
 				store.dispatch(hideModal());
 			}, 5000);
@@ -143,6 +159,28 @@ export async function getToken(params: IUserLogin): Promise<void> {
 			setTimeout(() => {
 				store.dispatch(hideModal());
 			}, 5000);
+		});
+}
+
+export async function refreshToken(params: IUserLogin): Promise<void> {
+	const { email, password } = params;
+	const url = `${AUTH_URL}/oauth/${PROJECT_KEY}/customers/token?grant_type=password&username=${email}&password=${password}`;
+	const headers = {
+		Authorization:
+			'Basic Y1NuZjhlM3RLSllqMmhmdm1uc0E5UmtMOnJNLXExemFGTDl0dVRvUUdQV3E4ZlVQX2piOEY0aW9O',
+	};
+	const data = '';
+
+	await axios
+		.post(url, data, {
+			headers,
+		})
+		.then(async (response) => {
+			localStorage.setItem('token', response.data.access_token);
+			await getCustomerForId(response.data.scope.split(':')[2]);
+		})
+		.catch((error) => {
+			console.log('file: apiServices.ts:170 ~ refreshToken ~ error:', error);
 		});
 }
 
@@ -175,7 +213,13 @@ export async function checkToken(token: string): Promise<{ email: string; active
 	// return customer;
 }
 
-export function getSortingProducts(limit: number, offset: number, sort: string, order: string): Promise<void | IProduct[]> { // eslint-disable-line consistent-return
+export function getSortingProducts(
+	limit: number,
+	offset: number,
+	sort: string,
+	order: string,
+): Promise<void | IProduct[]> {
+	// eslint-disable-line consistent-return
 	let token = '';
 	// store.dispatch(addSort(sortData));
 	if (!localStorage.getItem('token')) {
@@ -194,35 +238,47 @@ export function getSortingProducts(limit: number, offset: number, sort: string, 
 		'Content-Type': 'application/json',
 		Authorization: `Bearer ${token}`,
 	};
-	const products = axios.get(url, {
-		headers,
-	}).then((response) => {
-		response.data.results.forEach((product: {
-			id: string;
-			name: { [x: string]: string; };
-			description: { [x: string]: string; };
-			masterVariant: { images: { url: string; }[]; prices: { value: { centAmount: number; currencyCode: string }; }[]; };
-		}) => {
-			const productValues: IProduct = {
-				id: product.id,
-				name: product.name['en-US'],
-				description: product.description['en-US'],
-				image: product.masterVariant.images[0].url,
-				currencyCode: product.masterVariant.prices[0].value.currencyCode,
-				price: (product.masterVariant.prices[0].value.centAmount / 100)
-					.toFixed(2) as string,
-			};
-			productsArr.push(productValues);
-		});
-		return productsArr;
-	})
+	const products = axios
+		.get(url, {
+			headers,
+		})
+		.then((response) => {
+			response.data.results.forEach(
+				(product: {
+					id: string;
+					name: { [x: string]: string };
+					description: { [x: string]: string };
+					masterVariant: {
+						images: { url: string }[];
+						prices: { value: { centAmount: number; currencyCode: string } }[];
+					};
+				}) => {
+					const productValues: IProduct = {
+						id: product.id,
+						name: product.name['en-US'],
+						description: product.description['en-US'],
+						image: product.masterVariant.images[0].url,
+						currencyCode: product.masterVariant.prices[0].value.currencyCode,
+						price: (product.masterVariant.prices[0].value.centAmount / 100).toFixed(2) as string,
+					};
+					productsArr.push(productValues);
+				},
+			);
+			return productsArr;
+		})
 		.catch((error) => {
 			console.log(error);
 		});
 	return products;
 }
 
-export function getFilterByPrice(limit: number, offset: number, from: number, to: number): Promise<void | IProduct[]> { // eslint-disable-line consistent-return
+export function getFilterByPrice(
+	limit: number,
+	offset: number,
+	from: number,
+	to: number,
+): Promise<void | IProduct[]> {
+	// eslint-disable-line consistent-return
 	let token = '';
 	if (!localStorage.getItem('token')) {
 		token = localStorage.getItem('anonimous') as string;
@@ -239,27 +295,34 @@ export function getFilterByPrice(limit: number, offset: number, from: number, to
 		'Content-Type': 'application/json',
 		Authorization: `Bearer ${token}`,
 	};
-	const products = axios.get(url, {
-		headers,
-	}).then((response) => {
-		response.data.results.forEach((product: {
-			id: string; name: { [x: string]: string; };
-			description: { [x: string]: string; };
-			masterVariant: { images: { url: string; }[]; prices: { value: { centAmount: number; currencyCode: string }; }[]; };
-		}) => {
-			const productValues: IProduct = {
-				id: product.id,
-				name: product.name['en-US'],
-				description: product.description['en-US'],
-				image: product.masterVariant.images[0].url,
-				currencyCode: product.masterVariant.prices[0].value.currencyCode,
-				price: (product.masterVariant.prices[0].value.centAmount / 100)
-					.toFixed(2) as string,
-			};
-			productsArr.push(productValues);
-		});
-		return productsArr;
-	})
+	const products = axios
+		.get(url, {
+			headers,
+		})
+		.then((response) => {
+			response.data.results.forEach(
+				(product: {
+					id: string;
+					name: { [x: string]: string };
+					description: { [x: string]: string };
+					masterVariant: {
+						images: { url: string }[];
+						prices: { value: { centAmount: number; currencyCode: string } }[];
+					};
+				}) => {
+					const productValues: IProduct = {
+						id: product.id,
+						name: product.name['en-US'],
+						description: product.description['en-US'],
+						image: product.masterVariant.images[0].url,
+						currencyCode: product.masterVariant.prices[0].value.currencyCode,
+						price: (product.masterVariant.prices[0].value.centAmount / 100).toFixed(2) as string,
+					};
+					productsArr.push(productValues);
+				},
+			);
+			return productsArr;
+		})
 		.catch((error) => {
 			console.log(error);
 		});
@@ -281,50 +344,54 @@ export function getProductForId(id: string) {
 		'Content-Type': 'application/json',
 		Authorization: `Bearer ${token}`,
 	};
-	const product = axios.get(url, {
-		headers,
-	}).then((response) => {
-		const imagesArr: string[] = [];
-		response.data.variants[0].images.forEach((image: { url: string; }) => {
-			imagesArr.push(image.url);
-		});
-		const productData = {
-			name: response.data.name['en-US'],
-			images: imagesArr,
-			description: response.data.description['en-US'],
-			currencyCode: response.data.variants[0].prices[0].value.currencyCode,
-			price: (response.data.variants[0].prices[0].value.centAmount / 100).toFixed(2) as string,
-			color: response.data.variants[0].attributes[0].value[0],
-			weight: response.data.variants[0].attributes[1].value,
-			stone: response.data.variants[0].attributes[2].value[0],
-			standard: response.data.variants[0].attributes[3].value,
-			metall: response.data.variants[0].attributes[4].value[0],
-		};
-		return productData;
-	})
+	const product = axios
+		.get(url, {
+			headers,
+		})
+		.then((response) => {
+			const imagesArr: string[] = [];
+			response.data.variants[0].images.forEach((image: { url: string }) => {
+				imagesArr.push(image.url);
+			});
+			const productData = {
+				name: response.data.name['en-US'],
+				images: imagesArr,
+				description: response.data.description['en-US'],
+				currencyCode: response.data.variants[0].prices[0].value.currencyCode,
+				price: (response.data.variants[0].prices[0].value.centAmount / 100).toFixed(2) as string,
+				color: response.data.variants[0].attributes[0].value[0],
+				weight: response.data.variants[0].attributes[1].value,
+				stone: response.data.variants[0].attributes[2].value[0],
+				standard: response.data.variants[0].attributes[3].value,
+				metall: response.data.variants[0].attributes[4].value[0],
+			};
+			return productData;
+		})
 		.catch((error) => {
 			console.log(error);
 		});
 	return product;
 }
 
-export function changePassword(currPass: string, newPass: string) {
+export function changePassword({ oldPassword, newPassword }: IUpdatePassword): void {
 	const user = localStorage.getItem('userData') as string;
 	const { id, version } = JSON.parse(user);
 	const token = localStorage.getItem('token');
 	const data = JSON.stringify({
 		id,
 		version,
-		currentPassword: `${currPass}`,
-		newPassword: `${newPass}`,
+		currentPassword: `${oldPassword}`,
+		newPassword: `${newPassword}`,
 	});
 	const headers = {
-		'Content-Type': 'application/json', Authorization: `Bearer ${token}`,
+		'Content-Type': 'application/json',
+		Authorization: `Bearer ${token}`,
 	};
 	const url = 'https://api.europe-west1.gcp.commercetools.com/glitter-magazine/customers/password';
-	axios.post(url, data, {
-		headers,
-	})
+	axios
+		.post(url, data, {
+			headers,
+		})
 		.then((response) => {
 			const responseData = response.data;
 			localStorage.setItem('userData', JSON.stringify(responseData));
@@ -353,50 +420,55 @@ export function changePassword(currPass: string, newPass: string) {
 		});
 }
 
-export function changeCustomerValues(firstName: string, lastName: string, email: string, dateOfBirth: string) {
+export function changeCustomerValues({ firstName, lastName, email, dateOfBirth }: IUpdateUserData) {
 	const user = localStorage.getItem('userData') as string;
 	const { id, version } = JSON.parse(user);
 	const token = localStorage.getItem('token');
 	const headers = {
-		'Content-Type': 'application/json', Authorization: `Bearer ${token}`,
+		'Content-Type': 'application/json',
+		Authorization: `Bearer ${token}`,
 	};
 	const url = `https://api.europe-west1.gcp.commercetools.com/glitter-magazine/customers/${id}`;
 	const data = {
 		version,
-		actions: [{
-			action: 'changeEmail',
-			email,
-		},
-		{
-			action: 'setFirstName',
-			firstName,
-		},
-		{
-			action: 'setLastName',
-			lastName,
-		},
-		{
-			action: 'setDateOfBirth',
-			dateOfBirth,
-		}],
+		actions: [
+			{
+				action: 'changeEmail',
+				email,
+			},
+			{
+				action: 'setFirstName',
+				firstName,
+			},
+			{
+				action: 'setLastName',
+				lastName,
+			},
+			{
+				action: 'setDateOfBirth',
+				dateOfBirth,
+			},
+		],
 	};
-	axios.post(url, data, {
-		headers,
-	}).then((response) => {
-		console.log(response);
-		const responseData = response.data;
-		localStorage.setItem('userData', JSON.stringify(responseData));
-		store.dispatch(
-			showModal({
-				title: 'Success',
-				description: 'Data changed successfully',
-				color: 'rgb(60, 179, 113,0.5)',
-			}),
-		);
-		setTimeout(() => {
-			store.dispatch(hideModal());
-		}, 5000);
-	})
+	axios
+		.post(url, data, {
+			headers,
+		})
+		.then((response) => {
+			console.log(response);
+			const responseData = response.data;
+			localStorage.setItem('userData', JSON.stringify(responseData));
+			store.dispatch(
+				showModal({
+					title: 'Success',
+					description: 'Data changed successfully',
+					color: 'rgb(60, 179, 113,0.5)',
+				}),
+			);
+			setTimeout(() => {
+				store.dispatch(hideModal());
+			}, 5000);
+		})
 		.catch((error) => {
 			store.dispatch(
 				showModal({

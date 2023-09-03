@@ -3,13 +3,12 @@ import ChangeInput from '../../../components/inputs/changeInput/changeInput';
 import SubmitButton from '../../../components/buttons/submitButton';
 
 import style from './accountDetails.module.scss';
+import { changeCustomerValues, changePassword } from '../../../services/apiServices';
+import { IUpdateUserData } from '../../../utils/types';
 
-interface IUpdateUserData {
-	firstName: string;
-	lastName: string;
-	email: string;
-	dateOfBirth: string;
-	id: string;
+interface IUpdatePassword {
+	oldPassword: string;
+	newPassword: string;
 }
 
 export default function AccountDetails(): React.ReactElement {
@@ -21,9 +20,13 @@ export default function AccountDetails(): React.ReactElement {
 		id: '',
 	});
 
-	// const [oldPassword, setOldPassword] = useState<string>('');
-	// const [newPassword, setNewPassword] = useState<string>('');
-	// const [confirmPassword, setConfirmPassword] = useState<string>('');
+	const [datePassword, setDatePassword] = useState<IUpdatePassword>({
+		oldPassword: '',
+		newPassword: '',
+	});
+
+	const [isUserDataChanged, setIsUserDataChanged] = useState(false);
+	const [isPasswordChanged, setisPasswordChanged] = useState(false);
 
 	// При загрузке компонента загружаем данные из Local Storage
 	useEffect(() => {
@@ -41,28 +44,43 @@ export default function AccountDetails(): React.ReactElement {
 	}, []);
 
 	const handleInputChange = (newValue: string, id: string): void => {
-		setUserData((prevUserData) => ({
-			...prevUserData,
-			[id]: newValue,
-		}));
+		if (id === 'oldPassword' || id === 'newPassword' || id === 'newCopyPassword') {
+			setDatePassword((prevUserData) => ({
+				...prevUserData, [id]: newValue,
+			}));
+			setisPasswordChanged(true);
+		} else {
+			setUserData((prevUserData) => ({
+				...prevUserData,
+				[id]: newValue,
+			}));
+			setIsUserDataChanged(true);
+		}
 	};
-
-	// const handlePasswordChange = (newValue: string): void => {
-	// 	setOldPassword(newValue);
-	// };
 
 	const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
 		e.preventDefault();
-		console.log('handleSubmit', userData);
 
-		try {
-			// const updatedFields: Partial<IUpdateUserData> = {
-			// };
+		if (isUserDataChanged) {
+			try {
+				console.log('file: accountDetails.tsx:72 ~ handleSubmit ~ isUserDataChanged:', isUserDataChanged);
+				changeCustomerValues(userData);
+			} catch (error) {
+				console.error('Error updating user data:', error);
+				// Обработка ошибки, если что-то пошло не так при изменении данных пользователя
+			}
+		}
 
-			// setIsDataChanged(false);
-		} catch (error) {
-			console.error('Error handleSubmit:', error);
-			// Ошибка, если что-то пошло не так
+		if (isPasswordChanged) {
+			try {
+				changePassword(datePassword);
+				// refreshToken({
+				// 	email: userData.email, password: datePassword.newPassword,
+				// });
+			} catch (error) {
+				console.error('Error changing password:', error);
+				// Обработка ошибки, если что-то пошло не так при изменении пароля
+			}
 		}
 	};
 
@@ -114,9 +132,9 @@ export default function AccountDetails(): React.ReactElement {
 							onValueChange={handleInputChange}
 							placeholder='Current password (leave blank to leave unchanged)'
 							type='password'
-							id='password'
+							id='oldPassword'
 							errorMessage='The entered password does`t match the current password'
-							pattern='^[A-Za-zА-Яа-я]{1,16}$' // todo добавить текущий пароль
+							pattern='^(?!\s)(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,20}$' // todo добавить текущий пароль
 						/>
 						<ChangeInput
 							onValueChange={handleInputChange}
@@ -132,15 +150,11 @@ export default function AccountDetails(): React.ReactElement {
 							type='password'
 							id='newCopyPassword'
 							errorMessage="Passwords don't match!"
-						// pattern={password}
+							pattern={datePassword.newPassword}
 						/>
-						<div className={style.remember}>
-							<input type='checkbox' id='checkbox-1' className={style.formCheckBox} />
-							<label htmlFor='checkbox-1' className={style.checkboxLabel}>
-								Remember me
-							</label>
-						</div>
-						<SubmitButton value='Save changes' />
+
+						{/* <SubmitButton value='Save changes' /> */}
+						<SubmitButton value='Save changes' isDisabled={!isUserDataChanged && !isPasswordChanged} />
 					</div>
 				</form>
 			</div>

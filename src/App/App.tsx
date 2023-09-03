@@ -21,14 +21,11 @@ import NotFoundPage from '../pages/notFoundPage/notFoundPage';
 import Modal from '../components/modal/modal';
 
 import './App.scss';
-// import store from '../store/store';
 
 function App(): React.ReactElement {
 	const { user, autoSignIn } = useAuth();
 	const location = useLocation();
 	const navigate = useNavigate();
-	//	const selected = store.getState().data.data;
-	// console.log(selected?.sortLimit);
 
 	useEffect(() => {
 		if (!user && !localStorage.getItem('token')) {

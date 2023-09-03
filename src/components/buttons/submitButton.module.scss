@@ -11,6 +11,11 @@
 	color: white;
 	background-color: #000000;
 
+	&:disabled {
+    background-color: #363636; 
+    cursor: not-allowed;
+  }
+
 	@media (min-width: 320px) and (max-width: 1248px) {
 		font-size: calc(12px + (20 - 12) * ((100vw - 320px) / (1248 - 320)));
 		padding-top: calc(4px + (12 - 4) * ((100vw - 320px) / (1248 - 320)));
