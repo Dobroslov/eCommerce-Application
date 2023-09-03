@@ -368,11 +368,11 @@ export function changePassword(currPass: string, newPass: string) {
 			const responseData = response.data;
 			localStorage.setItem('userData', JSON.stringify(responseData));
 			const param:IUserLogin = {
-				email:response.data.email,
-				password:newPass
-			}
+				email: response.data.email,
+				password: newPass,
+			};
 			// смена токена после смены пароля
-			getToken(param)
+			getToken(param);
 			store.dispatch(
 				showModal({
 					title: 'Success',
