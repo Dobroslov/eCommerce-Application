@@ -100,3 +100,19 @@ export interface IProductbyId {
 	standard: number;
 	metall: string;
 }
+
+export interface Ifilter {
+	resultArray: string[];
+	metallProperty: string[];
+	metallValue: string[];
+	stoneProperty: string[];
+	stoneValue: string[];
+	addMetallProperty(property: string): void;
+	removeMetallProperty(property: string): void;
+	addMetallValue(property: string): void;
+	removeMetallValue(property: string): void;
+	addStoneProperty(property: string): void;
+	removeStoneProperty(property: string): void;
+	addStoneValue(property: string): void;
+	removeStoneValue(property: string): void;
+}
