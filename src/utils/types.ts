@@ -29,6 +29,7 @@ export interface IAddress {
 
 export interface ISubmitButton {
 	value: string;
+	onclick(): void;
 }
 export interface ModalProperties {
 	title: string;
@@ -72,19 +73,30 @@ export interface IUserDataRespons {
 	stores: string[];
 	authenticationMode: string;
 }
-export 	interface IProduct {
-	id:string,
-	name:string,
-	description:string,
-	image:string,
-	currencyCode:string,
-	price:string
-
+export interface IProduct {
+	id: string;
+	name: string;
+	description: string;
+	image: string;
+	currencyCode: string;
+	price: string;
 }
-export interface ISorting{
+export interface ISorting {
+	sortLimit: number | string;
+	sortOffset: number | string;
+	sorting: string;
+	sortOrder: string;
+}
 
-		sortLimit:number,
-		sortOffset:number,
-		sorting:string,
-		sortOrder:string
-	}
+export interface IProductbyId {
+	name: string;
+	images: string[];
+	description: string;
+	currencyCode: string;
+	price: string;
+	color: string;
+	weight: number;
+	stone: boolean;
+	standard: number;
+	metall: string;
+}

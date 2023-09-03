@@ -42,9 +42,11 @@ export async function createCustomer(
 	};
 
 	try {
-		const user = await axios.post(url, data, {
-			headers,
-		}).then((response) => response.data);
+		const user = await axios
+			.post(url, data, {
+				headers,
+			})
+			.then((response) => response.data);
 
 		// Показать модальное окно "Success" с задержкой
 		store.dispatch(
@@ -84,7 +86,8 @@ export async function createCustomer(
 	}
 }
 
-export async function getCustomerForId(id: string) { // eslint-disable-line consistent-return
+// eslint-disable-next-line consistent-return
+export async function getCustomerForId(id: string) {
 	const token = localStorage.getItem('token');
 	const url = `${API_URL}/${PROJECT_KEY}/customers/${id}`;
 	const headers = {
@@ -175,7 +178,13 @@ export async function checkToken(token: string): Promise<{ email: string; active
 	// return customer;
 }
 
-export function getSortingProducts(limit: number, offset: number, sort: string, order: string): Promise<void | IProduct[]> { // eslint-disable-line consistent-return
+export function getSortingProducts(
+	limit: number | string,
+	offset: number | string,
+	sort: string,
+	order: string,
+): Promise<void | IProduct[]> {
+	// eslint-disable-line consistent-return
 	let token = '';
 	// store.dispatch(addSort(sortData));
 	if (!localStorage.getItem('token')) {
@@ -194,35 +203,42 @@ export function getSortingProducts(limit: number, offset: number, sort: string, 
 		'Content-Type': 'application/json',
 		Authorization: `Bearer ${token}`,
 	};
-	const products = axios.get(url, {
-		headers,
-	}).then((response) => {
-		response.data.results.forEach((product: {
-			id: string;
-			name: { [x: string]: string; };
-			description: { [x: string]: string; };
-			masterVariant: { images: { url: string; }[]; prices: { value: { centAmount: number; currencyCode: string }; }[]; };
-		}) => {
-			const productValues: IProduct = {
-				id: product.id,
-				name: product.name['en-US'],
-				description: product.description['en-US'],
-				image: product.masterVariant.images[0].url,
-				currencyCode: product.masterVariant.prices[0].value.currencyCode,
-				price: (product.masterVariant.prices[0].value.centAmount / 100)
-					.toFixed(2) as string,
-			};
-			productsArr.push(productValues);
-		});
-		return productsArr;
-	})
+	const products = axios
+		.get(url, {
+			headers,
+		})
+		.then((response) => {
+			response.data.results.forEach(
+				(product: {
+					id: string;
+					name: { [x: string]: string };
+					description: { [x: string]: string };
+					masterVariant: {
+						images: { url: string }[];
+						prices: { value: { centAmount: number; currencyCode: string } }[];
+					};
+				}) => {
+					const productValues: IProduct = {
+						id: product.id,
+						name: product.name['en-US'],
+						description: product.description['en-US'],
+						image: product.masterVariant.images[0].url,
+						currencyCode: product.masterVariant.prices[0].value.currencyCode,
+						price: (product.masterVariant.prices[0].value.centAmount / 100).toFixed(2) as string,
+					};
+					productsArr.push(productValues);
+				},
+			);
+			return productsArr;
+		})
 		.catch((error) => {
 			console.log(error);
 		});
 	return products;
 }
 
-export function getFilter(limit = 9, offset = 0, filter: string): Promise<void | IProduct[]> { // eslint-disable-line consistent-return
+export function getFilter(limit = 9, offset = 0, filter: string): Promise<void | IProduct[]> {
+	// eslint-disable-line consistent-return
 	let token = '';
 	if (!localStorage.getItem('token')) {
 		token = localStorage.getItem('anonimous') as string;
@@ -239,33 +255,54 @@ export function getFilter(limit = 9, offset = 0, filter: string): Promise<void |
 		'Content-Type': 'application/json',
 		Authorization: `Bearer ${token}`,
 	};
-	const products = axios.get(url, {
-		headers,
-	}).then((response) => {
-		response.data.results.forEach((product: {
-			id: string; name: { [x: string]: string; };
-			description: { [x: string]: string; };
-			masterVariant: { images: { url: string; }[]; prices: { value: { centAmount: number; currencyCode: string }; }[]; };
-		}) => {
-			const productValues: IProduct = {
-				id: product.id,
-				name: product.name['en-US'],
-				description: product.description['en-US'],
-				image: product.masterVariant.images[0].url,
-				currencyCode: product.masterVariant.prices[0].value.currencyCode,
-				price: (product.masterVariant.prices[0].value.centAmount / 100)
-					.toFixed(2) as string,
-			};
-			productsArr.push(productValues);
-		});
-		return productsArr;
-	})
+	const products = axios
+		.get(url, {
+			headers,
+		})
+		.then((response) => {
+			response.data.results.forEach(
+				(product: {
+					id: string;
+					name: { [x: string]: string };
+					description: { [x: string]: string };
+					masterVariant: {
+						images: { url: string }[];
+						prices: { value: { centAmount: number; currencyCode: string } }[];
+					};
+				}) => {
+					const productValues: IProduct = {
+						id: product.id,
+						name: product.name['en-US'],
+						description: product.description['en-US'],
+						image: product.masterVariant.images[0].url,
+						currencyCode: product.masterVariant.prices[0].value.currencyCode,
+						price: (product.masterVariant.prices[0].value.centAmount / 100).toFixed(2) as string,
+					};
+					productsArr.push(productValues);
+				},
+			);
+			return productsArr;
+		})
 		.catch((error) => {
 			console.log(error);
 		});
 	return products;
 }
-export function getProductForId(id: string) {
+
+interface IProductbyId {
+	name: string;
+	images: string[];
+	description: string;
+	currencyCode: string;
+	price: string;
+	color: string;
+	weight: number;
+	stone: boolean;
+	standard: number;
+	metall: string;
+}
+
+export function getProductForId(id: string): Promise<void | IProductbyId> {
 	let token = '';
 	if (!localStorage.getItem('token')) {
 		token = localStorage.getItem('anonimous') as string;
@@ -319,12 +356,14 @@ export function changePassword(currPass: string, newPass: string) {
 		newPassword: `${newPass}`,
 	});
 	const headers = {
-		'Content-Type': 'application/json', Authorization: `Bearer ${token}`,
+		'Content-Type': 'application/json',
+		Authorization: `Bearer ${token}`,
 	};
 	const url = 'https://api.europe-west1.gcp.commercetools.com/glitter-magazine/customers/password';
-	axios.post(url, data, {
-		headers,
-	})
+	axios
+		.post(url, data, {
+			headers,
+		})
 		.then((response) => {
 			const responseData = response.data;
 			localStorage.setItem('userData', JSON.stringify(responseData));
@@ -353,50 +392,60 @@ export function changePassword(currPass: string, newPass: string) {
 		});
 }
 
-export function changeCustomerValues(firstName: string, lastName: string, email: string, dateOfBirth: string) {
+export function changeCustomerValues(
+	firstName: string,
+	lastName: string,
+	email: string,
+	dateOfBirth: string,
+) {
 	const user = localStorage.getItem('userData') as string;
 	const { id, version } = JSON.parse(user);
 	const token = localStorage.getItem('token');
 	const headers = {
-		'Content-Type': 'application/json', Authorization: `Bearer ${token}`,
+		'Content-Type': 'application/json',
+		Authorization: `Bearer ${token}`,
 	};
 	const url = `https://api.europe-west1.gcp.commercetools.com/glitter-magazine/customers/${id}`;
 	const data = {
 		version,
-		actions: [{
-			action: 'changeEmail',
-			email,
-		},
-		{
-			action: 'setFirstName',
-			firstName,
-		},
-		{
-			action: 'setLastName',
-			lastName,
-		},
-		{
-			action: 'setDateOfBirth',
-			dateOfBirth,
-		}],
+		actions: [
+			{
+				action: 'changeEmail',
+				email,
+			},
+			{
+				action: 'setFirstName',
+				firstName,
+			},
+			{
+				action: 'setLastName',
+				lastName,
+			},
+			{
+				action: 'setDateOfBirth',
+				dateOfBirth,
+			},
+		],
 	};
-	axios.post(url, data, {
-		headers,
-	}).then((response) => {
-		console.log(response);
-		const responseData = response.data;
-		localStorage.setItem('userData', JSON.stringify(responseData));
-		store.dispatch(
-			showModal({
-				title: 'Success',
-				description: 'Data changed successfully',
-				color: 'rgb(60, 179, 113,0.5)',
-			}),
-		);
-		setTimeout(() => {
-			store.dispatch(hideModal());
-		}, 5000);
-	})
+	axios
+		.post(url, data, {
+			headers,
+		})
+		.then((response) => {
+			console.log(response);
+			const responseData = response.data;
+			localStorage.setItem('userData', JSON.stringify(responseData));
+			store.dispatch(
+				showModal({
+					title: 'Success',
+					description: 'Data changed successfully',
+					color: 'rgb(60, 179, 113,0.5)',
+				}),
+			);
+			setTimeout(() => {
+				store.dispatch(hideModal());
+			}, 5000);
+		})
 		.catch((error) => {
 			store.dispatch(
 				showModal({

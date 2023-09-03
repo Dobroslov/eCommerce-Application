@@ -21,12 +21,14 @@ function LoginPage(): React.ReactElement | null {
 		switch (id) {
 			case 'emailLogin':
 				setLoginData({
-					...loginData, email: value,
+					...loginData,
+					email: value,
 				});
 				break;
 			case 'passwordLogin':
 				setLoginData({
-					...loginData, password: value,
+					...loginData,
+					password: value,
 				});
 				break;
 			default:
@@ -90,7 +92,12 @@ function LoginPage(): React.ReactElement | null {
 									Remember me
 								</label>
 							</div>
-							<SubmitButton value='Sign in' />
+							<SubmitButton
+								onclick={() => {
+									console.log('a');
+								}}
+								value='Sign in'
+							/>
 						</div>
 					</form>
 				</div>

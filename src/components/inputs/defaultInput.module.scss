@@ -1,0 +1,48 @@
+@import '/src/styles/mixins';
+
+.inputBody {
+	position: relative;
+  width: 100%;
+}
+
+.inputSearch {
+  display: flex;
+  max-height: 40px;
+}
+
+.inputSearch button {
+  border: none;
+  outline: none;
+  background-color: inherit;
+  cursor: pointer;
+}
+
+
+.inputSearch img {
+  height: 100%;
+  width: 30px;
+  object-fit: contain;
+}
+
+.input {
+	width: 100%;
+	font-size: 16px;
+  flex: 1 1 auto;
+	border: none;
+	outline: none;
+	padding: 12px 0;
+  @media (min-width: 320px) and (max-width: 1240px) {
+    @include respons-property(font-size, 12, 16);
+    @include respons-property(padding-top, 6, 12);
+    @include respons-property(padding-bottom, 6, 12);
+  }
+}
+
+.underline {
+	position: absolute;
+	height: 1px;
+	width: 100%;
+	left: 0;
+	bottom: 0;
+	background-color: #d8d8d8;
+}
