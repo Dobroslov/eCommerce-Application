@@ -63,7 +63,6 @@ export default function AccountDetails(): React.ReactElement {
 
 		if (isUserDataChanged) {
 			try {
-				console.log('file: accountDetails.tsx:72 ~ handleSubmit ~ isUserDataChanged:', isUserDataChanged);
 				changeCustomerValues(userData);
 			} catch (error) {
 				console.error('Error updating user data:', error);
@@ -74,9 +73,6 @@ export default function AccountDetails(): React.ReactElement {
 		if (isPasswordChanged) {
 			try {
 				changePassword(datePassword);
-				// refreshToken({
-				// 	email: userData.email, password: datePassword.newPassword,
-				// });
 			} catch (error) {
 				console.error('Error changing password:', error);
 				// Обработка ошибки, если что-то пошло не так при изменении пароля
@@ -121,7 +117,7 @@ export default function AccountDetails(): React.ReactElement {
 							placeholder='Date of birth'
 							type='date'
 							onValueChange={handleInputChange}
-							id='date'
+							id='dateOfBirth'
 							errorMessage='Need a user over the age of 13 ;-)'
 							initValue={userData.dateOfBirth}
 						/>
@@ -154,7 +150,7 @@ export default function AccountDetails(): React.ReactElement {
 						/>
 
 						{/* <SubmitButton value='Save changes' /> */}
-						<SubmitButton value='Save changes' isDisabled={!isUserDataChanged && !isPasswordChanged} />
+						<SubmitButton value='Save changes' />
 					</div>
 				</form>
 			</div>

@@ -5,9 +5,9 @@ import { ISubmitButton } from '../../utils/types';
 function SubmitButton(
 	props: ISubmitButton,
 ): React.JSX.Element {
-	const { value, isDisabled = false } = props;
+	const { value } = props;
 	return (
-		<button className={style.button} type='submit' disabled={isDisabled}>
+		<button className={style.button} type='submit'>
 			{value}
 		</button>
 	);
