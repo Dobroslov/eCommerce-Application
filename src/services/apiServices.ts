@@ -247,7 +247,7 @@ export function getFilter(limit = 9, offset = 0, filter: string): Promise<void |
 	}
 	const productsArr: IProduct[] = [];
 
-	const url = `https://api.europe-west1.gcp.commercetools.com/glitter-magazine/product-projections/search?limit=${limit}&offset=${offset}${filter}`;
+	const url = `https://api.europe-west1.gcp.commercetools.com/glitter-magazine/product-projections/search?fuzzy=true&limit=${limit}&offset=${offset}${filter}`;
 	const headers: {
 		'Content-Type': string;
 		Authorization: string;
@@ -368,10 +368,11 @@ export function changePassword(currPass: string, newPass: string) {
 			const responseData = response.data;
 			localStorage.setItem('userData', JSON.stringify(responseData));
 			const param:IUserLogin = {
-				email: response.data.email,
-				password: newPass,
-			};
-			getToken(param);
+				email:response.data.email,
+				password:newPass
+			}
+			// смена токена после смены пароля
+			getToken(param)
 			store.dispatch(
 				showModal({
 					title: 'Success',
