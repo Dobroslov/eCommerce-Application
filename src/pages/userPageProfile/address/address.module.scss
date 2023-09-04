@@ -2,8 +2,8 @@
 
 .title_h2 {
 	font-weight: 400;
-	font-size: 26px;
-	@include respons-property(font-size, 14, 26);
+	font-size: 30px;
+	@include respons-property(font-size, 14, 30);
 	margin-bottom: 40px;
 	@include respons-property(margin-bottom, 25, 40);
 }
@@ -18,19 +18,13 @@
 .container {
 	display: flex;
 	justify-content: center;
-	margin-top: 128px;
-	@include respons-property(margin-top, 24, 128);
 }
 
 .body {
 	width: 100%;
-	max-width: 500px;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	padding-bottom: 50px;
-	@include respons-property(max-width, 288, 500);
-	@include respons-property(padding-bottom, 90, 326);
 }
 
 .title {
@@ -41,16 +35,24 @@
 	@include respons-property(padding-bottom, 24, 64);
 }
 
-.buttons {
+.content {
 	display: flex;
 	width: 100%;
-	background-color: #efefef;
+	justify-content: space-evenly;
 	border-radius: 8px;
-	padding: 5px;
 	column-gap: 5px;
-	margin-bottom: 114px;
+	margin-bottom: 50px;
+	@include respons-property(margin-bottom, 90, 326);
+	font-size: 33px;
 	@include respons-property(font-size, 20, 33);
-	@include respons-property(margin-bottom, 50, 114);
+	@media (min-width: 320px) and (max-width: 768px) {
+		flex-direction: column;
+	}
+}
+
+.content__column {
+	min-width: 400px;
+	@include respons-property(min-width, 300, 400);
 }
 
 .toggle_gutton {
@@ -91,6 +93,7 @@
 	display: flex;
 	align-items: center;
 	font-size: 16px;
+	padding: 10px 0;
 	@include respons-property(font-size, 12, 16);
 }
 

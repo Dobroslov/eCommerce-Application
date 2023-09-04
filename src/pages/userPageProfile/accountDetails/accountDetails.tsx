@@ -130,7 +130,7 @@ export default function AccountDetails(): React.ReactElement {
 							type='password'
 							id='oldPassword'
 							errorMessage='The entered password does`t match the current password'
-							pattern='^(?!\s)(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,20}$' // todo добавить текущий пароль
+							pattern='^(?!\s)(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,20}$'
 						/>
 						<ChangeInput
 							onValueChange={handleInputChange}
@@ -149,7 +149,6 @@ export default function AccountDetails(): React.ReactElement {
 							pattern={datePassword.newPassword}
 						/>
 
-						{/* <SubmitButton value='Save changes' /> */}
 						<SubmitButton value='Save changes' />
 					</div>
 				</form>

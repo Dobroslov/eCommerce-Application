@@ -37,6 +37,7 @@
 
 .content {
 	padding-top: 48px;
+	@include respons-property(padding-top, 0, 48);
 	padding-bottom: 17px;
 	display: flex;
 	flex-direction: column;
@@ -49,6 +50,8 @@
 	color: #696969;
 	position: relative;
 	padding: 5px 6px;
+	font-size: 20px;
+	@include respons-property(font-size, 10, 20);
 	transition: 0.3s;
 	&:hover {
 		color: #000000;

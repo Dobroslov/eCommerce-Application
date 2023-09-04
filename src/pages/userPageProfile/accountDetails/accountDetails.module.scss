@@ -33,6 +33,11 @@
 	@include respons-property(padding-bottom, 90, 326);
 }
 
+.content {
+	display: flex;
+	justify-content: space-between;
+}
+
 .title {
 	font-size: 33px;
 	font-weight: 500;

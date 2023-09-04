@@ -1,7 +1,7 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import ProductCardsList from '../../components/productCardsList/productCardsList';
 import { IProductCard } from '../../utils/types';
-// import MAIN_IMAGE from '../../../public/assets/images/main-girl-with-earings.jpg';
 
 import styles from './mainPage.module.scss';
 
@@ -42,7 +42,7 @@ function MainPage(): React.ReactElement {
 			<div className={styles.catalog}>
 				<div className={styles.catalog__title}>
 					<h2 className={`${styles.title_h2} ${styles.catalor__title}`}>Shop The Latest</h2>
-					<a href='#top' className={`${styles.catalog__link} ${styles.title_h4}`}>View All</a>
+					<Link to='/shop' className={`${styles.catalog__link} ${styles.title_h4}`}>View All</Link>
 				</div>
 				<ProductCardsList
 					products={sampleCardData}

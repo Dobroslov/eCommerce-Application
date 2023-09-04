@@ -71,7 +71,7 @@ function App(): React.ReactElement {
 							</RequireAuthorisation>
 						)}
 					>
-						<Route path='dashboard' element={<UserDashboard />} />
+						<Route index element={<UserDashboard />} />
 						<Route path='orders' element={<Order />} />
 						<Route path='addresses' element={<Addresses />} />
 						<Route path='account-details' element={<AccountDetails />} />
