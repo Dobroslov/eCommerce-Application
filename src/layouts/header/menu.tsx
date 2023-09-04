@@ -7,9 +7,9 @@ import SearchForm from './searchForm';
 
 function Menu(): React.JSX.Element {
 	const [active, setToggle] = useState(false);
-	const toggleSearch = ():void => {
-		setToggle(!active);
-	};
+	// const toggleSearch = ():void => {
+	// 	setToggle(!active);
+	// };
 	const closeSearch = ():void => {
 		if (active) {
 			setToggle(!active);
@@ -21,7 +21,7 @@ function Menu(): React.JSX.Element {
 		<div className={header.menu} ref={node}>
 			<Navigation />
 			<div className={header.cards}>
-				<HeaderButton area-label='Search' className={`${header.search} ${header.button__header}`} onClick={toggleSearch} />
+				{/* <HeaderButton area-label='Search' className={`${header.search} ${header.button__header}`} onClick={toggleSearch} /> */}
 				<HeaderButton area-label='Basket' className={`${header.basket} ${header.button__header}`} />
 				<HeaderButton area-label='Profile' className={`${header.profile} ${header.button__header}`} />
 			</div>

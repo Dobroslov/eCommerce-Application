@@ -2,9 +2,6 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import style from './header.module.scss';
 
-// const setActive = ({ isActive }) => (isActive ? `${header.nav__link}` : '');
-// const setActive = ({ isActive: }) => (isActive ? `${header.nav__link}` : '');
-
 function Navigation(): React.JSX.Element {
 	return (
 		<ul className={style.navigation}>
@@ -45,16 +42,10 @@ function Navigation(): React.JSX.Element {
 				</NavLink>
 			</li>
 			<li>
-				<NavLink to='/shop' className={style.nav__link}>Shop</NavLink>
-			</li>
-			<li>
 				<NavLink to='/account_page' className={style.nav__link}>
 					My account
 				</NavLink>
 			</li>
-			{/* <li>
-				<NavLink to='*' className={style.nav__link}>Not found</NavLink>
-			</li> */}
 		</ul>
 	);
 }

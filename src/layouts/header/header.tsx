@@ -13,7 +13,7 @@ function Header(): React.JSX.Element {
 		<header className={header.header}>
 			<div className={header.container}>
 				<h1 className={header.logo}><Link to='/'>GLITTER</Link></h1>
-				{auth.user ? <div>{auth.user?.email}</div> : null}
+				{auth.user ? <div className='title_h5'>{auth.user?.email}</div> : null}
 				<Menu />
 				<Burger />
 			</div>

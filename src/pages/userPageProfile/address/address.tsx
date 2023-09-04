@@ -33,6 +33,8 @@ export default function Addresses() {
 
 	const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
 		e.preventDefault();
+		console.log('handleSubmit', formData);
+
 		try {
 			// await createCustomer(registrationFormData, navigate);
 		} catch (error) {
@@ -42,23 +44,21 @@ export default function Addresses() {
 	};
 
 	return (
-		<div className={`${style.container}`}>
+		<div className={`${style.container} container`}>
 			<div className={style.body}>
 				<h2 className={style.title_h2}>Adress</h2>
-				<div className={style.content}>
-					<div className={style.content__column}>
-						<h3 className={style.title_h3}>Billing Address</h3>
-						<button onClick={toggleBillingForm} type='button' className={style.toggle_gutton}>
-							{showBillingForm ? 'Hide' : 'Add'}
-						</button>
-						{showBillingForm && (
+				<div className={style.buttons}>
+					<button onClick={toggleBillingForm} type='button'>
+						{showBillingForm ? 'Hide Billing Address' : 'Add Billing Address'}
+					</button>
+					<button onClick={toggleShippingForm} type='button' className={style.toggle_gutton}>
+						{showShippingForm ? 'Hide Shipping Address' : 'Add Shipping Address'}
+					</button>
+				</div>
+				{showBillingForm && (
+					<form className={style.form} onSubmit={handleSubmit}>
+						<div className={style.inputs}>
 							<form className={style.form} onSubmit={handleSubmit}>
-								<div className={style.remember}>
-									<input type='checkbox' id='checkbox-billing-address' className={style.formCheckBox} />
-									<label htmlFor='checkbox-billing-address' className={style.checkboxLabel}>
-										Default billing address
-									</label>
-								</div>
 								<div className={style.inputs}>
 									<select
 										className={style.select}
@@ -89,7 +89,6 @@ export default function Addresses() {
 										id='city'
 										errorMessage="City should be 1-16 characters and shoudn'nt include any special character"
 										pattern='^[A-Za-zА-Яа-я]{1,16}$'
-										initValue={formData.city}
 									/>
 									<ChangeInput
 										placeholder='Street name'
@@ -119,21 +118,14 @@ export default function Addresses() {
 								</div>
 								<SubmitButton value='Save Billing Address' />
 							</form>
-						)}
-					</div>
-					<div className={style.content__column}>
-						<h3 className={style.title_h3}>Shipping Address</h3>
-						<button onClick={toggleShippingForm} type='button' className={style.toggle_gutton}>
-							{showShippingForm ? 'Hide' : 'Add'}
-						</button>
-						{showShippingForm && (
+						</div>
+					</form>
+				)}
+
+				{showShippingForm && (
+					<form className={style.form} onSubmit={handleSubmit}>
+						<div className={style.inputs}>
 							<form className={style.form} onSubmit={handleSubmit}>
-								<div className={style.remember}>
-									<input type='checkbox' id='checkbox-shipping-address' className={style.formCheckBox} />
-									<label htmlFor='checkbox-shipping-address' className={style.checkboxLabel}>
-										Default shipping address
-									</label>
-								</div>
 								<div className={style.inputs}>
 									<select
 										className={style.select}
@@ -193,9 +185,9 @@ export default function Addresses() {
 								</div>
 								<SubmitButton value='Save Shipping Address' />
 							</form>
-						)}
-					</div>
-				</div>
+						</div>
+					</form>
+				)}
 			</div>
 		</div>
 	);

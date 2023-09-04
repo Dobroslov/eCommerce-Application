@@ -1,11 +1,15 @@
 import axios from 'axios';
 import { NavigateFunction } from 'react-router-dom';
-import { IUserLogin,
+import {
+	IUserLogin,
 	IRegistrationForm,
-	IProduct, IProductbyId, IAddress,
+	IProduct,
+	IProductbyId,
+	IAddress,
 	IUpdatePassword,
 	IUpdateUserData,
-	IUserDataRespons } from '../utils/types';
+	IUserDataRespons,
+} from '../utils/types';
 
 import store from '../store/store';
 import { hideModal, showModal } from '../store/actions';
@@ -250,7 +254,10 @@ export function getSortingProducts(
 					description: { [x: string]: string };
 					masterVariant: {
 						images: { url: string }[];
-						prices: { value: { centAmount: number; currencyCode: string }, discounted:{value:{centAmount: number;}} }[];
+						prices: {
+							value: { centAmount: number; currencyCode: string };
+							discounted: { value: { centAmount: number } };
+						}[];
 					};
 				}) => {
 					const productValues: IProduct = {
@@ -260,7 +267,9 @@ export function getSortingProducts(
 						image: product.masterVariant.images[0].url,
 						currencyCode: product.masterVariant.prices[0].value.currencyCode,
 						price: (product.masterVariant.prices[0].value.centAmount / 100).toFixed(2) as string,
-						discount: (product.masterVariant.prices[0].discounted.value.centAmount / 100).toFixed(2) as string,
+						discount: (product.masterVariant.prices[0].discounted.value.centAmount / 100).toFixed(
+							2,
+						) as string,
 					};
 					productsArr.push(productValues);
 				},
@@ -304,7 +313,10 @@ export function getFilter(limit = 9, offset = 0, filter: string): Promise<void |
 					description: { [x: string]: string };
 					masterVariant: {
 						images: { url: string }[];
-						prices: { value: { centAmount: number; currencyCode: string }, discounted:{value:{centAmount:number}} }[];
+						prices: {
+							value: { centAmount: number; currencyCode: string };
+							discounted: { value: { centAmount: number } };
+						}[];
 					};
 				}) => {
 					const productValues: IProduct = {
@@ -314,7 +326,9 @@ export function getFilter(limit = 9, offset = 0, filter: string): Promise<void |
 						image: product.masterVariant.images[0].url,
 						currencyCode: product.masterVariant.prices[0].value.currencyCode,
 						price: (product.masterVariant.prices[0].value.centAmount / 100).toFixed(2) as string,
-						discount: (product.masterVariant.prices[0].discounted.value.centAmount / 100).toFixed(2) as string,
+						discount: (product.masterVariant.prices[0].discounted.value.centAmount / 100).toFixed(
+							2,
+						) as string,
 					};
 					productsArr.push(productValues);
 				},
@@ -343,30 +357,34 @@ export function getProductForId(id: string): Promise<void | IProductbyId> {
 		'Content-Type': 'application/json',
 		Authorization: `Bearer ${token}`,
 	};
-	const product = axios.get(url, {
-		headers,
-	}).then((response) => {
-		const imagesArr: string[] = [];
-		response.data.masterVariant.images.forEach((image: { url: string; }) => {
-			imagesArr.push(image.url);
-		});
-		const productData:IProductbyId = {
-			name: response.data.name['en-US'],
-			images: imagesArr,
-			description: response.data.description['en-US'],
-			currencyCode: response.data.masterVariant.prices[0].value.currencyCode,
-			price: (response.data.masterVariant.prices[0].value.centAmount / 100).toFixed(2) as string,
-			color: response.data.masterVariant.attributes[0].value[0],
-			weight: response.data.masterVariant.attributes[1].value,
-			stone: response.data.masterVariant.attributes[2].value[0],
-			standard: response.data.masterVariant.attributes[3].value,
-			metall: response.data.masterVariant.attributes[4].value[0],
-			discount: (response.data.masterVariant.prices[0].discounted.value.centAmount / 100).toFixed(2) as string,
-		};
-		console.log(productData);
+	const product = axios
+		.get(url, {
+			headers,
+		})
+		.then((response) => {
+			const imagesArr: string[] = [];
+			response.data.masterVariant.images.forEach((image: { url: string }) => {
+				imagesArr.push(image.url);
+			});
+			const productData: IProductbyId = {
+				name: response.data.name['en-US'],
+				images: imagesArr,
+				description: response.data.description['en-US'],
+				currencyCode: response.data.masterVariant.prices[0].value.currencyCode,
+				price: (response.data.masterVariant.prices[0].value.centAmount / 100).toFixed(2) as string,
+				color: response.data.masterVariant.attributes[0].value[0],
+				weight: response.data.masterVariant.attributes[1].value,
+				stone: response.data.masterVariant.attributes[2].value[0],
+				standard: response.data.masterVariant.attributes[3].value,
+				metall: response.data.masterVariant.attributes[4].value[0],
+				discount: (response.data.masterVariant.prices[0].discounted.value.centAmount / 100).toFixed(
+					2,
+				) as string,
+			};
+			console.log(productData);
 
-		return productData;
-	})
+			return productData;
+		})
 		.catch((error) => {
 			console.log(error);
 		});
@@ -488,7 +506,8 @@ export function changeCustomerValues({ firstName, lastName, email, dateOfBirth }
 			}, 5000);
 		});
 }
-// для установки или удаления используем addressAction:
+
+// Для установки или удаления используем addressAction:
 // 'setDefaultShippingAddress'
 // "setDefaultBillingAddress"
 //  "addBillingAddressId"
@@ -497,9 +516,7 @@ export function changeCustomerValues({ firstName, lastName, email, dateOfBirth }
 // "removeShippingAddressId"
 // "removeAddress"
 
-export function addressActions(addressAction: string,
-	addressId: string,
-) {
+export function addressActions(addressAction: string, addressId: string) {
 	const user = localStorage.getItem('userData') as string;
 	const { id, version } = JSON.parse(user);
 	const token = localStorage.getItem('token');
@@ -550,7 +567,7 @@ export function addressActions(addressAction: string,
 		});
 }
 
-export function changeAddress(addressId: string, addressData:IAddress) {
+export function changeAddress(addressId: string, addressData: IAddress) {
 	const user = localStorage.getItem('userData') as string;
 	const { id, version } = JSON.parse(user);
 	const token = localStorage.getItem('token');
@@ -581,6 +598,56 @@ export function changeAddress(addressId: string, addressData:IAddress) {
 				showModal({
 					title: 'Success',
 					description: 'Address changed successfully',
+					color: 'rgb(60, 179, 113,0.5)',
+				}),
+			);
+			setTimeout(() => {
+				store.dispatch(hideModal());
+			}, 5000);
+		})
+		.catch((error) => {
+			store.dispatch(
+				showModal({
+					title: 'Fault',
+					description: error.response?.data.message,
+					color: 'rgb(227, 23, 23,0.5)',
+				}),
+			);
+			setTimeout(() => {
+				store.dispatch(hideModal());
+			}, 5000);
+		});
+}
+
+export function addAddress(addressData: IAddress) {
+	const user = localStorage.getItem('userData') as string;
+	const { id } = JSON.parse(user);
+	const token = localStorage.getItem('token');
+	const headers = {
+		'Content-Type': 'application/json',
+		Authorization: `Bearer ${token}`,
+	};
+	const url = `https://api.europe-west1.gcp.commercetools.com/glitter-magazine/customers/${id}`;
+	const data = {
+		actions: [
+			{
+				action: 'addAddress',
+				address: addressData,
+			},
+		],
+	};
+	axios
+		.post(url, data, {
+			headers,
+		})
+		.then((response) => {
+			console.log(response);
+			const responseData = response.data;
+			localStorage.setItem('userData', JSON.stringify(responseData));
+			store.dispatch(
+				showModal({
+					title: 'Success',
+					description: 'Data changed successfully',
 					color: 'rgb(60, 179, 113,0.5)',
 				}),
 			);
