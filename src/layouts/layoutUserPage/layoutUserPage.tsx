@@ -1,10 +1,22 @@
 import React from 'react';
-import { NavLink, Outlet } from 'react-router-dom';
+import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 // import useAuth from '../../hooks/useAuth';
 
 import style from './layoutUserPage.module.scss';
+import useAuth from '../../hooks/useAuth';
 
 export default function LayoutUserPage(): React.ReactElement {
+	const { user, signOut } = useAuth();
+	const navigate = useNavigate();
+
+	const handleLogout = () => {
+		if (user) {
+			signOut(() => navigate('/', {
+				replace: true,
+			}));
+		}
+	};
+
 	return (
 		<div className={style.user__page}>
 			<h2 className={style.title_h2}>My account</h2>
@@ -14,6 +26,7 @@ export default function LayoutUserPage(): React.ReactElement {
 					<NavLink to='/account_page/orders' className={style.user__nav_link}>Orders</NavLink>
 					<NavLink to='/account_page/addresses' className={style.user__nav_link}>Addresses</NavLink>
 					<NavLink to='/account_page/account-details' className={style.user__nav_link}>Account details</NavLink>
+					<NavLink to='/' className={style.user__nav_link} onClick={handleLogout}>Logout</NavLink>
 				</nav>
 				<div className={style.description}>
 					<Outlet />

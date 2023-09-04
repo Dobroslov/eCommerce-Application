@@ -2,7 +2,7 @@ import axios from 'axios';
 import { NavigateFunction } from 'react-router-dom';
 import { IUserLogin,
 	IRegistrationForm,
-	IProduct,
+	IProduct, IProductbyId, IAddress,
 	IUpdatePassword,
 	IUpdateUserData,
 	IUserDataRespons } from '../utils/types';
@@ -214,8 +214,8 @@ export async function checkToken(token: string): Promise<{ email: string; active
 }
 
 export function getSortingProducts(
-	limit: number,
-	offset: number,
+	limit: number | string,
+	offset: number | string,
 	sort: string,
 	order: string,
 ): Promise<void | IProduct[]> {
@@ -250,7 +250,7 @@ export function getSortingProducts(
 					description: { [x: string]: string };
 					masterVariant: {
 						images: { url: string }[];
-						prices: { value: { centAmount: number; currencyCode: string } }[];
+						prices: { value: { centAmount: number; currencyCode: string }, discounted:{value:{centAmount: number;}} }[];
 					};
 				}) => {
 					const productValues: IProduct = {
@@ -260,10 +260,12 @@ export function getSortingProducts(
 						image: product.masterVariant.images[0].url,
 						currencyCode: product.masterVariant.prices[0].value.currencyCode,
 						price: (product.masterVariant.prices[0].value.centAmount / 100).toFixed(2) as string,
+						discount: (product.masterVariant.prices[0].discounted.value.centAmount / 100).toFixed(2) as string,
 					};
 					productsArr.push(productValues);
 				},
 			);
+			console.log(productsArr);
 			return productsArr;
 		})
 		.catch((error) => {
@@ -272,12 +274,7 @@ export function getSortingProducts(
 	return products;
 }
 
-export function getFilterByPrice(
-	limit: number,
-	offset: number,
-	from: number,
-	to: number,
-): Promise<void | IProduct[]> {
+export function getFilter(limit = 9, offset = 0, filter: string): Promise<void | IProduct[]> {
 	// eslint-disable-line consistent-return
 	let token = '';
 	if (!localStorage.getItem('token')) {
@@ -287,7 +284,7 @@ export function getFilterByPrice(
 	}
 	const productsArr: IProduct[] = [];
 
-	const url = `https://api.europe-west1.gcp.commercetools.com/glitter-magazine/product-projections/search?limit=${limit}&offset=${offset}&filter=variants.price.centAmount:range (${from} to ${to})`;
+	const url = `https://api.europe-west1.gcp.commercetools.com/glitter-magazine/product-projections/search?fuzzy=true&limit=${limit}&offset=${offset}${filter}`;
 	const headers: {
 		'Content-Type': string;
 		Authorization: string;
@@ -307,7 +304,7 @@ export function getFilterByPrice(
 					description: { [x: string]: string };
 					masterVariant: {
 						images: { url: string }[];
-						prices: { value: { centAmount: number; currencyCode: string } }[];
+						prices: { value: { centAmount: number; currencyCode: string }, discounted:{value:{centAmount:number}} }[];
 					};
 				}) => {
 					const productValues: IProduct = {
@@ -317,6 +314,7 @@ export function getFilterByPrice(
 						image: product.masterVariant.images[0].url,
 						currencyCode: product.masterVariant.prices[0].value.currencyCode,
 						price: (product.masterVariant.prices[0].value.centAmount / 100).toFixed(2) as string,
+						discount: (product.masterVariant.prices[0].discounted.value.centAmount / 100).toFixed(2) as string,
 					};
 					productsArr.push(productValues);
 				},
@@ -328,7 +326,8 @@ export function getFilterByPrice(
 		});
 	return products;
 }
-export function getProductForId(id: string) {
+
+export function getProductForId(id: string): Promise<void | IProductbyId> {
 	let token = '';
 	if (!localStorage.getItem('token')) {
 		token = localStorage.getItem('anonimous') as string;
@@ -344,29 +343,30 @@ export function getProductForId(id: string) {
 		'Content-Type': 'application/json',
 		Authorization: `Bearer ${token}`,
 	};
-	const product = axios
-		.get(url, {
-			headers,
-		})
-		.then((response) => {
-			const imagesArr: string[] = [];
-			response.data.variants[0].images.forEach((image: { url: string }) => {
-				imagesArr.push(image.url);
-			});
-			const productData = {
-				name: response.data.name['en-US'],
-				images: imagesArr,
-				description: response.data.description['en-US'],
-				currencyCode: response.data.variants[0].prices[0].value.currencyCode,
-				price: (response.data.variants[0].prices[0].value.centAmount / 100).toFixed(2) as string,
-				color: response.data.variants[0].attributes[0].value[0],
-				weight: response.data.variants[0].attributes[1].value,
-				stone: response.data.variants[0].attributes[2].value[0],
-				standard: response.data.variants[0].attributes[3].value,
-				metall: response.data.variants[0].attributes[4].value[0],
-			};
-			return productData;
-		})
+	const product = axios.get(url, {
+		headers,
+	}).then((response) => {
+		const imagesArr: string[] = [];
+		response.data.masterVariant.images.forEach((image: { url: string; }) => {
+			imagesArr.push(image.url);
+		});
+		const productData:IProductbyId = {
+			name: response.data.name['en-US'],
+			images: imagesArr,
+			description: response.data.description['en-US'],
+			currencyCode: response.data.masterVariant.prices[0].value.currencyCode,
+			price: (response.data.masterVariant.prices[0].value.centAmount / 100).toFixed(2) as string,
+			color: response.data.masterVariant.attributes[0].value[0],
+			weight: response.data.masterVariant.attributes[1].value,
+			stone: response.data.masterVariant.attributes[2].value[0],
+			standard: response.data.masterVariant.attributes[3].value,
+			metall: response.data.masterVariant.attributes[4].value[0],
+			discount: (response.data.masterVariant.prices[0].discounted.value.centAmount / 100).toFixed(2) as string,
+		};
+		console.log(productData);
+
+		return productData;
+	})
 		.catch((error) => {
 			console.log(error);
 		});
@@ -395,6 +395,12 @@ export function changePassword({ oldPassword, newPassword }: IUpdatePassword): v
 		.then((response) => {
 			const responseData = response.data;
 			localStorage.setItem('userData', JSON.stringify(responseData));
+			const param: IUserLogin = {
+				email: response.data.email,
+				password: newPassword,
+			};
+			// смена токена после смены пароля
+			getToken(param);
 			store.dispatch(
 				showModal({
 					title: 'Success',
@@ -462,6 +468,119 @@ export function changeCustomerValues({ firstName, lastName, email, dateOfBirth }
 				showModal({
 					title: 'Success',
 					description: 'Data changed successfully',
+					color: 'rgb(60, 179, 113,0.5)',
+				}),
+			);
+			setTimeout(() => {
+				store.dispatch(hideModal());
+			}, 5000);
+		})
+		.catch((error) => {
+			store.dispatch(
+				showModal({
+					title: 'Fault',
+					description: error.response?.data.message,
+					color: 'rgb(227, 23, 23,0.5)',
+				}),
+			);
+			setTimeout(() => {
+				store.dispatch(hideModal());
+			}, 5000);
+		});
+}
+// для установки или удаления используем addressAction:
+// 'setDefaultShippingAddress'
+// "setDefaultBillingAddress"
+//  "addBillingAddressId"
+//  "addShippingAddressId"
+// "removeBillingAddressId"
+// "removeShippingAddressId"
+// "removeAddress"
+
+export function addressActions(addressAction: string,
+	addressId: string,
+) {
+	const user = localStorage.getItem('userData') as string;
+	const { id, version } = JSON.parse(user);
+	const token = localStorage.getItem('token');
+	const headers = {
+		'Content-Type': 'application/json',
+		Authorization: `Bearer ${token}`,
+	};
+	const url = `https://api.europe-west1.gcp.commercetools.com/glitter-magazine/customers/${id}`;
+	const data = {
+		version,
+		actions: [
+			{
+				action: addressAction,
+				addressId,
+			},
+		],
+	};
+	axios
+		.post(url, data, {
+			headers,
+		})
+		.then((response) => {
+			console.log(response);
+			const responseData = response.data;
+			localStorage.setItem('userData', JSON.stringify(responseData));
+			store.dispatch(
+				showModal({
+					title: 'Success',
+					description: 'Data changed successfully',
+					color: 'rgb(60, 179, 113,0.5)',
+				}),
+			);
+			setTimeout(() => {
+				store.dispatch(hideModal());
+			}, 5000);
+		})
+		.catch((error) => {
+			store.dispatch(
+				showModal({
+					title: 'Fault',
+					description: error.response?.data.message,
+					color: 'rgb(227, 23, 23,0.5)',
+				}),
+			);
+			setTimeout(() => {
+				store.dispatch(hideModal());
+			}, 5000);
+		});
+}
+
+export function changeAddress(addressId: string, addressData:IAddress) {
+	const user = localStorage.getItem('userData') as string;
+	const { id, version } = JSON.parse(user);
+	const token = localStorage.getItem('token');
+	const headers = {
+		'Content-Type': 'application/json',
+		Authorization: `Bearer ${token}`,
+	};
+	const url = `https://api.europe-west1.gcp.commercetools.com/glitter-magazine/customers/${id}`;
+	const data = {
+		version,
+		actions: [
+			{
+				action: 'changeAddress',
+				addressId,
+				address: addressData,
+			},
+		],
+	};
+	axios
+		.post(url, data, {
+			headers,
+		})
+		.then((response) => {
+			console.log(response);
+			const responseData = response.data;
+			localStorage.setItem('userData', JSON.stringify(responseData));
+			store.dispatch(
+				showModal({
+					title: 'Success',
+					description: 'Address changed successfully',
 					color: 'rgb(60, 179, 113,0.5)',
 				}),
 			);

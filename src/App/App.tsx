@@ -49,7 +49,6 @@ function App(): React.ReactElement {
 			});
 		}
 	}, []);
-
 	return (
 		<div className='wrapper'>
 			<Routes>
@@ -60,7 +59,10 @@ function App(): React.ReactElement {
 					{/* ключевое слово "index" во вложенном роуте говорит о том,
 					 что это значение используется по умолчанию */}
 					<Route path='login' element={user ? <Navigate to='/account_page' /> : <LoginPage />} />
-					<Route path='registration' element={user ? <Navigate to='/account_page' /> : <RegistrationPage />} />
+					<Route
+						path='registration'
+						element={user ? <Navigate to='/account_page' /> : <RegistrationPage />}
+					/>
 					<Route path='shop' element={<Shop />} />
 					<Route path='shop/:id' element={<ShopSinglPageProduct />} />
 					<Route
