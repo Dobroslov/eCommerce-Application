@@ -2,100 +2,10 @@
 import React, { useState } from 'react';
 import ReactSlider from 'react-slider';
 import style from './filter.module.scss';
-import DefaultInput from '../../../components/inputs/defaultInput';
 import SubmitButton from '../../../components/buttons/submitButton';
+import filterObject from './filterObject';
+import IMAGE from '../../../../public/assets/svg/search.svg';
 // import { Link, useLocation, useNavigate } from 'react-router-dom';
-
-interface Ifilter {
-	resultArray: string[];
-	metallProperty: string[];
-	metallValue: string[];
-	stoneProperty: string[];
-	stoneValue: string[];
-	addMetallProperty(property: string): void;
-	removeMetallProperty(property: string): void;
-	addMetallValue(property: string): void;
-	removeMetallValue(property: string): void;
-	addStoneProperty(property: string): void;
-	removeStoneProperty(property: string): void;
-	addStoneValue(property: string): void;
-	removeStoneValue(property: string): void;
-}
-
-const filterObject: Ifilter = {
-	resultArray: [],
-	metallProperty: [],
-	metallValue: [],
-	stoneProperty: [],
-	stoneValue: [],
-
-	addMetallProperty(string) {
-		const property = string.split(' ');
-		if (this.metallProperty.length < 1) {
-			this.metallProperty.push(property[0]);
-		}
-		console.log(this.metallProperty);
-	},
-
-	removeMetallProperty(string) {
-		const property = string.split(' ');
-		const index = this.metallProperty.indexOf(property[0]);
-		if (index > -1) {
-			this.metallProperty.splice(index, 1);
-		}
-		console.log(this.metallProperty);
-	},
-
-	addMetallValue(string) {
-		const value = string.split(' ');
-		if (this.metallValue.indexOf(value[1]) === -1) {
-			this.metallValue.push(value[1]);
-		}
-		console.log(this.metallValue);
-	},
-
-	removeMetallValue(string) {
-		const value = string.split(' ');
-		const index = this.metallValue.indexOf(value[1]);
-		if (index > -1) {
-			this.metallValue.splice(index, 1);
-		}
-		console.log(this.metallValue);
-	},
-
-	addStoneProperty(string) {
-		const property = string.split(' ');
-		if (this.stoneProperty.length < 1) {
-			this.stoneProperty.push(property[0]);
-		}
-		console.log(this.stoneProperty);
-	},
-
-	removeStoneProperty(string) {
-		const property = string.split(' ');
-		const index = this.stoneProperty.indexOf(property[0]);
-		if (index > -1) {
-			this.stoneProperty.splice(index, 1);
-		}
-		console.log(this.stoneProperty);
-	},
-	addStoneValue(string) {
-		const value = string.split(' ');
-		if (this.stoneValue.indexOf(value[1]) === -1) {
-			this.stoneValue.push(value[1]);
-		}
-		console.log(this.stoneValue);
-	},
-
-	removeStoneValue(string) {
-		const value = string.split(' ');
-		const index = this.stoneValue.indexOf(value[1]);
-		if (index > -1) {
-			this.stoneValue.splice(index, 1);
-		}
-		console.log(this.stoneValue);
-	},
-};
 
 interface ISort {
 	onValueChange: (value: string) => void;
@@ -104,7 +14,8 @@ interface ISort {
 export default function Filter(props: ISort): React.ReactElement {
 	const { onValueChange } = props;
 	const [value, setValue] = useState<number[]>([10, 1200]);
-	const [sort, setSorting] = useState<string>('&createdAt+desc');
+	const [sort, setSorting] = useState<string>('&sort=createdAt+desc');
+	const [search, setSearch] = useState<string>('');
 
 	const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const newValue = e.target.value;
@@ -146,7 +57,10 @@ export default function Filter(props: ISort): React.ReactElement {
 	};
 
 	const handleApplyFilters = () => {
-		const priceRange = `&filter=variants.price.centAmount:range (${value[0] * 100} to ${value[1] * 100})`;
+		const priceRange = `&filter=variants.price.centAmount:range (${value[0] * 100} to ${
+			value[1] * 100
+		})`;
+		const searchInput = `&text.en-US=${search}`;
 		const metallValues = filterObject.metallValue.join(',');
 		const stoneValues = filterObject.stoneValue.join(',');
 		const result = filterObject.resultArray.concat(
@@ -156,15 +70,34 @@ export default function Filter(props: ISort): React.ReactElement {
 			stoneValues,
 			priceRange,
 			sort,
+			searchInput,
 		);
-		onValueChange(result.join(''));
-		console.log(result.join(''));
+		if (search.length > 0) {
+			onValueChange(result.join(''));
+			console.log(result.join(''));
+		} else {
+			result.pop();
+			onValueChange(result.join(''));
+		}
 	};
 
 	return (
 		<div className={style.filter}>
 			<div className={style.search}>
-				<DefaultInput placeholder='Search...' type='text' id='1' />
+				<div className={style.inputBody}>
+					<div className={style.inputSearch}>
+						<input
+							onChange={(e) => setSearch(e.target.value)}
+							className={style.input}
+							type='text'
+							placeholder='Search...'
+						/>
+						<button onClick={handleApplyFilters} type='button'>
+							<img src={IMAGE} alt='search-logo' />
+						</button>
+					</div>
+					<i className={style.underline} />
+				</div>
 			</div>
 			<select onChange={handleSortChange} className={style.select} name='Sort' id=''>
 				<option value='&sort=createdAt+desc'>Sort by newest</option>
@@ -176,9 +109,9 @@ export default function Filter(props: ISort): React.ReactElement {
 			</select>
 			<ReactSlider
 				className={style.slider}
-				defaultValue={[30, 1200]}
+				defaultValue={[10, 1200]}
 				max={1200}
-				min={30}
+				min={10}
 				onChange={(newValue) => setValue(newValue)}
 			/>
 			<div className={style.price}>
@@ -191,10 +124,9 @@ export default function Filter(props: ISort): React.ReactElement {
 					<span className={style.slider} />
 				</label>
 			</div>
-			<p>Metall</p>
-			<div className={style.inputTitle}>
-				<label htmlFor='metall'>
-					gold
+			<p className={style.inputTitle}>Metall</p>
+			<div className={style.filterProperty}>
+				<label className={style.filterAttribute} htmlFor='metall'>
 					<input
 						onChange={handleCheckbox}
 						value='&filter=variants.attributes.metall: "gold"'
@@ -202,9 +134,9 @@ export default function Filter(props: ISort): React.ReactElement {
 						name='metall'
 						id='gold'
 					/>
+					Gold
 				</label>
-				<label htmlFor='metall'>
-					silver
+				<label className={style.filterAttribute} htmlFor='metall'>
 					<input
 						onChange={handleCheckbox}
 						value='&filter=variants.attributes.metall: "silver"'
@@ -212,12 +144,12 @@ export default function Filter(props: ISort): React.ReactElement {
 						name='metall'
 						id='silver'
 					/>
+					Silver
 				</label>
 			</div>
-			<p>Stones</p>
-			<div className={style.inputTitle}>
-				<label htmlFor='stone'>
-					with stones
+			<p className={style.inputTitle}>Stones</p>
+			<div className={style.filterProperty}>
+				<label className={style.filterAttribute} htmlFor='stone'>
 					<input
 						type='checkbox'
 						onChange={handleCheckbox}
@@ -225,9 +157,9 @@ export default function Filter(props: ISort): React.ReactElement {
 						name='stone'
 						id='wstone'
 					/>
+					With stones
 				</label>
-				<label htmlFor='stone'>
-					no stones
+				<label className={style.filterAttribute} htmlFor='stone'>
 					<input
 						type='checkbox'
 						onChange={handleCheckbox}
@@ -235,6 +167,7 @@ export default function Filter(props: ISort): React.ReactElement {
 						name='stone'
 						id='nstone'
 					/>
+					No stones
 				</label>
 			</div>
 			<SubmitButton onclick={handleApplyFilters} value='Apply filters' />
