@@ -80,14 +80,8 @@ export interface IProduct {
 	image: string;
 	currencyCode: string;
 	price: string;
+	discount:string
 }
-export interface ISorting {
-	sortLimit: number | string;
-	sortOffset: number | string;
-	sorting: string;
-	sortOrder: string;
-}
-
 export interface IProductbyId {
 	name: string;
 	images: string[];
@@ -99,6 +93,14 @@ export interface IProductbyId {
 	stone: boolean;
 	standard: number;
 	metall: string;
+	discount?:string;
+	sku:string
+}
+export interface ISorting {
+	sortLimit: number | string;
+	sortOffset: number | string;
+	sorting: string;
+	sortOrder: string;
 }
 
 export interface Ifilter {

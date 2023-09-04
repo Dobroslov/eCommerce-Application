@@ -20,6 +20,8 @@ export default function ShopSinglPageProduct(): React.ReactElement {
 		stone: true,
 		standard: 1,
 		metall: '',
+		discount: '',
+		sku: '',
 	});
 	// const goForward = () => navigate(1); // вперёд по истории
 
