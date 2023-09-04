@@ -14,7 +14,7 @@ export default function Shop(): React.ReactElement {
 	const [products, setProducts] = useState<IProduct[]>([]);
 	const [modalActive, setModalActive] = useState(false);
 	const [filter, setFilter] = useState('');
-	const [id, setId] = useState('1');
+	const [id, setId] = useState('');
 	const [images, setImages] = useState<string[]>([]);
 
 	// const navigate = useNavigate();

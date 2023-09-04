@@ -115,7 +115,7 @@ export default function Filter(props: ISort): React.ReactElement {
 				onChange={(newValue) => setValue(newValue)}
 			/>
 			<div className={style.price}>
-				Price: ${value[0]} - ${value[1]}
+				Price: {value[0]} EUR - {value[1]} EUR
 			</div>
 			<div className={style.onSaleBody}>
 				<p>On sale</p>

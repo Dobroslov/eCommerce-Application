@@ -61,7 +61,7 @@
   height: 300px;
   width: 300px;
   border-radius: 4px;
-  object-fit: cover;
+  object-fit: contain;
   pointer-events: none;
   @media (min-width: 768px) and (max-width: 1240px) {
     @include respons-property(height, 140, 300);
@@ -127,12 +127,12 @@
 }
 
 .itemModal img {
-  width: 300px;
+  width: 500px;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
   @media (min-width: 320px) and (max-width: 1240px) {
-    @include respons-property(min-width, 320, 500);
+    @include respons-property(width, 320, 500);
     }
 }
 
