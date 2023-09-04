@@ -178,67 +178,6 @@ export async function checkToken(token: string): Promise<{ email: string; active
 	// return customer;
 }
 
-export function getSortingProducts(
-	limit: number | string,
-	offset: number | string,
-	sort: string,
-	order: string,
-): Promise<void | IProduct[]> {
-	// eslint-disable-line consistent-return
-	let token = '';
-	// store.dispatch(addSort(sortData));
-	if (!localStorage.getItem('token')) {
-		token = localStorage.getItem('anonimous') as string;
-	} else {
-		token = localStorage.getItem('token') as string;
-	}
-	const productsArr: IProduct[] = [];
-
-	const url = `https://api.europe-west1.gcp.commercetools.com/glitter-magazine/product-projections/search?limit=${limit}&offset=${offset}&sort=${sort} ${order}`;
-
-	const headers: {
-		'Content-Type': string;
-		Authorization: string;
-	} = {
-		'Content-Type': 'application/json',
-		Authorization: `Bearer ${token}`,
-	};
-	const products = axios
-		.get(url, {
-			headers,
-		})
-		.then((response) => {
-			response.data.results.forEach(
-				(product: {
-					id: string;
-					name: { [x: string]: string };
-					description: { [x: string]: string };
-					masterVariant: {
-						images: { url: string }[];
-						prices: { value: { centAmount: number; currencyCode: string }, discounted:{value:{centAmount: number;}} }[];
-					};
-				}) => {
-					const productValues: IProduct = {
-						id: product.id,
-						name: product.name['en-US'],
-						description: product.description['en-US'],
-						image: product.masterVariant.images[0].url,
-						currencyCode: product.masterVariant.prices[0].value.currencyCode,
-						price: (product.masterVariant.prices[0].value.centAmount / 100).toFixed(2) as string,
-						discount: (product.masterVariant.prices[0].discounted.value.centAmount / 100).toFixed(2) as string,
-					};
-					productsArr.push(productValues);
-				},
-			);
-			console.log(productsArr);
-			return productsArr;
-		})
-		.catch((error) => {
-			console.log(error);
-		});
-	return products;
-}
-
 export function getFilter(limit = 9, offset = 0, filter: string): Promise<void | IProduct[]> {
 	// eslint-disable-line consistent-return
 	let token = '';
@@ -279,7 +218,8 @@ export function getFilter(limit = 9, offset = 0, filter: string): Promise<void |
 						image: product.masterVariant.images[0].url,
 						currencyCode: product.masterVariant.prices[0].value.currencyCode,
 						price: (product.masterVariant.prices[0].value.centAmount / 100).toFixed(2) as string,
-						discount: (product.masterVariant.prices[0].discounted.value.centAmount / 100).toFixed(2) as string,
+						/* eslint-disable-next-line no-unsafe-optional-chaining */
+						discount: (product.masterVariant.prices[0].discounted?.value.centAmount / 100).toFixed(2) as string,
 					};
 					productsArr.push(productValues);
 				},
@@ -326,7 +266,10 @@ export function getProductForId(id: string): Promise<void | IProductbyId> {
 			stone: response.data.masterVariant.attributes[2].value[0],
 			standard: response.data.masterVariant.attributes[3].value,
 			metall: response.data.masterVariant.attributes[4].value[0],
-			discount: (response.data.masterVariant.prices[0].discounted.value.centAmount / 100).toFixed(2) as string,
+			/* eslint-disable-next-line no-unsafe-optional-chaining */
+			discount: (response.data.masterVariant.prices[0].discounted?.value.centAmount / 100).toFixed(2) as string,
+			sku: response.data.masterVariant.sku,
+
 		};
 		console.log(productData);
 
