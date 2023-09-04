@@ -1,61 +1,61 @@
-import React, { FormEvent, useState } from 'react';
-import ChangeInput from '../../../components/inputs/changeInput/changeInput';
+import React from 'react';
+// import React, { FormEvent, useState } from 'react';
+// import ChangeInput from '../../../components/inputs/changeInput/changeInput';
 
 import style from './address.module.scss';
-import SubmitButton from '../../../components/buttons/submitButton';
+// import SubmitButton from '../../../components/buttons/submitButton';
 
 export default function Addresses() {
-	const [selectedCountry, setSelectedCountry] = useState('RU');
-	const [formData, setFormData] = useState({
-		city: '',
-		streetName: '',
-		streetNumber: '',
-		postalCode: '',
-	});
+	// const [selectedCountry, setSelectedCountry] = useState('RU');
+	// const [formData, setFormData] = useState({
+	// 	city: '',
+	// 	streetName: '',
+	// 	streetNumber: '',
+	// 	postalCode: '',
+	// });
 
-	const [showBillingForm, setShowBillingForm] = useState(false);
-	const [showShippingForm, setShowShippingForm] = useState(false);
+	// const [showBillingForm, setShowBillingForm] = useState(false);
+	// const [showShippingForm, setShowShippingForm] = useState(false);
 
-	const toggleBillingForm = () => {
-		setShowBillingForm(!showBillingForm);
-	};
+	// const toggleBillingForm = () => {
+	// 	setShowBillingForm(!showBillingForm);
+	// };
 
-	const toggleShippingForm = () => {
-		setShowShippingForm(!showShippingForm);
-	};
+	// const toggleShippingForm = () => {
+	// 	setShowShippingForm(!showShippingForm);
+	// };
 
-	const handleInputChange = (newValue: string, id: string): void => {
-		setFormData((prevUserData) => ({
-			...prevUserData,
-			[id]: newValue,
-		}));
-	};
+	// const handleInputChange = (newValue: string, id: string): void => {
+	// 	setFormData((prevUserData) => ({
+	// 		...prevUserData,
+	// 		[id]: newValue,
+	// 	}));
+	// };
 
-	const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
-		e.preventDefault();
-		console.log('handleSubmit', formData);
+	// const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
+	// 	e.preventDefault();
 
-		try {
-			// await createCustomer(registrationFormData, navigate);
-		} catch (error) {
-			console.error('Error handleSubmit:', error);
-			// Обработайте ошибку, если что-то пошло не так
-		}
-	};
+	// 	try {
+	// 		// await createCustomer(registrationFormData, navigate);
+	// 	} catch (error) {
+	// 		console.error('Error handleSubmit:', error);
+	// 		// Обработайте ошибку, если что-то пошло не так
+	// 	}
+	// };
 
 	return (
 		<div className={`${style.container} container`}>
 			<div className={style.body}>
 				<h2 className={style.title_h2}>Adress</h2>
-				<div className={style.buttons}>
+				{/* <div className={style.buttons}>
 					<button onClick={toggleBillingForm} type='button'>
 						{showBillingForm ? 'Hide Billing Address' : 'Add Billing Address'}
 					</button>
 					<button onClick={toggleShippingForm} type='button' className={style.toggle_gutton}>
 						{showShippingForm ? 'Hide Shipping Address' : 'Add Shipping Address'}
 					</button>
-				</div>
-				{showBillingForm && (
+				</div> */}
+				{/* {showBillingForm && (
 					<form className={style.form} onSubmit={handleSubmit}>
 						<div className={style.inputs}>
 							<form className={style.form} onSubmit={handleSubmit}>
@@ -187,7 +187,7 @@ export default function Addresses() {
 							</form>
 						</div>
 					</form>
-				)}
+				)} */}
 			</div>
 		</div>
 	);

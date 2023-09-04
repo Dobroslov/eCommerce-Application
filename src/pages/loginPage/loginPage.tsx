@@ -44,7 +44,6 @@ function LoginPage(): React.ReactElement | null {
 				password: loginData.password,
 			},
 			() => {
-				console.log('handleSubmit', user);
 				if (user) {
 					// Только если пользователь успешно авторизовался, тогда выполняйте редирект
 					if (location.state?.from) {
@@ -93,9 +92,6 @@ function LoginPage(): React.ReactElement | null {
 								</label>
 							</div>
 							<SubmitButton
-								onclick={() => {
-									console.log('a');
-								}}
 								value='Sign in'
 							/>
 						</div>

@@ -20,11 +20,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 				const userString = localStorage.getItem('userData');
 				if (userString && token) {
 					const { email } = JSON.parse(userString);
-					console.log('file: authProvider.tsx:21 ~ getToken ~ email:', email);
 					setUser({
 						email,
 					});
-					console.log('file: authProvider.tsx:14 ~ AuthProvider ~ user:', user);
 					callback();
 				}
 			})

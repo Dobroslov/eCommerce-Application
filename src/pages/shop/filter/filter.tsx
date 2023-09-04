@@ -40,7 +40,7 @@ export default function Filter(props: ISort): React.ReactElement {
 					filterObject.addStoneValue(e.target.value);
 					break;
 				default:
-					console.log(filterObject);
+					break;
 			}
 		} else {
 			switch (e.target.name) {
@@ -57,14 +57,13 @@ export default function Filter(props: ISort): React.ReactElement {
 					}
 					break;
 				default:
-					console.log(filterObject);
+					break;
 			}
 		}
 	};
 
 	const handleApplyFilters = () => {
-		const priceRange = `&filter=variants.price.centAmount:range (${value[0] * 100} to ${
-			value[1] * 100
+		const priceRange = `&filter=variants.price.centAmount:range (${value[0] * 100} to ${value[1] * 100
 		})`;
 		const searchInput = `&text.en-US=${search}`;
 		const metallValues = filterObject.metallValue.join(',');

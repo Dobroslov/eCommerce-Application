@@ -23,8 +23,6 @@ export default function ChangeInput(props: IChangeInput): React.JSX.Element {
 		initValue,
 	} = props;
 
-	// console.log('file: changeInput.tsx:25 ~ ChangeInput ~ initValue:', initValue, typeof initValue);
-
 	const [isFocused, setIsFocused] = useState(false);
 	const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 

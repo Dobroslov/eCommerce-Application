@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import ProductCardsList from '../../components/productCardsList/productCardsList';
 import { IProduct } from '../../utils/types';
-// import MAIN_IMAGE from '../../../public/assets/images/main-girl-with-earings.jpg';
+import { getFilter } from '../../services/apiServices';
 
 import styles from './mainPage.module.scss';
-import { getFilter } from '../../services/apiServices';
 
 function MainPage(): React.ReactElement {
 	const [products, setProducts] = useState<IProduct[]>([]);
 	useEffect(() => {
 		getFilter(6, 0, '&sort=createdAt+asc')
 			.then((data) => {
-				console.log(data);
 				if (data) setProducts(data);
 			})
 			.catch((error) => error);

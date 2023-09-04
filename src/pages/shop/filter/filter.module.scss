@@ -1,169 +1,167 @@
 @import '/src/styles/mixins';
 
 .filter {
-  display: flex;
-  flex-direction: column;
-  row-gap: 20px;
+	display: flex;
+	flex-direction: column;
+	row-gap: 20px;
 }
 
 .search {
-  display: flex;
-  align-items: center;
+	display: flex;
+	align-items: center;
 }
 
 .select {
-  font-size: 14px;
-  padding: 10px 5px;
-  border: #d8d8d8 1px solid;
+	font-size: 14px;
+	padding: 10px 5px;
+	border: #d8d8d8 1px solid;
 }
 
 .searchButton {
-  background-color: inherit;
-  border: none;
-  outline: none;
+	background-color: inherit;
+	border: none;
+	outline: none;
 }
 
 .searchImage {
-  height: 47px;
-  width: 30px;
-  border-radius: 0px;
-  border-bottom: #d8d8d8 1px solid;
+	height: 47px;
+	width: 30px;
+	border-radius: 0px;
+	border-bottom: #d8d8d8 1px solid;
 }
 
 .price {
-  font-size: 14px;
-  color: #707070;
+	font-size: 14px;
+	color: #707070;
 }
 
-
-
 .switch {
-  display: flex;
-  position: relative;
-  width: 40px;
-  height: 24px;
-  background-color: inherit;
-  align-self: flex-end;
+	display: flex;
+	position: relative;
+	width: 40px;
+	height: 24px;
+	background-color: inherit;
+	align-self: flex-end;
 }
 
 .slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  border-radius: 24px;
-  background-color: #707070;
-  transition: 0.4s;
+	position: absolute;
+	cursor: pointer;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	border-radius: 24px;
+	background-color: #707070;
+	transition: 0.4s;
 }
 
 .slider::before {
-  content: '';
-  position: absolute;
-  cursor: pointer;
-  left: 4px;
-  bottom: 4px;
-  height: 16px;
-  width: 16px;
-  border-radius: 50%;
-  background-color: #fff;
-  transition: 0.4s;
+	content: '';
+	position: absolute;
+	cursor: pointer;
+	left: 4px;
+	bottom: 4px;
+	height: 16px;
+	width: 16px;
+	border-radius: 50%;
+	background-color: #fff;
+	transition: 0.4s;
 }
 
 .inputTitle {
-  font-size: 16px;
-  @media (min-width: 320px) and (max-width: 1240px) {
-    @include respons-property(font-size, 12, 16);
-  }
+	font-size: 16px;
+	@media (min-width: 320px) and (max-width: 1240px) {
+		@include respons-property(font-size, 12, 16);
+	}
 }
 
 .filterProperty {
-  display: flex;
-  flex-direction: column;
+	display: flex;
+	flex-direction: column;
 }
 
 .filterAttribute {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  font-size: 14px;
-  @media (min-width: 320px) and (max-width: 1240px) {
-    @include respons-property(font-size, 12, 14);
-  }
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	font-size: 14px;
+	@media (min-width: 320px) and (max-width: 1240px) {
+		@include respons-property(font-size, 12, 14);
+	}
 }
 
 .filterAttribute input {
-  width: 18px;
-  height: 18px;
-  @media (min-width: 320px) and (max-width: 768px) {
-    @include respons-property(width, 22, 36);
-    @include respons-property(height, 22, 36);
-  }
+	width: 18px;
+	height: 18px;
+	@media (min-width: 320px) and (max-width: 768px) {
+		@include respons-property(width, 22, 36);
+		@include respons-property(height, 22, 36);
+	}
 }
 
 .submitButtons {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  column-gap: 5px;
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	column-gap: 5px;
+  white-space: nowrap;
 }
 
 .submitButtons *:first-child {
-  flex: 1 1 20%;
-  height: 100%;
-  padding: 5px;
-  background-color: #fff;
-  color: #000;
-  border: 1px solid #000;
+	flex: 1 1 20%;
+	height: 100%;
+	padding: 5px;
+	background-color: #fff;
+	color: #000;
+	border: 1px solid #000;
 }
 
 .submitButtons *:first-child:hover {
-  background-color: #cd2b2b;
-  border: 1px solid #cd2b2b;
-  color: #fff;
+	background-color: #000;
+	border: 1px solid #000;
+	color: #fff;
 }
 
 .submitButtons *:last-child {
-  flex: 1 1 80%;
+	flex: 1 1 80%;
 }
 
 .inputBody {
 	position: relative;
-  width: 100%;
+	width: 100%;
 }
 
 .inputSearch {
-  display: flex;
-  max-height: 40px;
+	display: flex;
+	max-height: 40px;
 }
 
 .inputSearch button {
-  border: none;
-  outline: none;
-  background-color: inherit;
-  cursor: pointer;
+	border: none;
+	outline: none;
+	background-color: inherit;
+	cursor: pointer;
 }
 
-
 .inputSearch img {
-  height: 100%;
-  width: 30px;
-  object-fit: contain;
+	height: 100%;
+	width: 30px;
+	object-fit: contain;
 }
 
 .input {
 	width: 100%;
 	font-size: 16px;
-  flex: 1 1 auto;
+	flex: 1 1 auto;
 	border: none;
 	outline: none;
 	padding: 12px 0;
-  @media (min-width: 320px) and (max-width: 1240px) {
-    @include respons-property(font-size, 12, 16);
-    @include respons-property(padding-top, 6, 12);
-    @include respons-property(padding-bottom, 6, 12);
-  }
+	@media (min-width: 320px) and (max-width: 1240px) {
+		@include respons-property(font-size, 12, 16);
+		@include respons-property(padding-top, 6, 12);
+		@include respons-property(padding-bottom, 6, 12);
+	}
 }
 
 .underline {

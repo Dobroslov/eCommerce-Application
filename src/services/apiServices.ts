@@ -204,7 +204,6 @@ export async function checkToken(token: string): Promise<{ email: string; active
 		.then(async (response) => {
 			const email = await getCustomerForId(response.data.scope.split(':')[2]);
 			const active = JSON.stringify(response.data.active);
-			console.log(email);
 			return {
 				email,
 				active,
@@ -261,7 +260,9 @@ export function getFilter(limit = 9, offset = 0, filter: string): Promise<void |
 						currencyCode: product.masterVariant.prices[0].value.currencyCode,
 						price: (product.masterVariant.prices[0].value.centAmount / 100).toFixed(2) as string,
 						/* eslint-disable-next-line no-unsafe-optional-chaining */
-						discount: (product.masterVariant.prices[0].discounted?.value.centAmount / 100).toFixed(2) as string,
+						discount: (product.masterVariant.prices[0].discounted?.value.centAmount / 100).toFixed(
+							2,
+						) as string,
 					};
 					productsArr.push(productValues);
 				},
@@ -290,36 +291,39 @@ export function getProductForId(id: string): Promise<void | IProductbyId> {
 		'Content-Type': 'application/json',
 		Authorization: `Bearer ${token}`,
 	};
-	const product = axios.get(url, {
-		headers,
-	}).then((response) => {
-		const imagesArr: string[] = [];
-		response.data.masterVariant.images.forEach((image: { url: string; }) => {
-			imagesArr.push(image.url);
-		});
-		const productData:IProductbyId = {
-			name: response.data.name['en-US'],
-			images: imagesArr,
-			description: response.data.description['en-US'],
-			currencyCode: response.data.masterVariant.prices[0].value.currencyCode,
-			price: (response.data.masterVariant.prices[0].value.centAmount / 100).toFixed(2) as string,
-			color: response.data.masterVariant.attributes[0].value[0],
-			weight: response.data.masterVariant.attributes[1].value,
-			stone: response.data.masterVariant.attributes[2].value[0],
-			standard: response.data.masterVariant.attributes[3].value,
-			metall: response.data.masterVariant.attributes[4].value[0],
-			/* eslint-disable-next-line no-unsafe-optional-chaining */
-			discount: (response.data.masterVariant.prices[0].discounted?.value.centAmount / 100).toFixed(2) as string,
-			sku: response.data.masterVariant.sku,
+	const product = axios
+		.get(url, {
+			headers,
+		})
+		.then((response) => {
+			const imagesArr: string[] = [];
+			response.data.masterVariant.images.forEach((image: { url: string }) => {
+				imagesArr.push(image.url);
+			});
+			const productData: IProductbyId = {
+				name: response.data.name['en-US'],
+				images: imagesArr,
+				description: response.data.description['en-US'],
+				currencyCode: response.data.masterVariant.prices[0].value.currencyCode,
+				price: (response.data.masterVariant.prices[0].value.centAmount / 100).toFixed(2) as string,
+				color: response.data.masterVariant.attributes[0].value[0],
+				weight: response.data.masterVariant.attributes[1].value,
+				stone: response.data.masterVariant.attributes[2].value[0],
+				standard: response.data.masterVariant.attributes[3].value,
+				metall: response.data.masterVariant.attributes[4].value[0],
+				discount: (
+					// eslint-disable-next-line no-unsafe-optional-chaining
+					response.data.masterVariant.prices[0].discounted?.value.centAmount / 100
+				).toFixed(2) as string,
+				sku: response.data.masterVariant.sku,
+			};
 
-		};
-		console.log(productData);
-
-		return productData;
-	})
+			return productData;
+		})
 		.catch((error) => {
 			console.log(error);
 		});
+
 	return product;
 }
 
@@ -411,7 +415,6 @@ export function changeCustomerValues({ firstName, lastName, email, dateOfBirth }
 			headers,
 		})
 		.then((response) => {
-			console.log(response);
 			const responseData = response.data;
 			localStorage.setItem('userData', JSON.stringify(responseData));
 			store.dispatch(
@@ -471,7 +474,6 @@ export function addressActions(addressAction: string, addressId: string) {
 			headers,
 		})
 		.then((response) => {
-			console.log(response);
 			const responseData = response.data;
 			localStorage.setItem('userData', JSON.stringify(responseData));
 			store.dispatch(
@@ -523,7 +525,6 @@ export function changeAddress(addressId: string, addressData: IAddress) {
 			headers,
 		})
 		.then((response) => {
-			console.log(response);
 			const responseData = response.data;
 			localStorage.setItem('userData', JSON.stringify(responseData));
 			store.dispatch(
@@ -573,7 +574,6 @@ export function addAddress(addressData: IAddress) {
 			headers,
 		})
 		.then((response) => {
-			console.log(response);
 			const responseData = response.data;
 			localStorage.setItem('userData', JSON.stringify(responseData));
 			store.dispatch(

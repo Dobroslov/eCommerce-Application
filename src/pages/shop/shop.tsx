@@ -15,13 +15,9 @@ export default function Shop(): React.ReactElement {
 	const [products, setProducts] = useState<IProduct[]>([]);
 	const [modalActive, setModalActive] = useState(false);
 	const [filter, setFilter] = useState(localFilter || '&sort=createdAt+asc');
-	const [id, setId] = useState('');
+	const [id, setId] = useState('2a736cf8-ad85-4d6e-a9ef-1adf95915f8d');
 	const [images, setImages] = useState<string[]>([]);
 
-	// const navigate = useNavigate();
-
-	// const goBack = () => navigate(-1);
-	// const goHome = () => navigate('/', { replace: true });
 	useEffect(() => {
 		getProductForId(id)
 			.then((data) => {
@@ -37,14 +33,12 @@ export default function Shop(): React.ReactElement {
 	}, [id]);
 
 	const handleSortChange = (filterData: string) => {
-		console.log(filterData);
 		setFilter(filterData);
 	};
 
 	useEffect(() => {
 		getFilter(9, 0, filter)
 			.then((data) => {
-				console.log(data);
 				if (data) setProducts(data);
 			})
 			.catch((error) => error);
@@ -94,8 +88,8 @@ export default function Shop(): React.ReactElement {
 			</div>
 			<SliderModal active={modalActive} setActive={setModalActive}>
 				<CarouselCompound>
-					{images.map((image) => (
-						<CarouselCompound.CarouselPage>
+					{images.map((image, index) => (
+						<CarouselCompound.CarouselPage key={id ? id + index : id}>
 							<div className={`${style.itemModal}`}>
 								<img src={image} alt='' />
 							</div>

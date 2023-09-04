@@ -12,7 +12,6 @@ const filterObject: Ifilter = {
 		if (this.metallProperty.length < 1) {
 			this.metallProperty.push(property[0]);
 		}
-		console.log(this.metallProperty);
 	},
 
 	removeMetallProperty(string) {
@@ -21,7 +20,6 @@ const filterObject: Ifilter = {
 		if (index > -1) {
 			this.metallProperty.splice(index, 1);
 		}
-		console.log(this.metallProperty);
 	},
 
 	addMetallValue(string) {
@@ -29,7 +27,6 @@ const filterObject: Ifilter = {
 		if (this.metallValue.indexOf(value[1]) === -1) {
 			this.metallValue.push(value[1]);
 		}
-		console.log(this.metallValue);
 	},
 
 	removeMetallValue(string) {
@@ -38,7 +35,6 @@ const filterObject: Ifilter = {
 		if (index > -1) {
 			this.metallValue.splice(index, 1);
 		}
-		console.log(this.metallValue);
 	},
 
 	addStoneProperty(string) {
@@ -46,7 +42,6 @@ const filterObject: Ifilter = {
 		if (this.stoneProperty.length < 1) {
 			this.stoneProperty.push(property[0]);
 		}
-		console.log(this.stoneProperty);
 	},
 
 	removeStoneProperty(string) {
@@ -55,14 +50,12 @@ const filterObject: Ifilter = {
 		if (index > -1) {
 			this.stoneProperty.splice(index, 1);
 		}
-		console.log(this.stoneProperty);
 	},
 	addStoneValue(string) {
 		const value = string.split(' ');
 		if (this.stoneValue.indexOf(value[1]) === -1) {
 			this.stoneValue.push(value[1]);
 		}
-		console.log(this.stoneValue);
 	},
 
 	removeStoneValue(string) {
@@ -71,7 +64,6 @@ const filterObject: Ifilter = {
 		if (index > -1) {
 			this.stoneValue.splice(index, 1);
 		}
-		console.log(this.stoneValue);
 	},
 };
 
