@@ -52,6 +52,7 @@
   position: relative;
   overflow: hidden;
   margin-bottom: 24px;
+  cursor: pointer;
   @media (min-width: 320px) and (max-width: 1240px) {
     @include respons-property(margin-bottom, 6, 24);
   }
@@ -77,20 +78,35 @@
 .title {
   font-size: 20px;
   color: #000;
-  padding-bottom: 16px;
+  padding-bottom: 10px;
   flex: 1 1 auto;
   @media (min-width: 320px) and (max-width: 1240px) {
     @include respons-property(font-size, 14, 20);
-    @include respons-property(padding-bottom, 4, 16);
+    @include respons-property(padding-bottom, 4, 10);
   }
 }
+
+.title * {
+  color: #000;
+}
+
 
 .price {
   font-size: 20px;
   color: #A18A68;
   @media (min-width: 320px) and (max-width: 1240px) {
-    @include respons-property(font-size, 14, 20);
+    @include respons-property(font-size, 12, 20);
   }
+  @media (max-width: 480px){
+      display: flex;
+      flex-direction: column;
+  }
+}
+
+.lineThrough {
+  text-decoration: line-through;
+  color: #000;
+  opacity: 0.5;
 }
 
 .image:hover .showDetails {
@@ -111,11 +127,16 @@
   background-color: rgba($color: #000000, $alpha: 0.1);
   height: 20%;
   width: 100%;
-  transition: transform ease 0.3s;
-  transform: translateY(100%);
+  transition: all ease 0.3s;
+  transform: translateY(110%);
   @media (min-width: 320px) and (max-width: 1240px) {
     @include respons-property(font-size, 12, 16);
   }
+}
+
+.showDetails:hover {
+  background-color: rgba($color: #000000, $alpha: 0.25);
+  transition: all ease 0.3s;
 }
 
 .itemModal {
@@ -148,8 +169,14 @@
   background-color: rgba($color: #000000, $alpha: 0.1);
   height: 20%;
   width: 100%;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
   transition: transform ease 0.3s;
   @media (min-width: 320px) and (max-width: 1240px) {
     @include respons-property(font-size, 12, 16);
   }
+}
+
+.showDetailsModal:hover {
+  background-color: rgba($color: #000000, $alpha: 0.25);
 }

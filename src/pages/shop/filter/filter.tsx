@@ -13,13 +13,19 @@ interface ISort {
 
 export default function Filter(props: ISort): React.ReactElement {
 	const { onValueChange } = props;
-	const [value, setValue] = useState<number[]>([10, 1200]);
-	const [sort, setSorting] = useState<string>('&sort=createdAt+desc');
+	const [value, setValue] = useState<number[]>([35, 1000]);
+	const [sort, setSorting] = useState<string>('&sort=createdAt+asc');
+	const [category, setCategory] = useState<string>('');
 	const [search, setSearch] = useState<string>('');
 
 	const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const newValue = e.target.value;
 		setSorting(newValue);
+	};
+
+	const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		const newValue = e.target.value;
+		setCategory(newValue);
 	};
 
 	const handleCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,15 +76,25 @@ export default function Filter(props: ISort): React.ReactElement {
 			stoneValues,
 			priceRange,
 			sort,
+			category,
 			searchInput,
 		);
 		if (search.length > 0) {
-			onValueChange(result.join(''));
-			console.log(result.join(''));
+			localStorage.setItem('filter', result.join(''));
+			const filter = localStorage.getItem('filter');
+			if (filter) onValueChange(filter);
 		} else {
 			result.pop();
-			onValueChange(result.join(''));
+			localStorage.setItem('filter', result.join(''));
+			const filter = localStorage.getItem('filter');
+			if (filter) onValueChange(filter);
 		}
+	};
+
+	const handleResetFilters = () => {
+		filterObject.resultArray.length = 0;
+		localStorage.setItem('filter', '');
+		window.location.reload();
 	};
 
 	return (
@@ -99,30 +115,32 @@ export default function Filter(props: ISort): React.ReactElement {
 					<i className={style.underline} />
 				</div>
 			</div>
+			<p className={style.inputTitle}>Sorting</p>
 			<select onChange={handleSortChange} className={style.select} name='Sort' id=''>
-				<option value='&sort=createdAt+desc'>Sort by newest</option>
 				<option value='&sort=createdAt+asc'>Sort by latest</option>
+				<option value='&sort=createdAt+desc'>Sort by newest</option>
 				<option value='&sort=name.en-Us+asc'>Sort from A to Z</option>
 				<option value='&sort=name.en-Us+desc'>Sort from Z to A</option>
 				<option value='&sort=price+desc'>Sort by price: high to low</option>
 				<option value='&sort=price+asc'>Sort by price: low to high</option>
 			</select>
+			<p className={style.inputTitle}>Categories</p>
+			<select onChange={handleCategoryChange} className={style.select} name='Sort' id=''>
+				<option value=''>All</option>
+				<option value='&filter=categories.id:"f25caf95-504f-464f-a5a7-4174394bfaea"'>Rings</option>
+				<option value='&filter=categories.id:"42ae83b9-05be-4af4-9301-fb37b97e8d65"'>
+					Earrings
+				</option>
+			</select>
 			<ReactSlider
 				className={style.slider}
-				defaultValue={[10, 1200]}
-				max={1200}
-				min={10}
+				defaultValue={[35, 1000]}
+				max={1000}
+				min={35}
 				onChange={(newValue) => setValue(newValue)}
 			/>
 			<div className={style.price}>
 				Price: {value[0]} EUR - {value[1]} EUR
-			</div>
-			<div className={style.onSaleBody}>
-				<p>On sale</p>
-				<label className={style.switch} htmlFor='sale'>
-					<input type='checkbox' name='sale' id='sale' className={style.onSale} />
-					<span className={style.slider} />
-				</label>
 			</div>
 			<p className={style.inputTitle}>Metall</p>
 			<div className={style.filterProperty}>
@@ -170,7 +188,10 @@ export default function Filter(props: ISort): React.ReactElement {
 					No stones
 				</label>
 			</div>
-			<SubmitButton onclick={handleApplyFilters} value='Apply filters' />
+			<div className={style.submitButtons}>
+				<SubmitButton onclick={handleResetFilters} value='Reset' />
+				<SubmitButton onclick={handleApplyFilters} value='Apply filters' />
+			</div>
 		</div>
 	);
 }

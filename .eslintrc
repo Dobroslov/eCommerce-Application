@@ -78,7 +78,7 @@
           "ExportDeclaration": { "multiline": true, "minProperties": 3 }
       }],
       "no-param-reassign": ["error", { "props": false }],
-      "operator-linebreak": ["error", "after"],
+      "operator-linebreak": ["error", "before"],
       "default-param-last": 0,
       "no-spaced-func":"off",
       "func-call-spacing":"off",

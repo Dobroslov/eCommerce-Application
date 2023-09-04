@@ -11,9 +11,10 @@ import { IProduct } from '../../utils/types';
 // import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 export default function Shop(): React.ReactElement {
+	const localFilter = localStorage.getItem('filter');
 	const [products, setProducts] = useState<IProduct[]>([]);
 	const [modalActive, setModalActive] = useState(false);
-	const [filter, setFilter] = useState('');
+	const [filter, setFilter] = useState(localFilter || '&sort=createdAt+asc');
 	const [id, setId] = useState('');
 	const [images, setImages] = useState<string[]>([]);
 
@@ -55,8 +56,6 @@ export default function Shop(): React.ReactElement {
 			<div className={style.body}>
 				<Filter onValueChange={handleSortChange} />
 				<div className={style.products}>
-					{/* <button type='button' onClick={goBack}>Back</button> */}
-					{/* <button type='button' onClick={goHome}>Home</button> */}
 					{products.map((product) => (
 						<div key={product.id} className={style.item}>
 							<div className={style.image}>
@@ -72,11 +71,22 @@ export default function Shop(): React.ReactElement {
 									<div className={style.showDetails}>Show details</div>
 								</Link>
 							</div>
-							<Link key={product.id} to={`/shop/${product.id}`}>
-								<div className={style.title}>{product.name}</div>
-							</Link>
+							<div className={style.title}>
+								<Link key={product.id} to={`/shop/${product.id}`}>
+									{product.name}
+								</Link>
+							</div>
 							<div className={style.price}>
-								{product.price} {product.currencyCode}
+								{product.discount !== 'NaN' ? (
+									<>
+										{product.discount} {product.currencyCode}{' '}
+										<span className={style.lineThrough}>
+											{product.price} {product.currencyCode}
+										</span>
+									</>
+								) : (
+									`${product.price} ${product.currencyCode}`
+								)}
 							</div>
 						</div>
 					))}
