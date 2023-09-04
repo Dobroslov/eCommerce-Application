@@ -1,11 +1,11 @@
 import React from 'react';
-import { IProductCard } from '../../utils/types';
+import { IProduct } from '../../utils/types';
 import ProductCard from '../productCard/productCard';
 import styles from './productCardsList.module.scss';
 
 interface IProductListProps {
-	products: IProductCard[],
-	handleProductClick: (id: number) => void
+	products: IProduct[],
+	handleProductClick: (id: string) => void
 }
 
 function ProductCardsList(props: IProductListProps): React.ReactElement {
