@@ -93,7 +93,8 @@ export interface IProductbyId {
 	stone: boolean;
 	standard: number;
 	metall: string;
-	discount: string;
+	discount?:string;
+	sku:string
 }
 export interface ISorting {
 	sortLimit: number | string;

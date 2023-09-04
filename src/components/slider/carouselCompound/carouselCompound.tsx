@@ -9,7 +9,7 @@ interface CarouselProps {
 
 function CarouselCompound({ children }: CarouselProps) {
 	const [offset, setOffset] = useState<number>(0);
-	const [width, setwidth] = useState<number>(450);
+	const [width, setwidth] = useState<number>(500);
 	const windowElementRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {

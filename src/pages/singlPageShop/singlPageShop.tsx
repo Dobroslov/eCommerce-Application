@@ -21,6 +21,7 @@ export default function ShopSinglPageProduct(): React.ReactElement {
 		standard: 1,
 		metall: '',
 		discount: '',
+		sku: '',
 	});
 	// const goForward = () => navigate(1); // вперёд по истории
 
@@ -66,11 +67,11 @@ export default function ShopSinglPageProduct(): React.ReactElement {
 						<div className={style.counter}>Counter</div>
 						<LoginButton value='Add to Cart' />
 						<p className={style.skuMobile}>
-							SKU: <span>12</span>
+							SKU: <span>{product.sku}</span>
 						</p>
 					</div>
 					<p className={style.sku}>
-						SKU: <span>12</span>
+						SKU: <span>{product.sku}</span>
 					</p>
 				</div>
 			</div>
