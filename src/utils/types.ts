@@ -11,7 +11,6 @@ export interface IRegistrationForm {
 	lastName: string;
 	email: string;
 	dateOfBirth: string;
-	addresses: IAddress[];
 	password: string;
 }
 export interface IUserLogin {
