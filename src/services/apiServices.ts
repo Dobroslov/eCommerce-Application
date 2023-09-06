@@ -17,6 +17,17 @@ import { hideModal, showModal } from '../store/actions';
 const PROJECT_KEY = 'glitter-magazine';
 const API_URL = 'https://api.europe-west1.gcp.commercetools.com';
 const AUTH_URL = 'https://auth.europe-west1.gcp.commercetools.com';
+const CUSTOMER_URL
+	= 'https://api.europe-west1.gcp.commercetools.com/glitter-magazine/customers/[[id]]';
+
+export function getAddressRequestData(action: string, addressId: string) {
+	return [
+		{
+			action,
+			addressId,
+		},
+	];
+}
 
 export async function getAnonimousToken(): Promise<void> {
 	const url = `${AUTH_URL}/oauth/${PROJECT_KEY}/anonymous/token?grant_type=client_credentials`;
@@ -309,10 +320,10 @@ export function getProductForId(id: string): Promise<void | IProductbyId> {
 				stone: response.data.masterVariant.attributes[2].value[0],
 				standard: response.data.masterVariant.attributes[3].value,
 				metall: response.data.masterVariant.attributes[4].value[0],
-				discount: // eslint-disable-next-line no-unsafe-optional-chaining
-				(response.data.masterVariant.prices[0].discounted?.value.centAmount / 100).toFixed(
-					2,
-				) as string,
+				discount: (
+					// eslint-disable-next-line no-unsafe-optional-chaining
+					response.data.masterVariant.prices[0].discounted?.value.centAmount / 100
+				).toFixed(2) as string,
 				sku: response.data.masterVariant.sku,
 			};
 
@@ -520,7 +531,7 @@ export function addressActions(addressAction: string, addressId: string) {
 			},
 		],
 	};
-	axios
+	return axios
 		.post(url, data, {
 			headers,
 		})
@@ -552,29 +563,32 @@ export function addressActions(addressAction: string, addressId: string) {
 		});
 }
 
-export function addAddress(addressData: IAddress) {
+export interface IActionData {
+	action: string;
+	addressId?: string;
+	address?: IAddress;
+}
+
+export function doRequest(actionData: IActionData[], url: string) {
 	const user = localStorage.getItem('userData') as string;
 	const { id, version } = JSON.parse(user);
+	const preparedUrl = url.replaceAll('[[id]]', id);
 	const token = localStorage.getItem('token');
 	const headers = {
 		'Content-Type': 'application/json',
 		Authorization: `Bearer ${token}`,
 	};
-	const url = `https://api.europe-west1.gcp.commercetools.com/glitter-magazine/customers/${id}`;
 	const data = {
 		version,
-		actions: [
-			{
-				action: 'addAddress',
-				address: addressData,
-			},
-		],
+		actions: actionData,
 	};
-	axios
-		.post(url, data, {
+	console.log('file: apiServices.ts:574 ~ doRequest ~ data:', data);
+	return axios
+		.post(preparedUrl, data, {
 			headers,
 		})
 		.then((response) => {
+			console.log('file: apiServices.ts:624 ~ .then ~ response:', response);
 			const responseData = response.data;
 			localStorage.setItem('userData', JSON.stringify(responseData));
 			store.dispatch(
@@ -601,4 +615,80 @@ export function addAddress(addressData: IAddress) {
 				store.dispatch(hideModal());
 			}, 5000);
 		});
+}
+
+export function addAddress(addressData: IAddress): Promise<IUserDataRespons> {
+	const data: IActionData[] = [
+		{
+			action: 'addAddress',
+			address: addressData,
+		},
+	];
+	const url = 'https://api.europe-west1.gcp.commercetools.com/glitter-magazine/customers/[[id]]';
+	return doRequest(data, url);
+}
+
+// / Для установки или удаления используем addressAction:
+// 'setDefaultShippingAddress'
+// "setDefaultBillingAddress"
+//  "addBillingAddressId"
+//  "addShippingAddressId"
+// "removeBillingAddressId"
+// "removeShippingAddressId"
+// "removeAddress"
+
+// export function XaddressActions(addressAction: string, addressId: string) {
+// 	const url = 'https://api.europe-west1.gcp.commercetools.com/glitter-magazine/customers/[[id]]}';
+// 	const data = [
+// 		{
+// 			action: addressAction,
+// 			addressId,
+// 		},
+// 	];
+
+// 	return doRequest(data, url);
+// }
+
+export function addBillingAddressId(addressId: string) {
+	const data = [
+		{
+			action: 'addBillingAddressId',
+			addressId,
+		},
+	];
+	return doRequest(data, CUSTOMER_URL);
+}
+
+export function setDefaultBillingAddress(addressId: string) {
+	const data = [
+		{
+			action: 'setDefaultBillingAddress',
+			addressId,
+		},
+	];
+	console.log('file: apiServices.ts:661 ~ setDefaultBillingAddress:', data);
+
+	return doRequest(data, CUSTOMER_URL);
+}
+
+export function addShippingAddressId(addressId: string) {
+	const data = [
+		{
+			action: 'addShippingAddressId',
+			addressId,
+		},
+	];
+
+	return doRequest(data, CUSTOMER_URL);
+}
+
+export function setDefaultShippingAddress(addressId: string) {
+	// const data = [
+	// 	{
+	// 		action: 'setDefaultShippingAddress',
+	// 		addressId: addressId,
+	// 	},
+	// ];
+
+	return doRequest(getAddressRequestData('setDefaultShippingAddress', addressId), CUSTOMER_URL);
 }

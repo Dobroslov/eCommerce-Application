@@ -9,6 +9,7 @@ interface IRegistrationInput {
 	id: string;
 	errorMessage?: string;
 	pattern?: string;
+	defaultValue?: string;
 }
 
 function RegistrationInput(props: IRegistrationInput): React.JSX.Element {
@@ -19,9 +20,10 @@ function RegistrationInput(props: IRegistrationInput): React.JSX.Element {
 		id,
 		errorMessage,
 		pattern,
+		defaultValue,
 	} = props;
 
-	const [value, setValue] = useState('');
+	const [value, setValue] = useState(defaultValue || '');
 	const [isFocused, setIsFocused] = useState(false);
 	const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 	const ref = useRef(null);
@@ -41,18 +43,23 @@ function RegistrationInput(props: IRegistrationInput): React.JSX.Element {
 		setIsPasswordVisible(!isPasswordVisible);
 	};
 
+	const handleBlur = () => {
+		onValueChange(value, id);
+	};
+
 	return (
 		<div className={style.inputBody}>
 			<input
 				className={style.input}
 				type={isPasswordVisible ? 'text' : type}
 				placeholder={placeholder}
-				value={value}
+				value={defaultValue || value}
 				onChange={handleChange}
 				id={id}
 				required
 				ref={ref}
 				onFocus={() => setIsFocused(true)}
+				onBlur={handleBlur}
 				data-focused={isFocused}
 				pattern={pattern}
 				min='1'

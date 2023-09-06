@@ -20,6 +20,7 @@ export interface IUserLogin {
 }
 
 export interface IAddress {
+	id?: string;
 	city: string;
 	streetName: string;
 	streetNumber: string;
@@ -66,12 +67,14 @@ export interface IUserDataRespons {
 	salutation: string;
 	dateOfBirth: string;
 	password: string;
-	addresses: string[];
+	addresses: IAddress[];
 	shippingAddressIds: string[];
 	billingAddressIds: string[];
 	isEmailVerified: boolean;
 	stores: string[];
 	authenticationMode: string;
+	defaultShippingAddressId?: string;
+	defaultBillingAddressId?: string;
 }
 export interface IProduct {
 	id: string;
@@ -93,8 +96,8 @@ export interface IProductbyId {
 	stone: boolean;
 	standard: number;
 	metall: string;
-	discount?:string;
-	sku:string
+	discount?: string;
+	sku: string;
 }
 export interface ISorting {
 	sortLimit: number | string;
