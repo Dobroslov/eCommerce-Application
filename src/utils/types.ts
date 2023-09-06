@@ -29,6 +29,7 @@ export interface IAddress {
 
 export interface ISubmitButton {
 	value: string;
+	onclick?(): void;
 }
 export interface ModalProperties {
 	title: string;
@@ -71,4 +72,62 @@ export interface IUserDataRespons {
 	isEmailVerified: boolean;
 	stores: string[];
 	authenticationMode: string;
+}
+export interface IProduct {
+	id: string;
+	name: string;
+	description: string;
+	image: string;
+	currencyCode: string;
+	price: string;
+	discount: string;
+}
+export interface IProductbyId {
+	name: string;
+	images: string[];
+	description: string;
+	currencyCode: string;
+	price: string;
+	color: string;
+	weight: number;
+	stone: boolean;
+	standard: number;
+	metall: string;
+	discount?:string;
+	sku:string
+}
+export interface ISorting {
+	sortLimit: number | string;
+	sortOffset: number | string;
+	sorting: string;
+	sortOrder: string;
+}
+
+export interface Ifilter {
+	resultArray: string[];
+	metallProperty: string[];
+	metallValue: string[];
+	stoneProperty: string[];
+	stoneValue: string[];
+	addMetallProperty(property: string): void;
+	removeMetallProperty(property: string): void;
+	addMetallValue(property: string): void;
+	removeMetallValue(property: string): void;
+	addStoneProperty(property: string): void;
+	removeStoneProperty(property: string): void;
+	addStoneValue(property: string): void;
+	removeStoneValue(property: string): void;
+}
+
+export interface IUpdatePassword {
+	oldPassword: string;
+	newPassword: string;
+}
+
+export interface IUpdateUserData {
+	firstName: string;
+	lastName: string;
+	email: string;
+	dateOfBirth: string;
+	id: string;
 }

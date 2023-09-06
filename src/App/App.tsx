@@ -1,19 +1,26 @@
 import React, { useEffect } from 'react';
 import { Routes, Route, useNavigate, useLocation, Navigate } from 'react-router-dom';
 
+import { getAnonimousToken } from '../services/apiServices';
+import useAuth from '../hooks/useAuth';
+import RequireAuthorisation from '../hoc/requireAuthorisation';
 import MainPage from '../pages/mainPage/mainPage';
+import Layout from '../layouts/layout/layout';
 import LoginPage from '../pages/loginPage/loginPage';
 import RegistrationPage from '../pages/registrationPage/registrationPage';
-import NotFoundPage from '../pages/notFoundPage/notFoundPage';
-import Layout from '../layouts/layout/layout';
-import ShopSinglPageProduct from '../pages/singlPageShop/singlPageShop';
 import Shop from '../pages/shop/shop';
-import RequireAuthorisation from '../hoc/requireAuthorisation';
-import './App.scss';
-import PrivateAccountPage from '../pages/accountPage/accountPage';
-import { getAnonimousToken } from '../services/apiServices';
+import ShopSinglPageProduct from '../pages/singlPageShop/singlPageShop';
+
+import PrivateAccountPage from '../pages/userPageProfile/userPageProfile';
+import UserDashboard from '../pages/userPageProfile/userDashboard/userDashBoard';
+import Order from '../pages/userPageProfile/order/order';
+import AccountDetails from '../pages/userPageProfile/accountDetails/accountDetails';
+import Addresses from '../pages/userPageProfile/address/address';
+import NotFoundPage from '../pages/notFoundPage/notFoundPage';
+
 import Modal from '../components/modal/modal';
-import useAuth from '../hooks/useAuth';
+
+import './App.scss';
 
 function App(): React.ReactElement {
 	const { user, autoSignIn } = useAuth();
@@ -24,8 +31,10 @@ function App(): React.ReactElement {
 		if (!user && !localStorage.getItem('token')) {
 			getAnonimousToken();
 		}
+
 		const token = localStorage.getItem('token');
 		const userString = localStorage.getItem('userData');
+
 		if (userString && token) {
 			const { email } = JSON.parse(userString);
 			autoSignIn(email, () => {
@@ -33,8 +42,10 @@ function App(): React.ReactElement {
 					navigate(location.state.from, {
 						replace: true,
 					});
+				} if (localStorage.getItem('path')) {
+					const path = localStorage.getItem('path') as string;
+					navigate(path);
 				} else {
-					// В противном случае перейдите на домашнюю страницу
 					navigate('/');
 				}
 			});
@@ -51,7 +62,10 @@ function App(): React.ReactElement {
 					{/* ключевое слово "index" во вложенном роуте говорит о том,
 					 что это значение используется по умолчанию */}
 					<Route path='login' element={user ? <Navigate to='/account_page' /> : <LoginPage />} />
-					<Route path='registration' element={user ? <Navigate to='/account_page' /> : <RegistrationPage />} />
+					<Route
+						path='registration'
+						element={user ? <Navigate to='/account_page' /> : <RegistrationPage />}
+					/>
 					<Route path='shop' element={<Shop />} />
 					<Route path='shop/:id' element={<ShopSinglPageProduct />} />
 					<Route
@@ -61,7 +75,12 @@ function App(): React.ReactElement {
 								<PrivateAccountPage />
 							</RequireAuthorisation>
 						)}
-					/>
+					>
+						<Route index element={<UserDashboard />} />
+						<Route path='orders' element={<Order />} />
+						<Route path='addresses' element={<Addresses />} />
+						<Route path='account-details' element={<AccountDetails />} />
+					</Route>
 					{/* <Route path='about' element={<AboutUs />} />
 					<Route path='about-us' element={<Navigate to='/about' replace />} /> */}
 					{/* About - эти две строки это пример редиректа, если он нужен будет в дальнейшем

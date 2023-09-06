@@ -1,0 +1,117 @@
+@import '/src/styles/mixins';
+
+.title_h2 {
+	font-weight: 400;
+	font-size: 30px;
+	@include respons-property(font-size, 14, 30);
+	margin-bottom: 40px;
+	@include respons-property(margin-bottom, 25, 40);
+}
+
+.title_h3 {
+	font-weight: 400;
+	font-size: 26px;
+	@include respons-property(font-size, 16, 26);
+	margin: 20px 0;
+}
+
+.container {
+	display: flex;
+	justify-content: center;
+}
+
+.body {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.title {
+	font-size: 33px;
+	font-weight: 500;
+	padding-bottom: 64px;
+	@include respons-property(font-size, 20, 33);
+	@include respons-property(padding-bottom, 24, 64);
+}
+
+.content {
+	display: flex;
+	width: 100%;
+	justify-content: space-evenly;
+	border-radius: 8px;
+	column-gap: 5px;
+	margin-bottom: 50px;
+	@include respons-property(margin-bottom, 90, 326);
+	font-size: 33px;
+	@include respons-property(font-size, 20, 33);
+	@media (min-width: 320px) and (max-width: 768px) {
+		flex-direction: column;
+	}
+}
+
+.content__column {
+	min-width: 500px;
+	@include respons-property(min-width, 300, 500);
+}
+
+.toggle_gutton {
+	background-color: inherit;
+	border: none;
+	outline: none;
+	cursor: pointer;
+	font-size: 20px;
+	flex: 1 1 50%;
+	color: #e0bf02;
+}
+
+.inputs {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	row-gap: 34px;
+	margin-bottom: 64px;
+}
+
+.form {
+	width: 500px;
+	@include respons-property(width, 300, 500);
+}
+
+.select {
+	width: 100%;
+	font-size: 16px;
+	border: none;
+	outline: none;
+	padding: 12px 0;
+	border-bottom: 1px solid #d8d8d8;
+	@include respons-property(font-size, 12, 16);
+	@include respons-property(padding-top, 6, 12);
+	@include respons-property(padding-bottom, 6, 12);
+}
+
+.remember {
+	display: flex;
+	align-items: center;
+	font-size: 16px;
+	padding: 10px 0;
+	@include respons-property(font-size, 12, 16);
+}
+
+.formCheckBox {
+	margin: 0;
+	cursor: pointer;
+}
+
+.checkboxLabel {
+	padding-left: 8px;
+}
+
+.underline {
+	position: absolute;
+	height: 1px;
+	width: 100%;
+	left: 0;
+	bottom: 0;
+	background-color: #d8d8d8;
+}

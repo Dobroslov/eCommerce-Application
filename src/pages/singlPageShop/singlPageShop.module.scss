@@ -1,0 +1,165 @@
+@import '/src/styles/mixins';
+
+.main {
+  margin-top: 88px;
+  margin-bottom: 160px;
+  @media (min-width: 320px) and (max-width: 1240px) {
+    @include respons-property(margin-top, 10, 88);
+    @include respons-property(margin-bottom, 75, 160);
+    }
+}
+
+.body {
+  display: flex;
+  column-gap: 30px;
+  @media (max-width: 768px){
+      flex-direction: column;
+  }
+  span {
+    color: #707070;
+  }
+}
+
+.mainContainer {
+  display: flex;
+  flex-direction: column;
+  width: 40%;
+  @media (max-width: 768px){
+    width: 100%;
+}
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  height: 100%;
+}
+
+
+.item img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+.productBody {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.productName {
+  font-size: 26px;
+  padding-bottom: 23px;
+  @media (min-width: 320px) and (max-width: 1240px) {
+  @include respons-property(font-size, 20, 26);
+  @include respons-property(padding-bottom, 5, 23);
+  }
+}
+
+.price {
+  font-size: 20px;
+  color: #A18A68;
+  padding-bottom: 64px;
+  @media (min-width: 320px) and (max-width: 1240px) {
+  @include respons-property(font-size, 16, 20);
+  @include respons-property(padding-bottom, 24, 64);
+  }
+}
+
+.description {
+  font-size: 16px;
+  padding-bottom: 48px;
+  color: #707070;
+  @media (min-width: 320px) and (max-width: 1240px) {
+    @include respons-property(font-size, 12, 16);
+    @include respons-property(padding-bottom, 10, 48);
+    }
+}
+
+.counter {
+  @media (max-width: 768px){
+    display: none;
+}
+}
+
+.sku {
+  display: block;
+  padding-top: 30px;
+  font-size: 16px;
+  @media (max-width: 768px){
+    display: none;
+}
+}
+
+.addToCartBlock {
+  display: flex;
+  align-items: center;
+  column-gap: 30px;
+
+  @media (max-width: 768px){
+    flex-direction: column-reverse;
+    align-items: flex-start;
+      
+  }
+  .skuMobile {
+    display: none;
+    @media (max-width: 768px){
+        display: block;
+        padding-bottom: 5px;
+        font-size: 16px;
+    }
+  }
+
+  button {
+    width: 100%;
+    color: #000;
+    background-color: #fff;
+    border: 1px solid #000;
+    transition: all ease 0.5s;
+  }
+
+  button:hover {
+    width: 100%;
+    color: #fff;
+    background-color: #000;
+    border: 1px solid #000;
+    transition: all ease 0.5s;
+  }
+
+  button:active {
+    background-color: #3b3b3b;
+  }
+}
+
+.tabs {
+  font-size: 16px;
+  @media (min-width: 320px) and (max-width: 1240px) {
+    @include respons-property(margin-top, 20, 40);
+    }
+  span {
+    color: #707070;
+  }
+  ul {
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    border-top: 1px solid #D8D8D8;
+    padding-top: 40px;
+    @media (min-width: 320px) and (max-width: 1240px) {
+      @include respons-property(padding-top, 20, 40);
+      }
+  }
+}
+
+.tabsTitle {
+  font-size: 20px;
+  padding-bottom: 34px;
+  @media (min-width: 320px) and (max-width: 1240px) {
+    @include respons-property(font-size, 16, 20);
+    @include respons-property(padding-bottom, 20, 34);
+    }
+}

@@ -3,12 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { createCustomer } from '../../services/apiServices';
 import RegistrationSwitchButton from '../../components/buttons/registrationSwitchButton';
 import RegistrationInput from '../../components/inputs/registrationInput';
-import SubmitButton from '../../components/buttons/submitButton';
 import { IRegistrationForm } from '../../utils/types';
 
 import style from './registrationPage.module.scss';
+import RegistrationButton from '../../components/buttons/registrationButton';
 
-function RegistrationPage(): React.ReactElement {
+export default function RegistrationPage(): React.ReactElement {
 	const navigate = useNavigate();
 	// Создаем состояние для хранения значений полей формы
 	const [registrationFormData, setRegistrationFormData] = useState<IRegistrationForm>({
@@ -203,7 +203,7 @@ function RegistrationPage(): React.ReactElement {
 									Remember me
 								</label>
 							</div>
-							<SubmitButton value='Register' />
+							<RegistrationButton value='Register' />
 						</div>
 					</form>
 				</div>
@@ -211,5 +211,3 @@ function RegistrationPage(): React.ReactElement {
 		</div>
 	);
 }
-
-export default RegistrationPage;

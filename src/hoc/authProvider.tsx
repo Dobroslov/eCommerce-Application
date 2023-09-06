@@ -1,31 +1,31 @@
+/* eslint-disable indent */
 import React, { createContext, useState, useMemo } from 'react';
 import { IUserLogin } from '../utils/types';
 import { getToken } from '../services/apiServices';
 
 export const AuthContext = createContext<{
 	user: IUserLogin | null;
-	autoSignIn:(email: string, callback: () => void) => void
+	autoSignIn: (email: string, callback: () => void) => void;
 	signIn: (newUser: IUserLogin, callback: () => void) => void;
 	signOut: (callback: () => void) => void;
-		} | null>(null);
+} | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
 	const [user, setUser] = useState<IUserLogin | null>(null);
 
-	function signIn(newUser: IUserLogin, callback: () => void) {
-		getToken(newUser).then(() => {
-			const token = localStorage.getItem('token');
-			const userString = localStorage.getItem('userData');
-			if (userString && token) {
-				const { email } = JSON.parse(userString);
-				console.log('file: authProvider.tsx:21 ~ getToken ~ email:', email);
-				setUser({
-					email,
-				});
-				console.log('file: authProvider.tsx:14 ~ AuthProvider ~ user:', user);
-				callback();
-			}
-		})
+	async function signIn(newUser: IUserLogin, callback: () => void) {
+		await getToken(newUser)
+			.then(() => {
+				const token = localStorage.getItem('token');
+				const userString = localStorage.getItem('userData');
+				if (userString && token) {
+					const { email } = JSON.parse(userString);
+					setUser({
+						email,
+					});
+					callback();
+				}
+			})
 			.catch(() => {
 				setUser(null);
 				console.log('signIn error');
@@ -56,9 +56,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 		}
 	}
 
-	const contextValue = useMemo(() => ({
-		user, signIn, signOut, autoSignIn,
-	}), [user, signIn, signOut, autoSignIn]);
+	const contextValue = useMemo(
+		() => ({
+			user,
+			signIn,
+			signOut,
+			autoSignIn,
+		}),
+		[user, signIn, signOut, autoSignIn],
+	);
 
 	return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;
 }

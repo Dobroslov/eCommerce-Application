@@ -11,9 +11,9 @@ export default function Layout() {
 			<main>
 				<div className='container'>
 					<Outlet />
+					{/* В Outlet обновляются разные страницы - mainPage, login, magazine */}
 				</div>
 			</main>
-			{/* В Outlet обновляются разные страницы - mainPage, login, magazine */}
 			<Footer />
 			{/* этот блок статичен и не обновляется при переходах на
 			другую страницу */}

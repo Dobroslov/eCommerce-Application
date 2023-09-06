@@ -1,13 +1,13 @@
 import React from 'react';
-import { IProductCard } from '../../utils/types';
+import { IProduct } from '../../utils/types';
 import styles from './productCard.module.scss';
 
-interface IProductCardItem extends IProductCard {
-	handleProductClick: (id: number) => void;
+interface IProductCardItem extends IProduct {
+	handleProductClick: (id: string) => void;
 }
 
 function ProductCard(props: IProductCardItem): React.JSX.Element {
-	const { title, price, id, handleProductClick } = props;
+	const { name, price, id, currencyCode, image, handleProductClick } = props;
 	// const cardImgStyle = {
 	// backgroundImage: `url('/public/assets/images/${image}')`,
 	// backgroundColor: '#ff0000',
@@ -15,7 +15,8 @@ function ProductCard(props: IProductCardItem): React.JSX.Element {
 
 	return (
 		<li className={styles.product_card}>
-			<div className={styles.product_card__img_container}>
+
+			<div className={styles.product_card__img_container} style={{ backgroundImage: `url(${image})` }}>
 				{/* <div className={styles.product_card__img_container} style={cardImgStyle}> */}
 				<a
 					href='#{product-id}'
@@ -26,10 +27,10 @@ function ProductCard(props: IProductCardItem): React.JSX.Element {
 				</a>
 			</div>
 			<h3 className={`${styles.product_card__title} ${styles.title_h3}`}>
-				{title}
+				{name}
 			</h3>
 			<p className={`${styles.product_card__price} ${styles.title_h4}`}>
-				{`$ ${price}`}
+				{`${price} ${currencyCode}`}
 			</p>
 		</li>
 	);

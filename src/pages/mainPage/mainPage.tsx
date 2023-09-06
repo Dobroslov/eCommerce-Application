@@ -1,33 +1,24 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import ProductCardsList from '../../components/productCardsList/productCardsList';
-import { IProductCard } from '../../utils/types';
-// import MAIN_IMAGE from '../../../public/assets/images/main-girl-with-earings.jpg';
+import { IProduct } from '../../utils/types';
+import { getFilter } from '../../services/apiServices';
 
 import styles from './mainPage.module.scss';
 
 function MainPage(): React.ReactElement {
-	const sampleCardData: IProductCard[] = [
-		{
-			id: 1, title: 'Card 1', image: 'gold_ring_2.jpg', price: 20, altImage: 'gold ring',
-		},
-		{
-			id: 2, title: 'Card 2', image: 'gold_ring.jpg', price: 30, altImage: 'gold ring',
-		},
-		{
-			id: 3, title: 'Card 3', image: 'gold_ring_2.jpg', price: 40, altImage: 'gold ring',
-		},
-		{
-			id: 4, title: 'Card 4', image: 'gold_ring_2.jpg', price: 40, altImage: 'gold ring',
-		},
-		{
-			id: 5, title: 'Card 5', image: 'gold_ring_2.jpg', price: 40, altImage: 'gold ring',
-		},
-		{
-			id: 6, title: 'Card 6', image: 'gold_ring_2.jpg', price: 40, altImage: 'gold ring',
-		},
-	];
+	const [products, setProducts] = useState<IProduct[]>([]);
+	useEffect(() => {
+		setTimeout(() => {
+			getFilter(6, 0, '&sort=createdAt+asc')
+				.then((data) => {
+					if (data) setProducts(data);
+				})
+				.catch((error) => error);
+		}, 500);
+	}, []);
 
-	function handleProductClick(id: number): void {
+	function handleProductClick(id: string): void {
 		console.log('handleProductClick', id);
 	}
 
@@ -42,10 +33,10 @@ function MainPage(): React.ReactElement {
 			<div className={styles.catalog}>
 				<div className={styles.catalog__title}>
 					<h2 className={`${styles.title_h2} ${styles.catalor__title}`}>Shop The Latest</h2>
-					<a href='#top' className={`${styles.catalog__link} ${styles.title_h4}`}>View All</a>
+					<Link to='/shop' className={`${styles.catalog__link} ${styles.title_h4}`}>View All</Link>
 				</div>
 				<ProductCardsList
-					products={sampleCardData}
+					products={products}
 					handleProductClick={handleProductClick}
 				/>
 			</div>

@@ -21,12 +21,14 @@ function LoginPage(): React.ReactElement | null {
 		switch (id) {
 			case 'emailLogin':
 				setLoginData({
-					...loginData, email: value,
+					...loginData,
+					email: value,
 				});
 				break;
 			case 'passwordLogin':
 				setLoginData({
-					...loginData, password: value,
+					...loginData,
+					password: value,
 				});
 				break;
 			default:
@@ -42,7 +44,6 @@ function LoginPage(): React.ReactElement | null {
 				password: loginData.password,
 			},
 			() => {
-				console.log('handleSubmit', user);
 				if (user) {
 					// Только если пользователь успешно авторизовался, тогда выполняйте редирект
 					if (location.state?.from) {
@@ -90,7 +91,9 @@ function LoginPage(): React.ReactElement | null {
 									Remember me
 								</label>
 							</div>
-							<SubmitButton value='Sign in' />
+							<SubmitButton
+								value='Sign in'
+							/>
 						</div>
 					</form>
 				</div>

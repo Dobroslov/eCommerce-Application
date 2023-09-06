@@ -20,6 +20,7 @@ function RegistrationInput(props: IRegistrationInput): React.JSX.Element {
 		errorMessage,
 		pattern,
 	} = props;
+
 	const [value, setValue] = useState('');
 	const [isFocused, setIsFocused] = useState(false);
 	const [isPasswordVisible, setIsPasswordVisible] = useState(false);

@@ -56,7 +56,8 @@ main {
 
 .title_h5 {
 	font-weight: 500;
-	font-size: 2rem;
+	font-size: 20px;
+	@include respons-property(font-size, 12, 20);
 	line-height: 1;
 }
 
@@ -84,4 +85,33 @@ main {
 	&:hover {
 		color: #000000;
 	}
+}
+
+.thumb {
+	height: 15px;
+	width: 5px;
+	background-color: #000;
+	border-radius: 4px;
+	transform: translateY(-6px);
+	cursor: pointer;
+}
+
+.horizontal-slider {
+	height: 4px;
+}
+
+.track {
+	height: 3px;
+}
+
+.track.track-0 {
+	background-color: #d8d8d8;
+}
+
+.track.track-1 {
+	background-color: #000;
+}
+
+.track.track-2 {
+	background-color: #d8d8d8;
 }
