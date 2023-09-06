@@ -12,9 +12,11 @@ import { IProduct } from '../../utils/types';
 
 export default function Shop(): React.ReactElement {
 	const localFilter = localStorage.getItem('filter');
+	const localOffset = Number(localStorage.getItem('offset'));
 	const [products, setProducts] = useState<IProduct[]>([]);
 	const [modalActive, setModalActive] = useState(false);
 	const [filter, setFilter] = useState(localFilter || '&sort=createdAt+asc');
+	const [offset, setOffset] = useState(localOffset || 0);
 	const [id, setId] = useState('2a736cf8-ad85-4d6e-a9ef-1adf95915f8d');
 	const [images, setImages] = useState<string[]>([]);
 
@@ -36,13 +38,31 @@ export default function Shop(): React.ReactElement {
 		setFilter(filterData);
 	};
 
+	const handleOffsetNext = (nextOffset: number) => {
+		setOffset(nextOffset + 9);
+		localStorage.setItem('offset', (nextOffset + 9).toString());
+	};
+
+	const handleOffsetPrev = (prevOffset: number) => {
+		setOffset(prevOffset - 9);
+		localStorage.setItem('offset', (prevOffset - 9).toString());
+	};
+
 	useEffect(() => {
-		getFilter(9, 0, filter)
+		getFilter(9, offset || localOffset, filter)
 			.then((data) => {
 				if (data) setProducts(data);
 			})
 			.catch((error) => error);
 	}, [filter]);
+
+	useEffect(() => {
+		getFilter(9, offset || localOffset, localFilter || filter)
+			.then((data) => {
+				if (data) setProducts(data);
+			})
+			.catch((error) => error);
+	}, [offset]);
 
 	return (
 		<section className={style.catalog}>
@@ -82,6 +102,9 @@ export default function Shop(): React.ReactElement {
 									`${product.price} ${product.currencyCode}`
 								)}
 							</div>
+							<button className={style.addtoCartButton} type='button'>
+								Add to cart
+							</button>
 						</div>
 					))}
 				</div>
@@ -100,6 +123,14 @@ export default function Shop(): React.ReactElement {
 					<div className={style.showDetailsModal}>Show details</div>
 				</Link>
 			</SliderModal>
+			<div className={style.pagination}>
+				<button onClick={() => handleOffsetPrev(offset)} type='button'>
+					❮
+				</button>
+				<button onClick={() => handleOffsetNext(offset)} type='button'>
+					❯
+				</button>
+			</div>
 		</section>
 	);
 }

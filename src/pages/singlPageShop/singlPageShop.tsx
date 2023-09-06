@@ -6,12 +6,13 @@ import { getProductForId } from '../../services/apiServices';
 import CarouselCompound from '../../components/slider/carouselCompound/carouselCompound';
 import style from './singlPageShop.module.scss';
 import { IProductbyId } from '../../utils/types';
-import LoginButton from '../../components/buttons/loginButton';
 import SliderModal from '../../components/modal/sliderModal';
+import SubmitButton from '../../components/buttons/submitButton';
 
 export default function ShopSinglPageProduct(): React.ReactElement {
 	const { id } = useParams(); // получаем параметры ссылки
 	// два параметра: 1)куда перенаправить пользователя 2)
+	const [productCout, setProductCount] = useState(0);
 	const [modalActive, setModalActive] = useState(false);
 	const [product, setProduct] = useState<IProductbyId>({
 		name: '',
@@ -28,6 +29,17 @@ export default function ShopSinglPageProduct(): React.ReactElement {
 		sku: '',
 	});
 	// const goForward = () => navigate(1); // вперёд по истории
+
+	const handleCoutPlus = (count: number) => {
+		setProductCount(count + 1);
+		console.log(productCout);
+	};
+	const handleCoutMinus = (count: number) => {
+		if (count > 0) {
+			setProductCount(count - 1);
+			console.log(productCout);
+		}
+	};
 
 	useEffect(() => {
 		if (id) {
@@ -74,8 +86,18 @@ export default function ShopSinglPageProduct(): React.ReactElement {
 					</div>
 					<div className={style.description}>{product.description}</div>
 					<div className={style.addToCartBlock}>
-						<div className={style.counter}>Counter</div>
-						<LoginButton value='Add to Cart' />
+						<div className={style.counter}>
+							<button onClick={() => handleCoutMinus(productCout)} type='button'>
+								-
+							</button>
+							<input onChange={() => 0} value={productCout} type='number' />
+							<button onClick={() => handleCoutPlus(productCout)} type='button'>
+								+
+							</button>
+						</div>
+						<div className={style.addtoCartButton}>
+							<SubmitButton value='Add to Cart' />
+						</div>
 						<p className={style.skuMobile}>
 							SKU: <span>{product.sku}</span>
 						</p>
