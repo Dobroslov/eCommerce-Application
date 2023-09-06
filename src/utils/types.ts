@@ -20,6 +20,7 @@ export interface IUserLogin {
 
 export interface IAddress {
 	id?: string;
+	addresId?: string;
 	city: string;
 	streetName: string;
 	streetNumber: string;

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
+// import React, { FormEvent, useState } from 'react';
 // import ChangeInput from '../../../components/inputs/changeInput/changeInput';
 
 import AddNewAddress from './addAddress';
@@ -14,16 +15,16 @@ export default function Addresses() {
 	// 	postalCode: '',
 	// });
 
-	const [showBillingForm, setShowBillingForm] = useState(false);
-	const [showShippingForm, setShowShippingForm] = useState(false);
+	// const [showBillingForm, setShowBillingForm] = useState(false);
+	// const [showShippingForm, setShowShippingForm] = useState(false);
 
-	const toggleBillingForm = () => {
-		setShowBillingForm(!showBillingForm);
-	};
+	// const toggleBillingForm = () => {
+	// 	setShowBillingForm(!showBillingForm);
+	// };
 
-	const toggleShippingForm = () => {
-		setShowShippingForm(!showShippingForm);
-	};
+	// const toggleShippingForm = () => {
+	// 	setShowShippingForm(!showShippingForm);
+	// };
 
 	// const handleInputChange = (newValue: string, id: string): void => {
 	// 	setFormData((prevUserData) => ({
@@ -49,14 +50,14 @@ export default function Addresses() {
 				<h2 className={style.title_h2}>Adress</h2>
 				<AddNewAddress addressType='billing' />
 				<AddNewAddress addressType='shipping' />
-				<div className={style.buttons}>
+				{/* <div className={style.buttons}>
 					<button onClick={toggleBillingForm} type='button'>
 						{showBillingForm ? 'Hide Billing Address' : 'Add Billing Address'}
 					</button>
 					<button onClick={toggleShippingForm} type='button' className={style.toggle_gutton}>
 						{showShippingForm ? 'Hide Shipping Address' : 'Add Shipping Address'}
 					</button>
-				</div>
+				</div> */}
 				{/* {showBillingForm && (
 					<form className={style.form} onSubmit={handleSubmit}>
 						<div className={style.inputs}>

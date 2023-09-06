@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-// import isValidUserAge from '../../../utils/helpers';
+import isValidUserAge from '../../../utils/helpers';
 import style from './changeInput.module.scss';
 
 interface IChangeInput {
@@ -30,9 +30,9 @@ export default function ChangeInput(props: IChangeInput): React.JSX.Element {
 		const newValue = e.target.value;
 		onValueChange(newValue, id);
 
-		// if (id === 'date' && !isValidUserAge(newValue)) {
-		// 	onValueChange(newValue, id);
-		// }
+		if (id === 'date' && !isValidUserAge(newValue)) {
+			onValueChange(newValue, id);
+		}
 	};
 
 	const togglePasswordVisibility = () => {
