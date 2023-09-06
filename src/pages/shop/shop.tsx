@@ -63,6 +63,7 @@ export default function Shop(): React.ReactElement {
 			})
 			.catch((error) => error);
 	}, [offset]);
+	localStorage.setItem('path', window.location.pathname);
 
 	return (
 		<section className={style.catalog}>

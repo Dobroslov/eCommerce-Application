@@ -127,7 +127,7 @@ export default function ShopSinglPageProduct(): React.ReactElement {
 			<SliderModal active={modalActive} setActive={setModalActive}>
 				<CarouselCompound>
 					{product.images.map((image, index) => (
-						<CarouselCompound.CarouselPage key={id ? id + index + 10 : id}>
+						<CarouselCompound.CarouselPage key={id ? id + (index + 10) : id}>
 							<div className={`${style.item}`}>
 								<img src={image} alt='' />
 							</div>

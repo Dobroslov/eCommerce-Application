@@ -51,8 +51,8 @@
 }
 
 .content__column {
-	min-width: 400px;
-	@include respons-property(min-width, 300, 400);
+	min-width: 500px;
+	@include respons-property(min-width, 300, 500);
 }
 
 .toggle_gutton {
@@ -74,7 +74,8 @@
 }
 
 .form {
-	width: 100%;
+	width: 500px;
+	@include respons-property(width, 300, 500);
 }
 
 .select {

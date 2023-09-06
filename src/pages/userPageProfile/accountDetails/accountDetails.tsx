@@ -33,6 +33,7 @@ export default function AccountDetails(): React.ReactElement {
 		const storedUserData = localStorage.getItem('userData');
 		if (storedUserData) {
 			const parsedUserData = JSON.parse(storedUserData);
+			localStorage.setItem('path', window.location.pathname);
 			setUserData({
 				firstName: parsedUserData.firstName || '',
 				lastName: parsedUserData.lastName || '',

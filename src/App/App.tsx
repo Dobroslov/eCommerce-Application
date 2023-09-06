@@ -42,13 +42,16 @@ function App(): React.ReactElement {
 					navigate(location.state.from, {
 						replace: true,
 					});
+				} if (localStorage.getItem('path')) {
+					const path = localStorage.getItem('path') as string;
+					navigate(path);
 				} else {
-					// В противном случае перейдите на домашнюю страницу
 					navigate('/');
 				}
 			});
 		}
 	}, []);
+
 	return (
 		<div className='wrapper'>
 			<Routes>

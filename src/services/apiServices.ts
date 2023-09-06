@@ -17,9 +17,7 @@ import { hideModal, showModal } from '../store/actions';
 const PROJECT_KEY = 'glitter-magazine';
 const API_URL = 'https://api.europe-west1.gcp.commercetools.com';
 const AUTH_URL = 'https://auth.europe-west1.gcp.commercetools.com';
-// const REGION = 'europe-west1.gcp';
 
-// interface IToken {}
 export async function getAnonimousToken(): Promise<void> {
 	const url = `${AUTH_URL}/oauth/${PROJECT_KEY}/anonymous/token?grant_type=client_credentials`;
 	const headers = {
@@ -311,10 +309,10 @@ export function getProductForId(id: string): Promise<void | IProductbyId> {
 				stone: response.data.masterVariant.attributes[2].value[0],
 				standard: response.data.masterVariant.attributes[3].value,
 				metall: response.data.masterVariant.attributes[4].value[0],
-				discount: (
-					// eslint-disable-next-line no-unsafe-optional-chaining
-					response.data.masterVariant.prices[0].discounted?.value.centAmount / 100
-				).toFixed(2) as string,
+				discount: // eslint-disable-next-line no-unsafe-optional-chaining
+				(response.data.masterVariant.prices[0].discounted?.value.centAmount / 100).toFixed(
+					2,
+				) as string,
 				sku: response.data.masterVariant.sku,
 			};
 
@@ -417,10 +415,63 @@ export function changeCustomerValues({ firstName, lastName, email, dateOfBirth }
 		.then((response) => {
 			const responseData = response.data;
 			localStorage.setItem('userData', JSON.stringify(responseData));
+			// window.location.reload();
 			store.dispatch(
 				showModal({
 					title: 'Success',
 					description: 'Data changed successfully',
+					color: 'rgb(60, 179, 113,0.5)',
+				}),
+			);
+			setTimeout(() => {
+				store.dispatch(hideModal());
+				window.location.reload();
+			}, 5000);
+		})
+		.catch((error) => {
+			store.dispatch(
+				showModal({
+					title: 'Fault',
+					description: error.response?.data.message,
+					color: 'rgb(227, 23, 23,0.5)',
+				}),
+			);
+			setTimeout(() => {
+				store.dispatch(hideModal());
+			}, 5000);
+		});
+}
+
+export function changeAddress(addressId: string, addressData: IAddress) {
+	const user = localStorage.getItem('userData') as string;
+	const { id, version } = JSON.parse(user);
+	const token = localStorage.getItem('token');
+	const headers = {
+		'Content-Type': 'application/json',
+		Authorization: `Bearer ${token}`,
+	};
+	const url = `https://api.europe-west1.gcp.commercetools.com/glitter-magazine/customers/${id}`;
+	const data = {
+		version,
+		actions: [
+			{
+				action: 'changeAddress',
+				addressId,
+				address: addressData,
+			},
+		],
+	};
+	axios
+		.post(url, data, {
+			headers,
+		})
+		.then((response) => {
+			const responseData = response.data;
+			localStorage.setItem('userData', JSON.stringify(responseData));
+			store.dispatch(
+				showModal({
+					title: 'Success',
+					description: 'Address changed successfully',
 					color: 'rgb(60, 179, 113,0.5)',
 				}),
 			);
@@ -501,7 +552,7 @@ export function addressActions(addressAction: string, addressId: string) {
 		});
 }
 
-export function changeAddress(addressId: string, addressData: IAddress) {
+export function addAddress(addressData: IAddress) {
 	const user = localStorage.getItem('userData') as string;
 	const { id, version } = JSON.parse(user);
 	const token = localStorage.getItem('token');
@@ -512,56 +563,6 @@ export function changeAddress(addressId: string, addressData: IAddress) {
 	const url = `https://api.europe-west1.gcp.commercetools.com/glitter-magazine/customers/${id}`;
 	const data = {
 		version,
-		actions: [
-			{
-				action: 'changeAddress',
-				addressId,
-				address: addressData,
-			},
-		],
-	};
-	axios
-		.post(url, data, {
-			headers,
-		})
-		.then((response) => {
-			const responseData = response.data;
-			localStorage.setItem('userData', JSON.stringify(responseData));
-			store.dispatch(
-				showModal({
-					title: 'Success',
-					description: 'Address changed successfully',
-					color: 'rgb(60, 179, 113,0.5)',
-				}),
-			);
-			setTimeout(() => {
-				store.dispatch(hideModal());
-			}, 5000);
-		})
-		.catch((error) => {
-			store.dispatch(
-				showModal({
-					title: 'Fault',
-					description: error.response?.data.message,
-					color: 'rgb(227, 23, 23,0.5)',
-				}),
-			);
-			setTimeout(() => {
-				store.dispatch(hideModal());
-			}, 5000);
-		});
-}
-
-export function addAddress(addressData: IAddress) {
-	const user = localStorage.getItem('userData') as string;
-	const { id } = JSON.parse(user);
-	const token = localStorage.getItem('token');
-	const headers = {
-		'Content-Type': 'application/json',
-		Authorization: `Bearer ${token}`,
-	};
-	const url = `https://api.europe-west1.gcp.commercetools.com/glitter-magazine/customers/${id}`;
-	const data = {
 		actions: [
 			{
 				action: 'addAddress',
@@ -586,6 +587,7 @@ export function addAddress(addressData: IAddress) {
 			setTimeout(() => {
 				store.dispatch(hideModal());
 			}, 5000);
+			return responseData;
 		})
 		.catch((error) => {
 			store.dispatch(
