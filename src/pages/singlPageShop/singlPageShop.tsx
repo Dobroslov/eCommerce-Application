@@ -51,8 +51,8 @@ export default function ShopSinglPageProduct(): React.ReactElement {
 				<div className={style.mainContainer}>
 					<div className={style.slider}>
 						<CarouselCompound>
-							{product.images.map((image) => (
-								<CarouselCompound.CarouselPage>
+							{product.images.map((image, index) => (
+								<CarouselCompound.CarouselPage key={id ? id + index : id}>
 									<div className={`${style.item}`}>
 										<img
 											onClick={() => {
@@ -104,8 +104,8 @@ export default function ShopSinglPageProduct(): React.ReactElement {
 			</div>
 			<SliderModal active={modalActive} setActive={setModalActive}>
 				<CarouselCompound>
-					{product.images.map((image) => (
-						<CarouselCompound.CarouselPage>
+					{product.images.map((image, index) => (
+						<CarouselCompound.CarouselPage key={id ? id + (index + 10) : id}>
 							<div className={`${style.item}`}>
 								<img src={image} alt='' />
 							</div>
