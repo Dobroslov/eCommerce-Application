@@ -1,11 +1,10 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 import React, { useState } from 'react';
 import ReactSlider from 'react-slider';
-import style from './filter.module.scss';
 import SubmitButton from '../../../components/buttons/submitButton';
 import filterObject from './filterObject';
 import IMAGE from '../../../../public/assets/svg/search.svg';
-// import { Link, useLocation, useNavigate } from 'react-router-dom';
+import style from './filter.module.scss';
 
 interface ISort {
 	onValueChange: (value: string) => void;

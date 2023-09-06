@@ -9,11 +9,13 @@ import styles from './mainPage.module.scss';
 function MainPage(): React.ReactElement {
 	const [products, setProducts] = useState<IProduct[]>([]);
 	useEffect(() => {
-		getFilter(6, 0, '&sort=createdAt+asc')
-			.then((data) => {
-				if (data) setProducts(data);
-			})
-			.catch((error) => error);
+		setTimeout(() => {
+			getFilter(6, 0, '&sort=createdAt+asc')
+				.then((data) => {
+					if (data) setProducts(data);
+				})
+				.catch((error) => error);
+		}, 500);
 	}, []);
 
 	function handleProductClick(id: string): void {

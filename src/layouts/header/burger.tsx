@@ -17,9 +17,9 @@ function Burger(): React.JSX.Element {
 	const node = useRef<HTMLDivElement>(null);
 	useOnClickOutside(node, ():void => closeBurger());
 	return (
-		<div className={isActive ? `${header.burger} ${header.active}` : header.burger} ref={node}>
+		<div className={isActive ? `${header.burger} ${header.activate}` : header.burger} ref={node}>
 			<HeaderButton className={header.basket} />
-			<div className={isActive ? `${header.nav__button} ${header.active}` : header.nav__button} role='presentation' onClick={toggleBurger}>
+			<div className={isActive ? `${header.nav__button} ${header.activate}` : header.nav__button} role='presentation' onClick={toggleBurger}>
 				<span className={header.nav__line} />
 				<span className={header.nav__line} />
 				<span className={header.nav__line} />

@@ -35,7 +35,6 @@
   justify-content: center;
   user-select: none;
   height: 100%;
-  cursor: pointer;
 }
 
 
@@ -163,27 +162,4 @@
     @include respons-property(font-size, 16, 20);
     @include respons-property(padding-bottom, 20, 34);
     }
-}
-
-
-.itemModal {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  user-select: none;
-  height: 100%;
-}
-
-.itemModal img {
-  width: 500px;
-  height: 100%;
-  object-fit: contain;
-  object-position: center;
-  @media (min-width: 320px) and (max-width: 1240px) {
-    @include respons-property(width, 320, 500);
-    }
-}
-
-.showDetailsModal {
-  position: absolute;
 }

@@ -1,18 +1,14 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React, { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { getProductForId } from '../../services/apiServices';
 import CarouselCompound from '../../components/slider/carouselCompound/carouselCompound';
 import style from './singlPageShop.module.scss';
 import { IProductbyId } from '../../utils/types';
 import LoginButton from '../../components/buttons/loginButton';
-import SliderModal from '../../components/modal/sliderModal';
 
 export default function ShopSinglPageProduct(): React.ReactElement {
 	const { id } = useParams(); // получаем параметры ссылки
 	// два параметра: 1)куда перенаправить пользователя 2)
-	const [modalActive, setModalActive] = useState(false);
 	const [product, setProduct] = useState<IProductbyId>({
 		name: '',
 		images: [''],
@@ -54,13 +50,7 @@ export default function ShopSinglPageProduct(): React.ReactElement {
 							{product.images.map((image, index) => (
 								<CarouselCompound.CarouselPage key={id ? id + index : id}>
 									<div className={`${style.item}`}>
-										<img
-											onClick={() => {
-												setModalActive(true);
-											}}
-											src={image}
-											alt=''
-										/>
+										<img src={image} alt='' />
 									</div>
 								</CarouselCompound.CarouselPage>
 							))}
@@ -102,20 +92,6 @@ export default function ShopSinglPageProduct(): React.ReactElement {
 					</li>
 				</ul>
 			</div>
-			<SliderModal active={modalActive} setActive={setModalActive}>
-				<CarouselCompound>
-					{product.images.map((image, index) => (
-						<CarouselCompound.CarouselPage key={id ? id + index + 10 : id}>
-							<div className={`${style.item}`}>
-								<img src={image} alt='' />
-							</div>
-						</CarouselCompound.CarouselPage>
-					))}
-				</CarouselCompound>
-				<Link key={id} to={`/shop/${id}`}>
-					<div className={style.showDetailsModal} />
-				</Link>
-			</SliderModal>
 		</div>
 	);
 }

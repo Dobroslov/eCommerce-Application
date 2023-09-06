@@ -2,8 +2,9 @@ import React from 'react';
 // import React, { FormEvent, useState } from 'react';
 // import ChangeInput from '../../../components/inputs/changeInput/changeInput';
 
-import style from './address.module.scss';
+import AddNewAddress from './addAddress';
 // import SubmitButton from '../../../components/buttons/submitButton';
+import style from './address.module.scss';
 
 export default function Addresses() {
 	// const [selectedCountry, setSelectedCountry] = useState('RU');
@@ -47,6 +48,8 @@ export default function Addresses() {
 		<div className={`${style.container} container`}>
 			<div className={style.body}>
 				<h2 className={style.title_h2}>Adress</h2>
+				<AddNewAddress addressType='billing' />
+				<AddNewAddress addressType='shipping' />
 				{/* <div className={style.buttons}>
 					<button onClick={toggleBillingForm} type='button'>
 						{showBillingForm ? 'Hide Billing Address' : 'Add Billing Address'}

@@ -44,6 +44,8 @@ export default function Shop(): React.ReactElement {
 			.catch((error) => error);
 	}, [filter]);
 
+	localStorage.setItem('path', window.location.pathname);
+
 	return (
 		<section className={style.catalog}>
 			<h3 className={style.catalogTitle}>Shop The Latest</h3>

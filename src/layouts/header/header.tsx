@@ -9,6 +9,7 @@ import '../../styles/_global.scss';
 
 function Header(): React.JSX.Element {
 	const auth = useAuth();
+
 	return (
 		<header className={header.header}>
 			<div className={header.container}>
