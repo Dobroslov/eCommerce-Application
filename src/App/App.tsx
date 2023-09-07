@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Routes, Route, useNavigate, useLocation, Navigate } from 'react-router-dom';
 
-import { getAnonimousToken, checkAnonimousToken } from '../services/apiServices';
+import { getAnonimousToken, checkAnonimousToken, getCart } from '../services/apiServices';
 import useAuth from '../hooks/useAuth';
 import RequireAuthorisation from '../hoc/requireAuthorisation';
 import MainPage from '../pages/mainPage/mainPage';
@@ -36,7 +36,7 @@ function App(): React.ReactElement {
 				getAnonimousToken();
 			}
 		}
-
+		getCart();
 		const token = localStorage.getItem('token');
 		const userString = localStorage.getItem('userData');
 

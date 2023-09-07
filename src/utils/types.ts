@@ -36,7 +36,10 @@ export interface ModalProperties {
 	description: string;
 	color: string;
 }
-
+export interface ICart {
+	id:string,
+	version:string
+}
 export interface IUserDataRespons {
 	id: string;
 	version: number;
