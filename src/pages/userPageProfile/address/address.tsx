@@ -1,48 +1,87 @@
-import React from 'react';
-// import React, { FormEvent, useState } from 'react';
-// import ChangeInput from '../../../components/inputs/changeInput/changeInput';
+import React, { FormEvent, useEffect, useState } from 'react';
+import ChangeInput from '../../../components/inputs/changeInput/changeInput';
 
 import AddNewAddress from './addAddress';
-// import SubmitButton from '../../../components/buttons/submitButton';
+import SubmitButton from '../../../components/buttons/submitButton';
 import style from './address.module.scss';
+// import { IAddress } from '../../../utils/types';
+
+// function getAddresses() {
+// 	const user = localStorage.getItem('userData') as string;
+// 	const { billingAddressIds, shippingAddressIds, addresses } = JSON.parse(user);
+
+// 	// Фильтруем адреса с учетом billing адресов
+// 	const billingAddresses = addresses.filter((address: IAddress) =>
+// 		billingAddressIds.includes(address.id),
+// 	);
+
+// 	// Фильтруем адреса с учетом shipping адресов
+// 	const shippingAddresses = addresses.filter((address: IAddress) =>
+// 		shippingAddressIds.includes(address.id),
+// 	);
+
+// 	return { billingAddresses, shippingAddresses };
+// }
+
+// function getDefaultAddresses() {
+// 	const user = localStorage.getItem('userData') as string;
+// 	const { defaultShippingAddressId, defaultBillingAddressId, addresses } = JSON.parse(user);
+
+// 	const defaultBillingAddress = addresses.find((address: IAddress) => address.id === defaultBillingAddressId);
+// 	const defaultShippingAddress = addresses.find((address: IAddress) => address.id === defaultShippingAddressId);
+
+// 	return { defaultBillingAddress, defaultShippingAddress };
+// }
 
 export default function Addresses() {
-	// const [selectedCountry, setSelectedCountry] = useState('RU');
-	// const [formData, setFormData] = useState({
-	// 	city: '',
-	// 	streetName: '',
-	// 	streetNumber: '',
-	// 	postalCode: '',
-	// });
+	// const [addresses, setAddresses] = useState<IAddress[]>([]);
 
-	// const [showBillingForm, setShowBillingForm] = useState(false);
-	// const [showShippingForm, setShowShippingForm] = useState(false);
+	useEffect(() => {
+		const storedUserData = localStorage.getItem('userData');
+		if (storedUserData) {
+			// const parsedUserData = JSON.parse(storedUserData);
+			localStorage.setItem('path', window.location.pathname);
 
-	// const toggleBillingForm = () => {
-	// 	setShowBillingForm(!showBillingForm);
-	// };
+			// setAddress({
+			// 	country: parsedUserData.country || '',
+			// 	city: parsedUserData.city || '',
+			// 	streetName: parsedUserData.streetName || '',
+			// 	streetNumber: parsedUserData.streetNumber || '',
+			// 	postalCode: parsedUserData.postalCode || '',
+			// 	id: parsedUserData.id || '',
+			// });
+		}
+	}, []);
 
-	// const toggleShippingForm = () => {
-	// 	setShowShippingForm(!showShippingForm);
-	// };
+	const [showBillingForm, setShowBillingForm] = useState(false);
+	const [showShippingForm, setShowShippingForm] = useState(false);
 
-	// const handleInputChange = (newValue: string, id: string): void => {
-	// 	setFormData((prevUserData) => ({
-	// 		...prevUserData,
-	// 		[id]: newValue,
-	// 	}));
-	// };
+	const toggleBillingForm = () => {
+		setShowBillingForm(!showBillingForm);
+	};
 
-	// const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
-	// 	e.preventDefault();
+	const toggleShippingForm = () => {
+		setShowShippingForm(!showShippingForm);
+	};
 
-	// 	try {
-	// 		// await createCustomer(registrationFormData, navigate);
-	// 	} catch (error) {
-	// 		console.error('Error handleSubmit:', error);
-	// 		// Обработайте ошибку, если что-то пошло не так
-	// 	}
-	// };
+	const handleInputChange = (newValue: string, id: string): void => {
+		console.log(newValue, id);
+		// setAddress((prevUserData) => ({
+		// 	...prevUserData,
+		// 	[id]: newValue,
+		// }));
+	};
+
+	const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
+		e.preventDefault();
+
+		try {
+			// await createCustomer(registrationFormData, navigate);
+		} catch (error) {
+			console.error('Error handleSubmit:', error);
+			// Обработайте ошибку, если что-то пошло не так
+		}
+	};
 
 	return (
 		<div className={`${style.container} container`}>
@@ -50,23 +89,23 @@ export default function Addresses() {
 				<h2 className={style.title_h2}>Adress</h2>
 				<AddNewAddress addressType='billing' />
 				<AddNewAddress addressType='shipping' />
-				{/* <div className={style.buttons}>
+				<div className={style.buttons}>
 					<button onClick={toggleBillingForm} type='button'>
 						{showBillingForm ? 'Hide Billing Address' : 'Add Billing Address'}
 					</button>
 					<button onClick={toggleShippingForm} type='button' className={style.toggle_gutton}>
 						{showShippingForm ? 'Hide Shipping Address' : 'Add Shipping Address'}
 					</button>
-				</div> */}
-				{/* {showBillingForm && (
+				</div>
+				{showBillingForm && (
 					<form className={style.form} onSubmit={handleSubmit}>
 						<div className={style.inputs}>
 							<form className={style.form} onSubmit={handleSubmit}>
 								<div className={style.inputs}>
 									<select
 										className={style.select}
-										value={selectedCountry}
-										onChange={(e) => setSelectedCountry(e.target.value)}
+										// value={selectedCountry}
+										// onChange={(e) => setSelectedCountry(e.target.value)}
 										name='country'
 										id='country'
 									>
@@ -132,8 +171,8 @@ export default function Addresses() {
 								<div className={style.inputs}>
 									<select
 										className={style.select}
-										value={selectedCountry}
-										onChange={(e) => setSelectedCountry(e.target.value)}
+										// value={selectedCountry}
+										// onChange={(e) => setSelectedCountry(e.target.value)}
 										name='country'
 										id='country'
 									>
@@ -190,7 +229,7 @@ export default function Addresses() {
 							</form>
 						</div>
 					</form>
-				)} */}
+				)}
 			</div>
 		</div>
 	);
