@@ -12,7 +12,7 @@ import SubmitButton from '../../components/buttons/submitButton';
 export default function ShopSinglPageProduct(): React.ReactElement {
 	const { id } = useParams(); // получаем параметры ссылки
 	// два параметра: 1)куда перенаправить пользователя 2)
-	const [productCout, setProductCount] = useState(0);
+	const [productCout, setProductCount] = useState(1);
 	const [modalActive, setModalActive] = useState(false);
 	const [product, setProduct] = useState<IProductbyId>({
 		name: '',
@@ -35,7 +35,7 @@ export default function ShopSinglPageProduct(): React.ReactElement {
 		console.log(productCout);
 	};
 	const handleCoutMinus = (count: number) => {
-		if (count > 0) {
+		if (count > 1) {
 			setProductCount(count - 1);
 			console.log(productCout);
 		}
@@ -82,7 +82,16 @@ export default function ShopSinglPageProduct(): React.ReactElement {
 				<div className={style.productBody}>
 					<p className={style.productName}>{product.name}</p>
 					<div className={style.price}>
-						{product.price} {product.currencyCode}
+						{product.discount !== 'NaN' ? (
+							<>
+								{product.discount} {product.currencyCode}{' '}
+								<span className={style.lineThrough}>
+									{product.price} {product.currencyCode}
+								</span>
+							</>
+						) : (
+							`${product.price} ${product.currencyCode}`
+						)}
 					</div>
 					<div className={style.description}>{product.description}</div>
 					<div className={style.addToCartBlock}>

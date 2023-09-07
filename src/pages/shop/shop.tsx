@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import style from './shop.module.scss';
 import Filter from './filter/filter';
-import { getFilter, getProductForId } from '../../services/apiServices';
+import { getAnonimousToken, getFilter, getProductForId } from '../../services/apiServices';
 import SliderModal from '../../components/modal/sliderModal';
 import CarouselCompound from '../../components/slider/carouselCompound/carouselCompound';
 import { IProduct } from '../../utils/types';
@@ -49,11 +49,22 @@ export default function Shop(): React.ReactElement {
 	};
 
 	useEffect(() => {
-		getFilter(9, offset || localOffset, filter)
-			.then((data) => {
-				if (data) setProducts(data);
-			})
-			.catch((error) => error);
+		const localAnonymousToken = localStorage.getItem('anonimous');
+		if (!localAnonymousToken) {
+			getAnonimousToken().then(() => {
+				getFilter(9, offset || localOffset, filter)
+					.then((data) => {
+						if (data) setProducts(data);
+					})
+					.catch((error) => error);
+			});
+		} else {
+			getFilter(9, offset || localOffset, filter)
+				.then((data) => {
+					if (data) setProducts(data);
+				})
+				.catch((error) => error);
+		}
 	}, [filter]);
 
 	useEffect(() => {
