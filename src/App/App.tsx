@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Routes, Route, useNavigate, useLocation, Navigate } from 'react-router-dom';
 
-import { getAnonimousToken } from '../services/apiServices';
+import { getAnonimousToken, checkAnonimousToken } from '../services/apiServices';
 import useAuth from '../hooks/useAuth';
 import RequireAuthorisation from '../hoc/requireAuthorisation';
 import MainPage from '../pages/mainPage/mainPage';
@@ -29,7 +29,12 @@ function App(): React.ReactElement {
 
 	useEffect(() => {
 		if (!user && !localStorage.getItem('token')) {
-			getAnonimousToken();
+			if (localStorage.getItem('anonimous')) {
+				const anonimous = localStorage.getItem('anonimous') as string;
+				checkAnonimousToken(anonimous);
+			} else {
+				getAnonimousToken();
+			}
 		}
 
 		const token = localStorage.getItem('token');
@@ -42,7 +47,8 @@ function App(): React.ReactElement {
 					navigate(location.state.from, {
 						replace: true,
 					});
-				} if (localStorage.getItem('path')) {
+				}
+				if (localStorage.getItem('path')) {
 					const path = localStorage.getItem('path') as string;
 					navigate(path);
 				} else {
@@ -70,11 +76,11 @@ function App(): React.ReactElement {
 					<Route path='shop/:id' element={<ShopSinglPageProduct />} />
 					<Route
 						path='account_page'
-						element={(
+						element={
 							<RequireAuthorisation>
 								<PrivateAccountPage />
 							</RequireAuthorisation>
-						)}
+						}
 					>
 						<Route index element={<UserDashboard />} />
 						<Route path='orders' element={<Order />} />

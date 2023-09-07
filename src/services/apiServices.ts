@@ -213,6 +213,30 @@ export async function checkToken(token: string): Promise<{ email: string; active
 
 	// return customer;
 }
+export async function checkAnonimousToken(
+	token: string,
+): Promise<{ email: string; active: string } | void> {
+	const url = `${AUTH_URL}/oauth/introspect?token=${token}`;
+	const headers = {
+		'Content-Type': 'application/json',
+		Authorization:
+			'Basic Y1NuZjhlM3RLSllqMmhmdm1uc0E5UmtMOnJNLXExemFGTDl0dVRvUUdQV3E4ZlVQX2piOEY0aW9O',
+	};
+	const data = '';
+
+	await axios
+		.post(url, data, {
+			headers,
+		})
+		.then((response) => {
+			if (response.data.active === false) {
+				getAnonimousToken();
+			}
+		})
+		.catch((error) => {
+			console.log(error);
+		});
+}
 
 export function getFilter(limit = 9, offset = 0, filter: string): Promise<void | IProduct[]> {
 	// eslint-disable-line consistent-return
@@ -600,5 +624,58 @@ export function addAddress(addressData: IAddress) {
 			setTimeout(() => {
 				store.dispatch(hideModal());
 			}, 5000);
+		});
+}
+
+export function createCart() {
+	let token = '';
+	if (!localStorage.getItem('token')) {
+		token = localStorage.getItem('anonimous') as string;
+	} else {
+		token = localStorage.getItem('token') as string;
+	}
+	const data = JSON.stringify({
+		currency: 'EUR',
+	});
+	const url = 'https://api.europe-west1.gcp.commercetools.com/glitter-magazine/me/carts';
+	const headers = {
+		'Content-Type': 'application/json',
+		Authorization: `Bearer ${token}`,
+	};
+
+	axios
+		.post(url, data, {
+			headers,
+		})
+		.then((response) => {
+			console.log(JSON.stringify(response.data));
+		})
+		.catch((error) => {
+			console.log(error);
+		});
+}
+export function getCart() {
+	let token = '';
+	if (!localStorage.getItem('token')) {
+		token = localStorage.getItem('anonimous') as string;
+	} else {
+		token = localStorage.getItem('token') as string;
+	}
+	const url = 'https://api.europe-west1.gcp.commercetools.com/glitter-magazine/me/active-cart';
+
+	const headers = {
+		'Content-Type': 'application/json',
+		Authorization: `Bearer ${token}`,
+	};
+
+	axios
+		.get(url, {
+			headers,
+		})
+		.then((response) => {
+			console.log(JSON.stringify(response.data));
+		})
+		.catch(() => {
+			createCart();
 		});
 }
