@@ -1,14 +1,19 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { getProductForId } from '../../services/apiServices';
 import CarouselCompound from '../../components/slider/carouselCompound/carouselCompound';
 import style from './singlPageShop.module.scss';
 import { IProductbyId } from '../../utils/types';
-import LoginButton from '../../components/buttons/loginButton';
+import SliderModal from '../../components/modal/sliderModal';
+import SubmitButton from '../../components/buttons/submitButton';
 
 export default function ShopSinglPageProduct(): React.ReactElement {
 	const { id } = useParams(); // получаем параметры ссылки
 	// два параметра: 1)куда перенаправить пользователя 2)
+	const [productCout, setProductCount] = useState(1);
+	const [modalActive, setModalActive] = useState(false);
 	const [product, setProduct] = useState<IProductbyId>({
 		name: '',
 		images: [''],
@@ -24,6 +29,17 @@ export default function ShopSinglPageProduct(): React.ReactElement {
 		sku: '',
 	});
 	// const goForward = () => navigate(1); // вперёд по истории
+
+	const handleCoutPlus = (count: number) => {
+		setProductCount(count + 1);
+		console.log(productCout);
+	};
+	const handleCoutMinus = (count: number) => {
+		if (count > 1) {
+			setProductCount(count - 1);
+			console.log(productCout);
+		}
+	};
 
 	useEffect(() => {
 		if (id) {
@@ -50,7 +66,13 @@ export default function ShopSinglPageProduct(): React.ReactElement {
 							{product.images.map((image, index) => (
 								<CarouselCompound.CarouselPage key={id ? id + index : id}>
 									<div className={`${style.item}`}>
-										<img src={image} alt='' />
+										<img
+											onClick={() => {
+												setModalActive(true);
+											}}
+											src={image}
+											alt=''
+										/>
 									</div>
 								</CarouselCompound.CarouselPage>
 							))}
@@ -60,12 +82,31 @@ export default function ShopSinglPageProduct(): React.ReactElement {
 				<div className={style.productBody}>
 					<p className={style.productName}>{product.name}</p>
 					<div className={style.price}>
-						{product.price} {product.currencyCode}
+						{product.discount !== 'NaN' ? (
+							<>
+								{product.discount} {product.currencyCode}{' '}
+								<span className={style.lineThrough}>
+									{product.price} {product.currencyCode}
+								</span>
+							</>
+						) : (
+							`${product.price} ${product.currencyCode}`
+						)}
 					</div>
 					<div className={style.description}>{product.description}</div>
 					<div className={style.addToCartBlock}>
-						<div className={style.counter}>Counter</div>
-						<LoginButton value='Add to Cart' />
+						<div className={style.counter}>
+							<button onClick={() => handleCoutMinus(productCout)} type='button'>
+								-
+							</button>
+							<input onChange={() => 0} value={productCout} type='number' />
+							<button onClick={() => handleCoutPlus(productCout)} type='button'>
+								+
+							</button>
+						</div>
+						<div className={style.addtoCartButton}>
+							<SubmitButton value='Add to Cart' />
+						</div>
 						<p className={style.skuMobile}>
 							SKU: <span>{product.sku}</span>
 						</p>
@@ -92,6 +133,20 @@ export default function ShopSinglPageProduct(): React.ReactElement {
 					</li>
 				</ul>
 			</div>
+			<SliderModal active={modalActive} setActive={setModalActive}>
+				<CarouselCompound>
+					{product.images.map((image, index) => (
+						<CarouselCompound.CarouselPage key={id ? id + (index + 10) : id}>
+							<div className={`${style.item}`}>
+								<img src={image} alt='' />
+							</div>
+						</CarouselCompound.CarouselPage>
+					))}
+				</CarouselCompound>
+				<Link key={id} to={`/shop/${id}`}>
+					<div className={style.showDetailsModal} />
+				</Link>
+			</SliderModal>
 		</div>
 	);
 }

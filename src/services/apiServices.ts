@@ -582,13 +582,11 @@ export function doRequest(actionData: IActionData[], url: string) {
 		version,
 		actions: actionData,
 	};
-	console.log('file: apiServices.ts:574 ~ doRequest ~ data:', data);
 	return axios
 		.post(preparedUrl, data, {
 			headers,
 		})
 		.then((response) => {
-			console.log('file: apiServices.ts:624 ~ .then ~ response:', response);
 			const responseData = response.data;
 			localStorage.setItem('userData', JSON.stringify(responseData));
 			store.dispatch(
@@ -678,6 +676,18 @@ export function addShippingAddressId(addressId: string) {
 			addressId,
 		},
 	];
+
+	return doRequest(data, CUSTOMER_URL);
+}
+
+export function removeAddress(addressId: string) {
+	const data = [
+		{
+			action: 'removeAddress',
+			addressId,
+		},
+	];
+	console.log('file: apiServices.ts:661 ~ setDefaultBillingAddress:', data);
 
 	return doRequest(data, CUSTOMER_URL);
 }

@@ -23,7 +23,6 @@ export default function LayoutUserPage(): React.ReactElement {
 			<div className={style.content}>
 				<nav className={style.navigation}>
 					<NavLink to='/account_page' className={style.user__nav_link}>Dashboard</NavLink>
-					<NavLink to='/account_page/orders' className={style.user__nav_link}>Orders</NavLink>
 					<NavLink to='/account_page/addresses' className={style.user__nav_link}>Addresses</NavLink>
 					<NavLink to='/account_page/account-details' className={style.user__nav_link}>Account details</NavLink>
 					<NavLink to='/' className={style.user__nav_link} onClick={handleLogout}>Logout</NavLink>

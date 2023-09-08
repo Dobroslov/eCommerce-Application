@@ -13,7 +13,6 @@ import ShopSinglPageProduct from '../pages/singlPageShop/singlPageShop';
 
 import PrivateAccountPage from '../pages/userPageProfile/userPageProfile';
 import UserDashboard from '../pages/userPageProfile/userDashboard/userDashBoard';
-import Order from '../pages/userPageProfile/order/order';
 import AccountDetails from '../pages/userPageProfile/accountDetails/accountDetails';
 import Addresses from '../pages/userPageProfile/address/address';
 import NotFoundPage from '../pages/notFoundPage/notFoundPage';
@@ -77,7 +76,6 @@ function App(): React.ReactElement {
 						)}
 					>
 						<Route index element={<UserDashboard />} />
-						<Route path='orders' element={<Order />} />
 						<Route path='addresses' element={<Addresses />} />
 						<Route path='account-details' element={<AccountDetails />} />
 					</Route>

@@ -163,3 +163,9 @@
     @include respons-property(padding-bottom, 20, 34);
     }
 }
+
+.lineThrough {
+  text-decoration: line-through;
+  color: #000;
+  opacity: 0.5;
+}

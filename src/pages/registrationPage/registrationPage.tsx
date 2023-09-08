@@ -37,36 +37,6 @@ export default function RegistrationPage(): React.ReactElement {
 		}));
 	};
 
-	// const handleInputChange = (value: string, id: string) => {
-	// 	// Клонируем текущее состояние, чтобы не изменять его напрямую
-	// 	const updatedData = {
-	// 		...registrationFormData,
-	// 	};
-
-	// 	switch (id) {
-	// 		case 'firstName':
-	// 			updatedData.firstName = value;
-	// 			break;
-	// 		case 'lastName':
-	// 			updatedData.lastName = value;
-	// 			break;
-	// 		case 'email':
-	// 			updatedData.email = value;
-	// 			break;
-	// 		case 'date':
-	// 			updatedData.dateOfBirth = value;
-	// 			break;
-	// 		case 'password':
-	// 			updatedData.password = value;
-	// 			break;
-	// 		default:
-	// 			break;
-	// 	}
-
-	// 	// Обновляем состояние с обновленными данными
-	// 	setRegistrationFormData(updatedData);
-	// };
-
 	return (
 		<div className={style.registration}>
 			<div className={`${style.container} container`}>

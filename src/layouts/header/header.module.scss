@@ -50,6 +50,12 @@
 		cursor: pointer;
 	}
 
+	.button {
+		border: none;
+		background-color: transparent;
+		cursor: pointer;
+	}
+
 	input {
 		border: none;
 		outline: none;
@@ -110,6 +116,22 @@
 			}
 
 			button {
+				color: #696969;
+				display: block;
+				width: 20px;
+				height: 20px;
+				background-position: center;
+				background-repeat: no-repeat;
+				background-size: contain;
+
+				&:hover {
+					color: #000000;
+					transform: scale(1.4);
+					transition: transform 0.3s;
+				}
+			}
+
+			.button {
 				color: #696969;
 				display: block;
 				width: 20px;
