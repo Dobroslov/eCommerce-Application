@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import React, { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { getAnonimousToken, getFilter } from '../../services/apiServices';
 import { IProduct } from '../../utils/types';
+import SubmitButton from '../../components/buttons/submitButton';
 
 import style from './cart.module.scss';
 
@@ -58,26 +60,30 @@ function CartPage() {
 				<div className={style.cartList}>
 					{products.map((product, index) => (
 						<div className={style.product}>
-							<img src={product.image} alt='' />
-							<div className={style.productBody}>
-								<div className={style.productInfo}>
-									<div className={style.productName}>{product.name}</div>
-									<div className={style.productDescription}>{product.description}</div>
-									<div className={style.price}>
-										{' '}
-										{product.discount !== 'NaN' ? (
-											<>
-												{product.discount} {product.currencyCode}{' '}
-												<span className={style.lineThrough}>
-													{product.price} {product.currencyCode}
-												</span>
-											</>
-										) : (
-											`${product.price} ${product.currencyCode}`
-										)}
+							<div>
+								<img src={product.image} alt='' />
+								<div className={style.productBody}>
+									<div className={style.productInfo}>
+										<div className={style.productName}>{product.name}</div>
+										<div className={style.productDescription}>{product.description}</div>
+										<div className={style.price}>
+											{' '}
+											{product.discount !== 'NaN' ? (
+												<>
+													{product.discount} {product.currencyCode}{' '}
+													<span className={style.lineThrough}>
+														{product.price} {product.currencyCode}
+													</span>
+												</>
+											) : (
+												`${product.price} ${product.currencyCode}`
+											)}
+										</div>
 									</div>
 								</div>
-								<div className={style.counterMobile}>
+							</div>
+							<div className={style.buttons}>
+								<div className={style.counter}>
 									<button onClick={() => handleMinus(index)} type='button'>
 										-
 									</button>
@@ -90,25 +96,32 @@ function CartPage() {
 										+
 									</button>
 								</div>
-							</div>
-							<div className={style.counter}>
-								<button onClick={() => handleMinus(index)} type='button'>
-									-
-								</button>
-								<input
-									ref={usernameRefs.current[index]}
-									onChange={(e) => e.target.value}
-									type='number'
-								/>
-								<button onClick={() => handlePlus(index)} type='button'>
-									+
+								<button type='button' className={style.deleteButton}>
+									✖
 								</button>
 							</div>
 						</div>
 					))}
+					<div className={style.clearCoupon}>
+						<SubmitButton value='CLEAR CART' />
+						<div className={style.coupon}>
+							<div className={style.inputBody}>
+								<div className={style.inputSearch}>
+									<input className={style.input} type='text' placeholder='Coupon code' />
+								</div>
+								<i className={style.underline} />
+							</div>
+							<SubmitButton value='APPLY COUPON' />
+						</div>
+					</div>
 				</div>
 				<div className={style.cartTotal}>
-					<p>Cart totals</p>
+					<p className={style.totalTitle}>Cart totals</p>
+					<div className={style.totalPrice}>
+						<p>TOTAL</p>
+						<p>300.00 EUR</p>
+					</div>
+					<SubmitButton value='PROCEED TO CHECKOUT' />
 				</div>
 			</div>
 		</div>

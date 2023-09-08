@@ -48,6 +48,10 @@ export default function Shop(): React.ReactElement {
 		localStorage.setItem('offset', (prevOffset - 9).toString());
 	};
 
+	const handleId = (productId: string) => {
+		console.log(productId);
+	};
+
 	useEffect(() => {
 		const localAnonymousToken = localStorage.getItem('anonimous');
 		if (!localAnonymousToken) {
@@ -114,7 +118,11 @@ export default function Shop(): React.ReactElement {
 									`${product.price} ${product.currencyCode}`
 								)}
 							</div>
-							<button className={style.addtoCartButton} type='button'>
+							<button
+								onClick={() => handleId(product.id)}
+								className={style.addtoCartButton}
+								type='button'
+							>
 								Add to cart
 							</button>
 						</div>
