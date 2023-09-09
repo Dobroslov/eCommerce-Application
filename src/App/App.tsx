@@ -36,7 +36,12 @@ function App(): React.ReactElement {
 				getAnonimousToken();
 			}
 		}
-		getCart();
+
+		(async function Cart() {
+			const cart = await getCart();
+			console.log(cart);
+		}());
+
 		const token = localStorage.getItem('token');
 		const userString = localStorage.getItem('userData');
 

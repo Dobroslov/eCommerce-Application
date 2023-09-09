@@ -19,7 +19,7 @@ export interface DataAction {
 
 export function hideModal(): ModalAction {
 	return {
-		type: ModalActionTypes.HideModal,
+		type: ModalActionTypes.ShowModal,
 	};
 }
 

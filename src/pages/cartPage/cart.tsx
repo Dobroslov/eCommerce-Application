@@ -1,17 +1,19 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import React, { MutableRefObject, useEffect, useRef, useState } from 'react';
-import { getAnonimousToken, getFilter } from '../../services/apiServices';
-import { IProduct } from '../../utils/types';
+import { getCart } from '../../services/apiServices';
+import { IProductCart } from '../../utils/types';
 import SubmitButton from '../../components/buttons/submitButton';
 
 import style from './cart.module.scss';
 
 function CartPage() {
 	const localFilter = localStorage.getItem('filter');
-	const localOffset = Number(localStorage.getItem('offset'));
-	const [products, setProducts] = useState<IProduct[]>([]);
+	// const localOffset = Number(localStorage.getItem('offset'));
+	const [products, setProducts] = useState<IProductCart[]>([]);
+	const [total, setTotal] = useState<string>('');
+	const [currency, setCurrency] = useState<string>('');
 	const [filter] = useState(localFilter || '&sort=createdAt+asc');
-	const [offset] = useState(localOffset || 0);
+	// const [offset] = useState(localOffset || 0);
 	const usernameRefs = useRef<MutableRefObject<HTMLInputElement | null>[] | null[]>([]);
 	usernameRefs.current = products.map(() => React.createRef());
 
@@ -35,22 +37,29 @@ function CartPage() {
 	// };
 
 	useEffect(() => {
-		const localAnonymousToken = localStorage.getItem('anonimous');
-		if (!localAnonymousToken) {
-			getAnonimousToken().then(() => {
+		getCart().then((data) => {
+			if (data) {
+				setProducts(data.productArr);
+				setTotal(data.totalPrice);
+				setCurrency(data.currencyCode);
+			}
+		});
+		/*	const localAnonymousToken = localStorage.getItem('anonimous');
+			if (!localAnonymousToken) {
+				getAnonimousToken().then(() => {
+					getFilter(9, offset || localOffset, filter)
+						.then((data) => {
+							if (data) setProducts(data);
+						})
+						.catch((error) => error);
+				});
+			} else {
 				getFilter(9, offset || localOffset, filter)
 					.then((data) => {
 						if (data) setProducts(data);
 					})
 					.catch((error) => error);
-			});
-		} else {
-			getFilter(9, offset || localOffset, filter)
-				.then((data) => {
-					if (data) setProducts(data);
-				})
-				.catch((error) => error);
-		}
+			} */
 	}, [filter]);
 
 	return (
@@ -65,19 +74,9 @@ function CartPage() {
 								<div className={style.productBody}>
 									<div className={style.productInfo}>
 										<div className={style.productName}>{product.name}</div>
-										<div className={style.productDescription}>{product.description}</div>
+										<div className={style.productDescription}>Material:{product.metall}/Weight:{product.weight}g</div>
 										<div className={style.price}>
-											{' '}
-											{product.discount !== 'NaN' ? (
-												<>
-													{product.discount} {product.currencyCode}{' '}
-													<span className={style.lineThrough}>
-														{product.price} {product.currencyCode}
-													</span>
-												</>
-											) : (
-												`${product.price} ${product.currencyCode}`
-											)}
+											`${product.price} ${product.currencyCode}`
 										</div>
 									</div>
 								</div>
@@ -91,6 +90,7 @@ function CartPage() {
 										ref={usernameRefs.current[index]}
 										onChange={(e) => e.target.value}
 										type='number'
+										value={product.quantity}
 									/>
 									<button onClick={() => handlePlus(index)} type='button'>
 										+
@@ -119,7 +119,7 @@ function CartPage() {
 					<p className={style.totalTitle}>Cart totals</p>
 					<div className={style.totalPrice}>
 						<p>TOTAL</p>
-						<p>300.00 EUR</p>
+						<p>{total} {currency}</p>
 					</div>
 					<SubmitButton value='PROCEED TO CHECKOUT' />
 				</div>

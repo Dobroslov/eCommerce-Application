@@ -10,9 +10,13 @@ import {
 	IUpdateUserData,
 	IUserDataRespons,
 	ICart,
+	IProductCart,
+	ICartData,
 } from '../utils/types';
 import store from '../store/store';
 import { hideModal, showModal } from '../store/actions';
+import errorModal from '../../../../../../public/assets/svg/error.svg';
+import successModal from '../../../../../../public/assets/svg/success.svg';
 
 const PROJECT_KEY = 'glitter-magazine';
 const API_URL = 'https://api.europe-west1.gcp.commercetools.com';
@@ -78,7 +82,7 @@ export async function createCustomer(
 			showModal({
 				title: 'Success',
 				description: `User ${user.customer.firstName} ${user.customer.lastName} successfully registered`,
-				color: 'rgb(60, 179, 113,0.5)',
+				url: successModal,
 			}),
 		);
 
@@ -97,7 +101,7 @@ export async function createCustomer(
 				showModal({
 					title: 'Fault',
 					description: error.response?.data.message,
-					color: 'rgb(227, 23, 23,0.5)',
+					url: errorModal,
 				}),
 			);
 
@@ -161,7 +165,7 @@ export async function getToken(params: IUserLogin): Promise<void> {
 					showModal({
 						title: 'Success',
 						description: `Welcome ${user.firstName} ${user.lastName} `,
-						color: 'rgb(60, 179, 113,0.5)',
+						url: successModal,
 					}),
 				);
 			} else {
@@ -177,7 +181,7 @@ export async function getToken(params: IUserLogin): Promise<void> {
 				showModal({
 					title: 'Fault',
 					description: error.response?.data.message,
-					color: 'rgb(227, 23, 23,0.5)',
+					url: errorModal,
 				}),
 			);
 			setTimeout(() => {
@@ -185,7 +189,28 @@ export async function getToken(params: IUserLogin): Promise<void> {
 			}, 5000);
 		});
 }
+/* export async function refreshToken(params: IUserLogin): Promise<void> {
+	const { email, password } = params;
+	const url = `${AUTH_URL}/oauth/${PROJECT_KEY}/customers/token?grant_type=password&username=${email}&password=${password}`;
+	const headers = {
+		Authorization:
+			'Basic Y1NuZjhlM3RLSllqMmhmdm1uc0E5UmtMOnJNLXExemFGTDl0dVRvUUdQV3E4ZlVQX2piOEY0aW9O',
+	};
+	const data = '';
 
+	await axios
+		.post(url, data, {
+			headers,
+		})
+		.then(async (response) => {
+			localStorage.setItem('token', response.data.access_token);
+			await getCustomerForId(email,password);
+		})
+		.catch((error) => {
+			console.log('file: apiServices.ts:170 ~ refreshToken ~ error:', error);
+		});
+}
+*/
 export async function checkToken(token: string): Promise<{ active: string } | void> {
 	const url = `${AUTH_URL}/oauth/introspect?token=${token}`;
 	const headers = HEADERS_BASIC;
@@ -232,7 +257,7 @@ export async function checkAnonimousToken(
 export async function getFilter(limit = 9, offset = 0, filter: string): Promise<void | IProduct[]> {
 	// eslint-disable-line consistent-return
 	const productsArr: IProduct[] = [];
-	const url = `${API_URL}/${PROJECT_KEY}/search?fuzzy=true&limit=${limit}&offset=${offset}${filter}`;
+	const url = `${API_URL}/${PROJECT_KEY}/product-projections/search?fuzzy=true&limit=${limit}&offset=${offset}${filter}`;
 	const headers = getHeaders();
 
 	const products = await axios
@@ -343,7 +368,7 @@ export async function changePassword({ oldPassword, newPassword }: IUpdatePasswo
 				showModal({
 					title: 'Success',
 					description: 'Password changed successfully',
-					color: 'rgb(60, 179, 113,0.5)',
+					url: successModal,
 				}),
 			);
 			setTimeout(() => {
@@ -355,7 +380,7 @@ export async function changePassword({ oldPassword, newPassword }: IUpdatePasswo
 				showModal({
 					title: 'Fault',
 					description: error.response?.data.message,
-					color: 'rgb(227, 23, 23,0.5)',
+					url: errorModal,
 				}),
 			);
 			setTimeout(() => {
@@ -403,7 +428,7 @@ export async function changeCustomerValues({ firstName, lastName, email, dateOfB
 				showModal({
 					title: 'Success',
 					description: 'Data changed successfully',
-					color: 'rgb(60, 179, 113,0.5)',
+					url: successModal,
 				}),
 			);
 			setTimeout(() => {
@@ -416,7 +441,7 @@ export async function changeCustomerValues({ firstName, lastName, email, dateOfB
 				showModal({
 					title: 'Fault',
 					description: error.response?.data.message,
-					color: 'rgb(227, 23, 23,0.5)',
+					url: errorModal,
 				}),
 			);
 			setTimeout(() => {
@@ -452,7 +477,7 @@ export async function changeAddress(addressId: string, addressData: IAddress) {
 				showModal({
 					title: 'Success',
 					description: 'Address changed successfully',
-					color: 'rgb(60, 179, 113,0.5)',
+					url: successModal,
 				}),
 			);
 			setTimeout(() => {
@@ -464,7 +489,7 @@ export async function changeAddress(addressId: string, addressData: IAddress) {
 				showModal({
 					title: 'Fault',
 					description: error.response?.data.message,
-					color: 'rgb(227, 23, 23,0.5)',
+					url: errorModal,
 				}),
 			);
 			setTimeout(() => {
@@ -508,7 +533,7 @@ export async function addressActions(addressAction: string, addressId: string) {
 				showModal({
 					title: 'Success',
 					description: 'Data changed successfully',
-					color: 'rgb(60, 179, 113,0.5)',
+					url: successModal,
 				}),
 			);
 			setTimeout(() => {
@@ -520,7 +545,7 @@ export async function addressActions(addressAction: string, addressId: string) {
 				showModal({
 					title: 'Fault',
 					description: error.response?.data.message,
-					color: 'rgb(227, 23, 23,0.5)',
+					url: errorModal,
 				}),
 			);
 			setTimeout(() => {
@@ -555,7 +580,7 @@ export async function addAddress(addressData: IAddress) {
 				showModal({
 					title: 'Success',
 					description: 'Data changed successfully',
-					color: 'rgb(60, 179, 113,0.5)',
+					url: successModal,
 				}),
 			);
 			setTimeout(() => {
@@ -568,7 +593,7 @@ export async function addAddress(addressData: IAddress) {
 				showModal({
 					title: 'Fault',
 					description: error.response?.data.message,
-					color: 'rgb(227, 23, 23,0.5)',
+					url: errorModal,
 				}),
 			);
 			setTimeout(() => {
@@ -589,7 +614,7 @@ export async function createCart() {
 			headers,
 		})
 		.then((response) => {
-			console.log(JSON.stringify(response.data));
+			console.log(response.data);
 			const cartData = {
 				id: response.data.id,
 				version: response.data.version,
@@ -604,36 +629,65 @@ export async function getCart() {
 	const url = `${API_URL}/${PROJECT_KEY}/me/active-cart`;
 	const headers = getHeaders();
 
-	await axios
+	const cart: void | ICartData = await axios
 		.get(url, {
 			headers,
 		})
 		.then((response) => {
+			const productArr: IProductCart[] = [];
+			const totalPrice = response.data.totalPrice.centAmount;
+			const { currencyCode } = response.data.totalPrice;
+			const totalQuantity = response.data.totalLineItemQuantity;
+			response.data.lineItems.forEach((item: {
+				id: string;
+				name: { [x: string]: string; };
+				variant: {
+					attributes: { value: string }[];
+					images: { url: string; }[];
+				};
+				totalPrice: { centAmount: number; };
+				quantity: number;
+			}) => {
+				const productCart: IProductCart = {
+					id: item.id,
+					name: item.name['en-US'],
+					weight: item.variant.attributes[1].value,
+					metall: item.variant.attributes[4].value[0],
+					image: item.variant.images[0].url,
+					currencyCode: response.data.totalPrice.currencyCode,
+					price: (item.totalPrice.centAmount / 100).toFixed(2) as string,
+					quantity: item.quantity,
+				};
+				productArr.push(productCart);
+			});
 			console.log(response.data);
+			console.log(productArr);
 			const cartData = {
 				id: response.data.id,
 				version: response.data.version,
 			};
 			localStorage.setItem('dataCart', JSON.stringify(cartData));
+			return { productArr, totalPrice, currencyCode, totalQuantity };
 		})
 		.catch(() => {
 			createCart();
 		});
+	return cart;
 }
 
-export async function addProductForCart(productId: string, quantity: number) {
+export async function addProductForCart(productId: string | undefined, quantity: number) {
 	const cartData = JSON.parse(localStorage.getItem('dataCart') as string);
-	const data = JSON.stringify({
-		version: `${cartData.version}`,
+	const data = {
+		version: cartData.version,
 		actions: [
 			{
 				action: 'addLineItem',
 				productId: `${productId}`,
 				variantId: 1,
-				quantity: Number(`${quantity}`),
+				quantity,
 			},
 		],
-	});
+	};
 	const url = `${API_URL}/${PROJECT_KEY}/me/carts/${cartData.id}`;
 	const headers = getHeaders();
 
@@ -642,12 +696,21 @@ export async function addProductForCart(productId: string, quantity: number) {
 			headers,
 		})
 		.then((response) => {
-			console.log(JSON.stringify(response.data));
 			const cart: ICart = {
 				id: response.data.id,
 				version: response.data.version,
 			};
 			localStorage.setItem('dataCart', JSON.stringify(cart));
+			store.dispatch(
+				showModal({
+					title: 'Success',
+					description: 'the product has been added to the cart',
+					url: successModal,
+				}),
+			);
+			setTimeout(() => {
+				store.dispatch(hideModal());
+			}, 5000);
 		})
 		.catch((error) => {
 			console.log(error);
