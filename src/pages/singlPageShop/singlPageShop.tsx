@@ -32,13 +32,15 @@ export default function ShopSinglPageProduct(): React.ReactElement {
 
 	const handleCoutPlus = (count: number) => {
 		setProductCount(count + 1);
-		console.log(productCout);
 	};
 	const handleCoutMinus = (count: number) => {
 		if (count > 1) {
 			setProductCount(count - 1);
-			console.log(productCout);
 		}
+	};
+
+	const handleItem = () => {
+		console.log(`Count: ${productCout} id: ${id}`);
 	};
 
 	useEffect(() => {
@@ -105,7 +107,7 @@ export default function ShopSinglPageProduct(): React.ReactElement {
 							</button>
 						</div>
 						<div className={style.addtoCartButton}>
-							<SubmitButton value='Add to Cart' />
+							<SubmitButton onclick={handleItem} value='Add to Cart' />
 						</div>
 						<p className={style.skuMobile}>
 							SKU: <span>{product.sku}</span>
