@@ -15,8 +15,8 @@ import {
 } from '../utils/types';
 import store from '../store/store';
 import { hideModal, showModal } from '../store/actions';
-import errorModal from '../../../../../../public/assets/svg/error.svg';
-import successModal from '../../../../../../public/assets/svg/success.svg';
+import errorModal from '../../public/assets/svg/error.svg';
+import successModal from '../../public/assets/svg/success.svg';
 
 const PROJECT_KEY = 'glitter-magazine';
 const API_URL = 'https://api.europe-west1.gcp.commercetools.com';
@@ -115,7 +115,10 @@ export async function createCustomer(
 	}
 }
 
-export async function getCustomerForId(email: string, password: string | undefined): Promise<IUserDataRespons | undefined> {
+export async function getCustomerForId(
+	email: string,
+	password: string | undefined,
+): Promise<IUserDataRespons | undefined> {
 	const cartData = JSON.parse(localStorage.getItem('dataCart') as string);
 	const data = JSON.stringify({
 		email: `${email}`,
@@ -128,10 +131,9 @@ export async function getCustomerForId(email: string, password: string | undefin
 	const url = `${API_URL}/${PROJECT_KEY}/login`;
 	const headers = getHeaders();
 	try {
-		const response = await axios
-			.post(url, data, {
-				headers,
-			});
+		const response = await axios.post(url, data, {
+			headers,
+		});
 		const responseData: IUserDataRespons = response.data.customer;
 		const cart: ICart = {
 			id: response.data.cart.id,
@@ -326,9 +328,9 @@ export async function getProductForId(id: string): Promise<void | IProductbyId> 
 				standard: response.data.masterVariant.attributes[3].value,
 				metall: response.data.masterVariant.attributes[4].value[0],
 				discount: // eslint-disable-next-line no-unsafe-optional-chaining
-					(response.data.masterVariant.prices[0].discounted?.value.centAmount / 100).toFixed(
-						2,
-					) as string,
+				(response.data.masterVariant.prices[0].discounted?.value.centAmount / 100).toFixed(
+					2,
+				) as string,
 				sku: response.data.masterVariant.sku,
 			};
 			return productData;
@@ -352,9 +354,10 @@ export async function changePassword({ oldPassword, newPassword }: IUpdatePasswo
 	const headers = getHeaders();
 	const url = `${API_URL}/${PROJECT_KEY}/customers/password`;
 
-	await axios.post(url, data, {
-		headers,
-	})
+	await axios
+		.post(url, data, {
+			headers,
+		})
 		.then((response) => {
 			const responseData = response.data;
 			localStorage.setItem('userData', JSON.stringify(responseData));
@@ -389,7 +392,12 @@ export async function changePassword({ oldPassword, newPassword }: IUpdatePasswo
 		});
 }
 
-export async function changeCustomerValues({ firstName, lastName, email, dateOfBirth }: IUpdateUserData) {
+export async function changeCustomerValues({
+	firstName,
+	lastName,
+	email,
+	dateOfBirth,
+}: IUpdateUserData) {
 	const user = localStorage.getItem('userData') as string;
 	const { id, version } = JSON.parse(user);
 	const headers = getHeaders();
@@ -638,28 +646,30 @@ export async function getCart() {
 			const totalPrice = response.data.totalPrice.centAmount;
 			const { currencyCode } = response.data.totalPrice;
 			const totalQuantity = response.data.totalLineItemQuantity;
-			response.data.lineItems.forEach((item: {
-				id: string;
-				name: { [x: string]: string; };
-				variant: {
-					attributes: { value: string }[];
-					images: { url: string; }[];
-				};
-				totalPrice: { centAmount: number; };
-				quantity: number;
-			}) => {
-				const productCart: IProductCart = {
-					id: item.id,
-					name: item.name['en-US'],
-					weight: item.variant.attributes[1].value,
-					metall: item.variant.attributes[4].value[0],
-					image: item.variant.images[0].url,
-					currencyCode: response.data.totalPrice.currencyCode,
-					price: (item.totalPrice.centAmount / 100).toFixed(2) as string,
-					quantity: item.quantity,
-				};
-				productArr.push(productCart);
-			});
+			response.data.lineItems.forEach(
+				(item: {
+					id: string;
+					name: { [x: string]: string };
+					variant: {
+						attributes: { value: string }[];
+						images: { url: string }[];
+					};
+					totalPrice: { centAmount: number };
+					quantity: number;
+				}) => {
+					const productCart: IProductCart = {
+						id: item.id,
+						name: item.name['en-US'],
+						weight: item.variant.attributes[1].value,
+						metall: item.variant.attributes[4].value[0],
+						image: item.variant.images[0].url,
+						currencyCode: response.data.totalPrice.currencyCode,
+						price: (item.totalPrice.centAmount / 100).toFixed(2) as string,
+						quantity: item.quantity,
+					};
+					productArr.push(productCart);
+				},
+			);
 			console.log(response.data);
 			console.log(productArr);
 			const cartData = {
@@ -705,6 +715,47 @@ export async function addProductForCart(productId: string | undefined, quantity:
 				showModal({
 					title: 'Success',
 					description: 'the product has been added to the cart',
+					url: successModal,
+				}),
+			);
+			setTimeout(() => {
+				store.dispatch(hideModal());
+			}, 5000);
+		})
+		.catch((error) => {
+			console.log(error);
+		});
+}
+
+export async function changeQuantityProductForCart(itemId: string, quantity: number) {
+	const cartData = JSON.parse(localStorage.getItem('dataCart') as string);
+	const data = JSON.stringify({
+		version: cartData.version,
+		actions: [
+			{
+				action: 'changeLineItemQuantity',
+				lineItemId: `${itemId}`,
+				quantity,
+			},
+		],
+	});
+	const url = `${API_URL}/${PROJECT_KEY}/me/carts/${cartData.id}`;
+	const headers = getHeaders();
+
+	await axios
+		.post(url, data, {
+			headers,
+		})
+		.then((response) => {
+			const cart: ICart = {
+				id: response.data.id,
+				version: response.data.version,
+			};
+			localStorage.setItem('dataCart', JSON.stringify(cart));
+			store.dispatch(
+				showModal({
+					title: 'Success',
+					description: '+',
 					url: successModal,
 				}),
 			);
