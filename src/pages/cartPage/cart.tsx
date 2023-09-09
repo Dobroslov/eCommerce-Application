@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import React, { MutableRefObject, useEffect, useRef, useState } from 'react';
-import { getCart } from '../../services/apiServices';
+import { DeleteProductForCart, changeQuantityProductForCart, getCart } from '../../services/apiServices';
 import { IProductCart } from '../../utils/types';
 import SubmitButton from '../../components/buttons/submitButton';
 
@@ -17,15 +17,19 @@ function CartPage() {
 	const usernameRefs = useRef<MutableRefObject<HTMLInputElement | null>[] | null[]>([]);
 	usernameRefs.current = products.map(() => React.createRef());
 
-	const handlePlus = (index: number) => {
+	const handlePlus = (index: number, id: string) => {
 		let value = Number(usernameRefs.current[index]?.current?.value);
 		usernameRefs.current[index]!.current!.value = `${(value += 1)}`;
+		console.log(`value: ${value} id: ${id}`);
+		changeQuantityProductForCart(id, value);
 	};
-	const handleMinus = (index: number) => {
+	const handleMinus = (index: number, id: string) => {
 		let value = Number(usernameRefs.current[index]?.current?.value);
 		if (value > 1) {
 			usernameRefs.current[index]!.current!.value = `${(value -= 1)}`;
 		}
+		console.log(`value: ${value} id: ${id}`);
+		DeleteProductForCart(id);
 	};
 
 	// const handleResult = () => {
@@ -74,7 +78,9 @@ function CartPage() {
 								<div className={style.productBody}>
 									<div className={style.productInfo}>
 										<div className={style.productName}>{product.name}</div>
-										<div className={style.productDescription}>Material:{product.metall}/Weight:{product.weight}g</div>
+										<div className={style.productDescription}>
+											Material:{product.metall} / Weight:{product.weight} g
+										</div>
 										<div className={style.price}>
 											`${product.price} ${product.currencyCode}`
 										</div>
@@ -83,7 +89,7 @@ function CartPage() {
 							</div>
 							<div className={style.buttons}>
 								<div className={style.counter}>
-									<button onClick={() => handleMinus(index)} type='button'>
+									<button onClick={() => handleMinus(index, product.id)} type='button'>
 										-
 									</button>
 									<input
@@ -92,7 +98,7 @@ function CartPage() {
 										type='number'
 										value={product.quantity}
 									/>
-									<button onClick={() => handlePlus(index)} type='button'>
+									<button onClick={() => handlePlus(index, product.id)} type='button'>
 										+
 									</button>
 								</div>
@@ -119,7 +125,9 @@ function CartPage() {
 					<p className={style.totalTitle}>Cart totals</p>
 					<div className={style.totalPrice}>
 						<p>TOTAL</p>
-						<p>{total} {currency}</p>
+						<p>
+							{total} {currency}
+						</p>
 					</div>
 					<SubmitButton value='PROCEED TO CHECKOUT' />
 				</div>

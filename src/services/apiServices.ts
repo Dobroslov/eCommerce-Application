@@ -15,8 +15,8 @@ import {
 } from '../utils/types';
 import store from '../store/store';
 import { hideModal, showModal } from '../store/actions';
-import errorModal from '../../../../../../public/assets/svg/error.svg';
-import successModal from '../../../../../../public/assets/svg/success.svg';
+import errorModal from '../../public/assets/svg/error.svg';
+import successModal from '../../public/assets/svg/success.svg';
 
 const PROJECT_KEY = 'glitter-magazine';
 const API_URL = 'https://api.europe-west1.gcp.commercetools.com';
@@ -635,7 +635,7 @@ export async function getCart() {
 		})
 		.then((response) => {
 			const productArr: IProductCart[] = [];
-			const totalPrice = response.data.totalPrice.centAmount;
+			const totalPrice = (response.data.totalPrice.centAmount / 100).toFixed(2);
 			const { currencyCode } = response.data.totalPrice;
 			const totalQuantity = response.data.totalLineItemQuantity;
 			response.data.lineItems.forEach((item: {
@@ -705,6 +705,85 @@ export async function addProductForCart(productId: string | undefined, quantity:
 				showModal({
 					title: 'Success',
 					description: 'the product has been added to the cart',
+					url: successModal,
+				}),
+			);
+			setTimeout(() => {
+				store.dispatch(hideModal());
+			}, 5000);
+		})
+		.catch((error) => {
+			console.log(error);
+		});
+}
+
+export async function changeQuantityProductForCart(itemId: string, quantity: number) {
+	const cartData = JSON.parse(localStorage.getItem('dataCart') as string);
+	const data = JSON.stringify({
+		version: cartData.version,
+		actions: [
+			{
+				action: 'changeLineItemQuantity',
+				lineItemId: `${itemId}`,
+				quantity,
+			},
+		],
+	});
+	const url = `${API_URL}/${PROJECT_KEY}/me/carts/${cartData.id}`;
+	const headers = getHeaders();
+
+	await axios
+		.post(url, data, {
+			headers,
+		})
+		.then((response) => {
+			const cart: ICart = {
+				id: response.data.id,
+				version: response.data.version,
+			};
+			localStorage.setItem('dataCart', JSON.stringify(cart));
+			store.dispatch(
+				showModal({
+					title: 'Success',
+					description: '+',
+					url: successModal,
+				}),
+			);
+			setTimeout(() => {
+				store.dispatch(hideModal());
+			}, 5000);
+		})
+		.catch((error) => {
+			console.log(error);
+		});
+}
+
+export async function DeleteProductForCart(itemId: string) {
+	const cartData = JSON.parse(localStorage.getItem('dataCart') as string);
+	const url = `${API_URL}/${PROJECT_KEY}/me/carts/${cartData.id}`;
+	const headers = getHeaders();
+	const data = JSON.stringify({
+		version: cartData.version,
+		actions: [
+			{
+				action: 'removeLineItem',
+				lineItemId: itemId,
+			}],
+	});
+	await axios
+		.post(url, data, {
+			headers,
+		})
+		.then((response) => {
+			const cart: ICart = {
+				id: response.data.id,
+				version: response.data.version,
+			};
+			localStorage.setItem('dataCart', JSON.stringify(cart));
+			store.dispatch(
+				showModal({
+					title: 'Success',
+					description: 'delete',
 					url: successModal,
 				}),
 			);
