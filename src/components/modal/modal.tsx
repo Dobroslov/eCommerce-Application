@@ -27,14 +27,15 @@ function Modal(props: ModalProps) {
 		dispatchHideModal();
 	};
 	return (
-		<div
-			className={style.modal}
-			style={{
-				backgroundColor: `${modal.color}`,
-			}}
-		>
+		<div className={style.modal}>
 			<button type='button' aria-label='button' className={style.button} onClick={onCloseButtonClick} />
-			<h3 className={style.title}>{modal.title}</h3>
+			<h3 className={style.title}><span
+				className={style.ico}
+				style={{
+					backgroundImage: `url(${modal.url})`,
+				}}
+			/>{modal.title}
+			</h3>
 			<p className={style.text}>{modal.description}</p>
 
 		</div>

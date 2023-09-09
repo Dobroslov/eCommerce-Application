@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { getProductForId } from '../../services/apiServices';
+import { addProductForCart, getProductForId } from '../../services/apiServices';
 import CarouselCompound from '../../components/slider/carouselCompound/carouselCompound';
 import style from './singlPageShop.module.scss';
 import { IProductbyId } from '../../utils/types';
@@ -41,6 +41,7 @@ export default function ShopSinglPageProduct(): React.ReactElement {
 
 	const handleItem = () => {
 		console.log(`Count: ${productCout} id: ${id}`);
+		addProductForCart(id, productCout);
 	};
 
 	useEffect(() => {

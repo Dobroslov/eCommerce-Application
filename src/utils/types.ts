@@ -34,11 +34,17 @@ export interface ISubmitButton {
 export interface ModalProperties {
 	title: string;
 	description: string;
-	color: string;
+	url: string;
 }
 export interface ICart {
 	id:string,
 	version:string
+}
+export interface ICartData{
+		productArr: IProductCart[];
+		totalPrice: string;
+		currencyCode: string;
+		totalQuantity: string;
 }
 export interface IUserDataRespons {
 	id: string;
@@ -84,6 +90,17 @@ export interface IProduct {
 	currencyCode: string;
 	price: string;
 	discount: string;
+}
+
+export interface IProductCart {
+	id: string,
+	name: string,
+	weight: string,
+	metall:string,
+	image: string,
+	currencyCode: string,
+	price: string,
+	quantity: number
 }
 export interface IProductbyId {
 	name: string;
