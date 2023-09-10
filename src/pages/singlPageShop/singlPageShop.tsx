@@ -2,14 +2,31 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { addProductForCart, getProductForId } from '../../services/apiServices';
+import {
+	DeleteProductForCart,
+	addProductForCart,
+	getCart,
+	getProductForId,
+} from '../../services/apiServices';
 import CarouselCompound from '../../components/slider/carouselCompound/carouselCompound';
 import style from './singlPageShop.module.scss';
 import { IProductbyId } from '../../utils/types';
 import SliderModal from '../../components/modal/sliderModal';
 import SubmitButton from '../../components/buttons/submitButton';
 
+interface IidData {
+	item: string;
+	product: string;
+}
+
 export default function ShopSinglPageProduct(): React.ReactElement {
+	const localCart: IidData[] = JSON.parse(localStorage.getItem('productsCartId') as string);
+	const items: string[] = [];
+	const products: string[] = [];
+	localCart.forEach((item) => {
+		items.push(item.item);
+		products.push(item.product);
+	});
 	const { id } = useParams(); // получаем параметры ссылки
 	// два параметра: 1)куда перенаправить пользователя 2)
 	const [productCout, setProductCount] = useState(1);
@@ -40,8 +57,17 @@ export default function ShopSinglPageProduct(): React.ReactElement {
 	};
 
 	const handleItem = () => {
-		console.log(`Count: ${productCout} id: ${id}`);
-		addProductForCart(id, productCout);
+		if (id) {
+			console.log(`Count: ${productCout} id: ${id}`);
+			addProductForCart(id, productCout);
+		}
+	};
+
+	const handleRemoveItem = () => {
+		if (id) {
+			const index = products.indexOf(id);
+			DeleteProductForCart(items[index]);
+		}
 	};
 
 	useEffect(() => {
@@ -59,6 +85,23 @@ export default function ShopSinglPageProduct(): React.ReactElement {
 				});
 		}
 	}, [id]);
+
+	useEffect(() => {
+		if (id) {
+			getProductForId(id)
+				.then((data) => {
+					if (data) {
+						setProduct(data);
+						getCart();
+					} else {
+						console.error('No data received from API');
+					}
+				})
+				.catch((error) => {
+					console.error('API request failed:', error);
+				});
+		}
+	}, [products]);
 
 	return (
 		<div className={style.main}>
@@ -108,7 +151,11 @@ export default function ShopSinglPageProduct(): React.ReactElement {
 							</button>
 						</div>
 						<div className={style.addtoCartButton}>
-							<SubmitButton onclick={handleItem} value='Add to Cart' />
+							{id && products.includes(id) ? (
+								<SubmitButton onclick={handleRemoveItem} value='Remove from Cart' />
+							) : (
+								<SubmitButton onclick={handleItem} value='Add to Cart' />
+							)}
 						</div>
 						<p className={style.skuMobile}>
 							SKU: <span>{product.sku}</span>
