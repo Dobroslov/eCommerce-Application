@@ -94,6 +94,7 @@ export interface IProduct {
 
 export interface IProductCart {
 	id: string,
+	productId:string,
 	name: string,
 	weight: string,
 	metall:string,

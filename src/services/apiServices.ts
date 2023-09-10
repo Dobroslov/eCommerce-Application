@@ -648,6 +648,7 @@ export async function getCart() {
 			const totalQuantity = response.data.totalLineItemQuantity;
 			response.data.lineItems.forEach(
 				(item: {
+					productId: string;
 					id: string;
 					name: { [x: string]: string };
 					variant: {
@@ -659,6 +660,7 @@ export async function getCart() {
 				}) => {
 					const productCart: IProductCart = {
 						id: item.id,
+						productId: item.productId,
 						name: item.name['en-US'],
 						weight: item.variant.attributes[1].value,
 						metall: item.variant.attributes[4].value[0],
