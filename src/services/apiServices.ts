@@ -134,13 +134,15 @@ export async function getCustomerForId(email: string, password: string | undefin
 				headers,
 			});
 		const responseData: IUserDataRespons = response.data.customer;
-		const cart = {
-			id: response.data.id,
-			version: response.data.version,
-			quantity: response.data.totalLineItemQuantity,
+		const cart:ICart = {
+			id: response.data.cart.id,
+			version: response.data.cart.version,
+			quantity: response.data.cart.totalLineItemQuantity,
 		};
 		localStorage.setItem('userData', JSON.stringify(responseData));
 		store.dispatch(addCartData(cart));
+		console.log(store.getState());
+
 		return responseData;
 	} catch (error) {
 		console.error('Error getting customer data:', error);

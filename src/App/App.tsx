@@ -37,11 +37,6 @@ function App(): React.ReactElement {
 			}
 		}
 
-		(async function Cart() {
-			const cart = await getCart();
-			console.log(cart);
-		}());
-
 		const token = localStorage.getItem('token');
 		const userString = localStorage.getItem('userData');
 
@@ -62,7 +57,7 @@ function App(): React.ReactElement {
 			});
 		}
 	}, []);
-
+	getCart();
 	return (
 		<div className='wrapper'>
 			<Routes>
