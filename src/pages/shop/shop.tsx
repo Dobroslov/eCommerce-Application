@@ -58,14 +58,14 @@ export default function Shop(): React.ReactElement {
 			getAnonimousToken().then(() => {
 				getFilter(9, offset || localOffset, filter)
 					.then((data) => {
-						if (data) setProducts(data);
+						if (data) setProducts(data.productsArr);
 					})
 					.catch((error) => error);
 			});
 		} else {
 			getFilter(9, offset || localOffset, filter)
 				.then((data) => {
-					if (data) setProducts(data);
+					if (data) setProducts(data.productsArr);
 				})
 				.catch((error) => error);
 		}
@@ -74,7 +74,7 @@ export default function Shop(): React.ReactElement {
 	useEffect(() => {
 		getFilter(9, offset || localOffset, localFilter || filter)
 			.then((data) => {
-				if (data) setProducts(data);
+				if (data) setProducts(data.productsArr);
 			})
 			.catch((error) => error);
 	}, [offset]);

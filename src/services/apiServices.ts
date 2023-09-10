@@ -9,9 +9,9 @@ import {
 	IUpdatePassword,
 	IUpdateUserData,
 	IUserDataRespons,
-	ICart,
 	IProductCart,
 	ICartData,
+	IProductCatalog,
 } from '../utils/types';
 import store from '../store/store';
 import { hideModal, showModal } from '../store/actions';
@@ -133,7 +133,7 @@ export async function getCustomerForId(email: string, password: string | undefin
 				headers,
 			});
 		const responseData: IUserDataRespons = response.data.customer;
-		const cart: ICart = {
+		const cart = {
 			id: response.data.cart.id,
 			version: response.data.cart.version,
 		};
@@ -254,17 +254,18 @@ export async function checkAnonimousToken(
 		});
 }
 
-export async function getFilter(limit = 9, offset = 0, filter: string): Promise<void | IProduct[]> {
+export async function getFilter(limit = 9, offset = 0, filter: string): Promise<void | IProductCatalog> {
 	// eslint-disable-line consistent-return
-	const productsArr: IProduct[] = [];
+
 	const url = `${API_URL}/${PROJECT_KEY}/product-projections/search?fuzzy=true&limit=${limit}&offset=${offset}${filter}`;
 	const headers = getHeaders();
-
 	const products = await axios
 		.get(url, {
 			headers,
 		})
 		.then((response) => {
+			const productsArr: IProduct[] = [];
+			const totalQuantity = response.data.total;
 			response.data.results.forEach(
 				(product: {
 					id: string;
@@ -293,7 +294,7 @@ export async function getFilter(limit = 9, offset = 0, filter: string): Promise<
 					productsArr.push(productValues);
 				},
 			);
-			return productsArr;
+			return { productsArr, totalQuantity };
 		})
 		.catch((error) => {
 			console.log(error);
@@ -634,6 +635,7 @@ export async function getCart() {
 			headers,
 		})
 		.then((response) => {
+			const productIdArr: string[] = [];
 			const productArr: IProductCart[] = [];
 			const totalPrice = (response.data.totalPrice.centAmount / 100).toFixed(2);
 			const { currencyCode } = response.data.totalPrice;
@@ -661,9 +663,11 @@ export async function getCart() {
 					quantity: item.quantity,
 				};
 				productArr.push(productCart);
+				productIdArr.push(item.productId);
 			});
 			console.log(response.data);
 			console.log(productArr);
+			localStorage.setItem('productsCartId', JSON.stringify(productIdArr));
 			const cartData = {
 				id: response.data.id,
 				version: response.data.version,
@@ -698,10 +702,15 @@ export async function addProductForCart(productId: string | undefined, quantity:
 			headers,
 		})
 		.then((response) => {
-			const cart: ICart = {
+			const cartProductId: string[] = [];
+			const cart = {
 				id: response.data.id,
 				version: response.data.version,
 			};
+			response.data.lineItems.forEach((item: { id: string; }) => {
+				cartProductId.push(item.id);
+			});
+			localStorage.setItem('productsCartId', JSON.stringify(cartProductId));
 			localStorage.setItem('dataCart', JSON.stringify(cart));
 			store.dispatch(
 				showModal({
@@ -739,7 +748,7 @@ export async function changeQuantityProductForCart(itemId: string, quantity: num
 			headers,
 		})
 		.then((response) => {
-			const cart: ICart = {
+			const cart = {
 				id: response.data.id,
 				version: response.data.version,
 			};
@@ -777,7 +786,7 @@ export async function DeleteProductForCart(itemId: string) {
 			headers,
 		})
 		.then((response) => {
-			const cart: ICart = {
+			const cart = {
 				id: response.data.id,
 				version: response.data.version,
 			};

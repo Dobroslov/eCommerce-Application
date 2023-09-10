@@ -1,7 +1,7 @@
-import { ISorting, ModalProperties } from '../utils/types';
+import { ICart, ModalProperties } from '../utils/types';
 
 export enum DataActionTypes{
-AddSort = 'ADD'
+AddCartData = 'ADD'
 }
 
 export enum ModalActionTypes {
@@ -14,7 +14,7 @@ export interface ModalAction {
   }
 export interface DataAction {
     type: DataActionTypes;
-    payload?: ISorting;
+    payload?: ICart;
   }
 
 export function hideModal(): ModalAction {
@@ -29,9 +29,9 @@ export function showModal(payload: ModalProperties): ModalAction {
 		payload,
 	};
 }
-export function addSort(payload:ISorting) {
+export function addCartData(payload:ICart) {
 	return {
-		type: DataActionTypes.AddSort,
+		type: DataActionTypes.AddCartData,
 		payload,
 	};
 }
