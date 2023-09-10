@@ -12,6 +12,7 @@ import {
 	IProductCart,
 	ICartData,
 	IProductCatalog,
+	ICart,
 } from '../utils/types';
 import store from '../store/store';
 import { addCartData, hideModal, showModal } from '../store/actions';
@@ -116,7 +117,7 @@ export async function createCustomer(
 }
 
 export async function getCustomerForId(email: string, password: string | undefined): Promise<IUserDataRespons | undefined> {
-	const cartData = JSON.parse(localStorage.getItem('dataCart') as string);
+	const cartData = store.getState().data.cart as ICart;
 	const data = JSON.stringify({
 		email: `${email}`,
 		password: `${password}`,
@@ -139,7 +140,7 @@ export async function getCustomerForId(email: string, password: string | undefin
 			quantity: response.data.totalLineItemQuantity,
 		};
 		localStorage.setItem('userData', JSON.stringify(responseData));
-		localStorage.setItem('dataCart', JSON.stringify(cart));
+		store.dispatch(addCartData(cart));
 		return responseData;
 	} catch (error) {
 		console.error('Error getting customer data:', error);
@@ -622,7 +623,8 @@ export async function createCart() {
 				version: response.data.version,
 				quantity: response.data.totalLineItemQuantity,
 			};
-			localStorage.setItem('dataCart', JSON.stringify(cartData));
+			store.dispatch(addCartData(cartData));
+			console.log(store.getState());
 		})
 		.catch((error) => {
 			console.log(error);
@@ -683,7 +685,7 @@ export async function getCart() {
 				version: response.data.version,
 				quantity: response.data.totalLineItemQuantity,
 			};
-			localStorage.setItem('dataCart', JSON.stringify(cartData));
+			store.dispatch(addCartData(cartData));
 			return { productArr, totalPrice, currencyCode, totalQuantity };
 		})
 		.catch(() => {
@@ -693,7 +695,7 @@ export async function getCart() {
 }
 
 export async function addProductForCart(productId: string | undefined, quantity: number) {
-	const cartData = JSON.parse(localStorage.getItem('dataCart') as string);
+	const cartData = store.getState().data.cart as ICart;
 	const data = {
 		version: cartData.version,
 		actions: [
@@ -722,7 +724,6 @@ export async function addProductForCart(productId: string | undefined, quantity:
 				version: response.data.version,
 				quantity: response.data.totalLineItemQuantity,
 			};
-			store.dispatch(addCartData(cart));
 			response.data.lineItems.forEach((item: { id: string; productId:string }) => {
 				const idData: {
 					item: string;
@@ -734,7 +735,7 @@ export async function addProductForCart(productId: string | undefined, quantity:
 				cartProductId.push(idData);
 			});
 			localStorage.setItem('productsCartId', JSON.stringify(cartProductId));
-			localStorage.setItem('dataCart', JSON.stringify(cart));
+			store.dispatch(addCartData(cart));
 			store.dispatch(
 				showModal({
 					title: 'Success',
@@ -752,7 +753,7 @@ export async function addProductForCart(productId: string | undefined, quantity:
 }
 
 export async function changeQuantityProductForCart(itemId: string, quantity: number) {
-	const cartData = JSON.parse(localStorage.getItem('dataCart') as string);
+	const cartData = store.getState().data.cart as ICart;
 	const data = JSON.stringify({
 		version: cartData.version,
 		actions: [
@@ -774,8 +775,9 @@ export async function changeQuantityProductForCart(itemId: string, quantity: num
 			const cart = {
 				id: response.data.id,
 				version: response.data.version,
+				quantity: response.data.totalLineItemQuantity,
 			};
-			localStorage.setItem('dataCart', JSON.stringify(cart));
+			store.dispatch(addCartData(cart));
 			store.dispatch(
 				showModal({
 					title: 'Success',
@@ -793,7 +795,7 @@ export async function changeQuantityProductForCart(itemId: string, quantity: num
 }
 
 export async function DeleteProductForCart(itemId: string) {
-	const cartData = JSON.parse(localStorage.getItem('dataCart') as string);
+	const cartData = store.getState().data.cart as ICart;
 	const url = `${API_URL}/${PROJECT_KEY}/me/carts/${cartData.id}`;
 	const headers = getHeaders();
 	const data = JSON.stringify({
@@ -814,7 +816,7 @@ export async function DeleteProductForCart(itemId: string) {
 				version: response.data.version,
 				quantity: response.data.totalLineItemQuantity,
 			};
-			localStorage.setItem('dataCart', JSON.stringify(cart));
+			store.dispatch(addCartData(cart));
 			store.dispatch(
 				showModal({
 					title: 'Success',

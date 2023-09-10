@@ -2,11 +2,11 @@ import { ICart } from '../utils/types';
 import { DataAction, DataActionTypes } from './actions';
 
 type DataState = {
-  data: ICart | null | undefined;
+  cart: ICart | null | undefined;
 };
 
 const initialState: DataState = {
-	data: null,
+	cart: null,
 };
 
 function dataReducer(state = initialState, action:DataAction): DataState {
@@ -14,7 +14,7 @@ function dataReducer(state = initialState, action:DataAction): DataState {
 		case DataActionTypes.AddCartData:
 			return {
 				...state,
-				data: action.payload,
+				cart: action.payload,
 			};
 
 		default:
