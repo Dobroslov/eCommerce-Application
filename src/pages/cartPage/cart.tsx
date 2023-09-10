@@ -14,9 +14,8 @@ function CartPage() {
 	useEffect(() => {
 		getCart().then((data) => {
 			if (data) {
-				const totalPrice = data.totalPrice.toString();
 				setProducts(data.productArr);
-				setTotal(`${totalPrice.slice(0, totalPrice.length - 2)}.${totalPrice.slice(-2)}`);
+				setTotal(data.totalPrice);
 				setCurrency(data.currencyCode);
 				setValue(data.productArr.length);
 			}

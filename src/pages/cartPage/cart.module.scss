@@ -31,6 +31,9 @@
   display: flex;
   column-gap: 140px;
 
+  @media (min-width: 320px) and (max-width: 1240px) {
+    @include respons-property(column-gap, -80, 140);
+}
   @media (max-width: 768px){
     flex-direction: column;
 }

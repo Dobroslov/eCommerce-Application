@@ -4,7 +4,12 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import style from './shop.module.scss';
 import Filter from './filter/filter';
-import { getAnonimousToken, getFilter, getProductForId } from '../../services/apiServices';
+import {
+	addProductForCart,
+	getAnonimousToken,
+	getFilter,
+	getProductForId,
+} from '../../services/apiServices';
 import SliderModal from '../../components/modal/sliderModal';
 import CarouselCompound from '../../components/slider/carouselCompound/carouselCompound';
 import { IProduct } from '../../utils/types';
@@ -49,7 +54,7 @@ export default function Shop(): React.ReactElement {
 	};
 
 	const handleId = (productId: string) => {
-		console.log(productId);
+		addProductForCart(productId, 1);
 	};
 
 	useEffect(() => {

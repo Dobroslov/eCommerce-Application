@@ -1,3 +1,4 @@
+/* eslint-disable no-unsafe-optional-chaining */
 import axios from 'axios';
 import { NavigateFunction } from 'react-router-dom';
 import {
@@ -129,10 +130,9 @@ export async function getCustomerForId(email: string, password: string | undefin
 	const url = `${API_URL}/${PROJECT_KEY}/login`;
 	const headers = getHeaders();
 	try {
-		const response = await axios
-			.post(url, data, {
-				headers,
-			});
+		const response = await axios.post(url, data, {
+			headers,
+		});
 		const responseData: IUserDataRespons = response.data.customer;
 		const cart:ICart = {
 			id: response.data.cart.id,
@@ -258,7 +258,11 @@ export async function checkAnonimousToken(
 		});
 }
 
-export async function getFilter(limit = 9, offset = 0, filter: string): Promise<void | IProductCatalog> {
+export async function getFilter(
+	limit = 9,
+	offset = 0,
+	filter: string,
+): Promise<void | IProductCatalog> {
 	// eslint-disable-line consistent-return
 
 	const url = `${API_URL}/${PROJECT_KEY}/product-projections/search?fuzzy=true&limit=${limit}&offset=${offset}${filter}`;
@@ -330,10 +334,9 @@ export async function getProductForId(id: string): Promise<void | IProductbyId> 
 				stone: response.data.masterVariant.attributes[2].value[0],
 				standard: response.data.masterVariant.attributes[3].value,
 				metall: response.data.masterVariant.attributes[4].value[0],
-				discount: // eslint-disable-next-line no-unsafe-optional-chaining
-					(response.data.masterVariant.prices[0].discounted?.value.centAmount / 100).toFixed(
-						2,
-					) as string,
+				discount: (
+					response.data.masterVariant.prices[0].discounted?.value.centAmount / 100
+				).toFixed(2) as string,
 				sku: response.data.masterVariant.sku,
 			};
 			return productData;
@@ -357,9 +360,10 @@ export async function changePassword({ oldPassword, newPassword }: IUpdatePasswo
 	const headers = getHeaders();
 	const url = `${API_URL}/${PROJECT_KEY}/customers/password`;
 
-	await axios.post(url, data, {
-		headers,
-	})
+	await axios
+		.post(url, data, {
+			headers,
+		})
 		.then((response) => {
 			const responseData = response.data;
 			localStorage.setItem('userData', JSON.stringify(responseData));
@@ -394,7 +398,12 @@ export async function changePassword({ oldPassword, newPassword }: IUpdatePasswo
 		});
 }
 
-export async function changeCustomerValues({ firstName, lastName, email, dateOfBirth }: IUpdateUserData) {
+export async function changeCustomerValues({
+	firstName,
+	lastName,
+	email,
+	dateOfBirth,
+}: IUpdateUserData) {
 	const user = localStorage.getItem('userData') as string;
 	const { id, version } = JSON.parse(user);
 	const headers = getHeaders();
@@ -641,46 +650,48 @@ export async function getCart() {
 			headers,
 		})
 		.then((response) => {
-			const productIdArr:{
+			const productIdArr: {
 				item: string;
 				product: string;
-			} [] = [];
+			}[] = [];
 			const productArr: IProductCart[] = [];
 			const totalPrice = (response.data.totalPrice.centAmount / 100).toFixed(2);
 			const { currencyCode } = response.data.totalPrice;
 			const totalQuantity = response.data.totalLineItemQuantity;
-			response.data.lineItems.forEach((item: {
-				productId: string;
-				id: string;
-				name: { [x: string]: string; };
-				variant: {
-					attributes: { value: string }[];
-					images: { url: string; }[];
-				};
-				totalPrice: { centAmount: number; };
-				quantity: number;
-			}) => {
-				const productCart: IProductCart = {
-					id: item.id,
-					productId: item.productId,
-					name: item.name['en-US'],
-					weight: item.variant.attributes[1].value,
-					metall: item.variant.attributes[4].value[0],
-					image: item.variant.images[0].url,
-					currencyCode: response.data.totalPrice.currencyCode,
-					price: (item.totalPrice.centAmount / 100).toFixed(2) as string,
-					quantity: item.quantity,
-				};
-				const idData: {
-					item: string;
-					product: string;
-				} = {
-					item: item.id,
-					product: item.productId,
-				};
-				productArr.push(productCart);
-				productIdArr.push(idData);
-			});
+			response.data.lineItems.forEach(
+				(item: {
+					productId: string;
+					id: string;
+					name: { [x: string]: string };
+					variant: {
+						attributes: { value: string }[];
+						images: { url: string }[];
+					};
+					totalPrice: { centAmount: number };
+					quantity: number;
+				}) => {
+					const productCart: IProductCart = {
+						id: item.id,
+						productId: item.productId,
+						name: item.name['en-US'],
+						weight: item.variant.attributes[1].value,
+						metall: item.variant.attributes[4].value[0],
+						image: item.variant.images[0].url,
+						currencyCode: response.data.totalPrice.currencyCode,
+						price: (item.totalPrice.centAmount / 100).toFixed(2) as string,
+						quantity: item.quantity,
+					};
+					const idData: {
+						item: string;
+						product: string;
+					} = {
+						item: item.id,
+						product: item.productId,
+					};
+					productArr.push(productCart);
+					productIdArr.push(idData);
+				},
+			);
 			localStorage.setItem('productsCartId', JSON.stringify(productIdArr));
 			const cartData = {
 				id: response.data.id,
@@ -721,12 +732,13 @@ export async function addProductForCart(productId: string | undefined, quantity:
 				item: string;
 				product: string;
 			}[] = [];
-			const cart = {
+			const cart:ICart = {
 				id: response.data.id,
 				version: response.data.version,
 				quantity: response.data.totalLineItemQuantity,
 			};
-			response.data.lineItems.forEach((item: { id: string; productId:string }) => {
+			store.dispatch(addCartData(cart));
+			response.data.lineItems.forEach((item: { id: string; productId: string }) => {
 				const idData: {
 					item: string;
 					product: string;
@@ -795,7 +807,6 @@ export async function changeQuantityProductForCart(itemId: string, quantity: num
 			console.log(error);
 		});
 }
-
 export async function DeleteProductForCart(itemId: string) {
 	const cartData = store.getState().data.cart as ICart;
 	const url = `${API_URL}/${PROJECT_KEY}/me/carts/${cartData.id}`;
@@ -806,7 +817,8 @@ export async function DeleteProductForCart(itemId: string) {
 			{
 				action: 'removeLineItem',
 				lineItemId: itemId,
-			}],
+			},
+		],
 	});
 	await axios
 		.post(url, data, {
