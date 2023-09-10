@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import ProductCardsList from '../../components/productCardsList/productCardsList';
 import { IProduct } from '../../utils/types';
-import { getAnonimousToken, getFilter } from '../../services/apiServices';
+import { addProductForCart, getAnonimousToken, getFilter } from '../../services/apiServices';
 import styles from './mainPage.module.scss';
 
 function MainPage(): React.ReactElement {
@@ -34,7 +34,7 @@ function MainPage(): React.ReactElement {
 	}, []);
 
 	function handleProductClick(id: string): void {
-		console.log('handleProductClick', id);
+		addProductForCart(id, 1);
 	}
 
 	return (

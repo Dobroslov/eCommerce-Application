@@ -43,6 +43,7 @@ function App(): React.ReactElement {
 		const token = localStorage.getItem('token');
 		const userString = localStorage.getItem('userData');
 		if (userString && token) {
+			getCart();
 			const { email } = JSON.parse(userString);
 			autoSignIn(email, () => {
 				if (location.state?.from) {

@@ -851,6 +851,8 @@ export async function checkAnonimousToken(
 				getAnonimousToken().then(() => {
 					getCart();
 				});
+			} else {
+				getCart();
 			}
 		})
 		.catch((error) => {
