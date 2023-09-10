@@ -1,3 +1,4 @@
+/* eslint-disable no-unsafe-optional-chaining */
 import axios from 'axios';
 import { NavigateFunction } from 'react-router-dom';
 import {
@@ -327,10 +328,9 @@ export async function getProductForId(id: string): Promise<void | IProductbyId> 
 				stone: response.data.masterVariant.attributes[2].value[0],
 				standard: response.data.masterVariant.attributes[3].value,
 				metall: response.data.masterVariant.attributes[4].value[0],
-				discount: // eslint-disable-next-line no-unsafe-optional-chaining
-				(response.data.masterVariant.prices[0].discounted?.value.centAmount / 100).toFixed(
-					2,
-				) as string,
+				discount: (
+					response.data.masterVariant.prices[0].discounted?.value.centAmount / 100
+				).toFixed(2) as string,
 				sku: response.data.masterVariant.sku,
 			};
 			return productData;
@@ -643,7 +643,7 @@ export async function getCart() {
 		})
 		.then((response) => {
 			const productArr: IProductCart[] = [];
-			const totalPrice = response.data.totalPrice.centAmount;
+			const totalPrice = (response.data.totalPrice.centAmount / 100).toFixed(2);
 			const { currencyCode } = response.data.totalPrice;
 			const totalQuantity = response.data.totalLineItemQuantity;
 			response.data.lineItems.forEach(
@@ -756,6 +756,44 @@ export async function changeQuantityProductForCart(itemId: string, quantity: num
 				showModal({
 					title: 'Success',
 					description: '+',
+					url: successModal,
+				}),
+			);
+			setTimeout(() => {
+				store.dispatch(hideModal());
+			}, 5000);
+		})
+		.catch((error) => {
+			console.log(error);
+		});
+}
+export async function DeleteProductForCart(itemId: string) {
+	const cartData = JSON.parse(localStorage.getItem('dataCart') as string);
+	const url = `${API_URL}/${PROJECT_KEY}/me/carts/${cartData.id}`;
+	const headers = getHeaders();
+	const data = JSON.stringify({
+		version: cartData.version,
+		actions: [
+			{
+				action: 'removeLineItem',
+				lineItemId: itemId,
+			},
+		],
+	});
+	await axios
+		.post(url, data, {
+			headers,
+		})
+		.then((response) => {
+			const cart: ICart = {
+				id: response.data.id,
+				version: response.data.version,
+			};
+			localStorage.setItem('dataCart', JSON.stringify(cart));
+			store.dispatch(
+				showModal({
+					title: 'Success',
+					description: 'delete',
 					url: successModal,
 				}),
 			);

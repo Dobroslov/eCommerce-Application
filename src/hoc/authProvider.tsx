@@ -1,7 +1,7 @@
 /* eslint-disable indent */
 import React, { createContext, useState, useMemo } from 'react';
 import { IUserLogin } from '../utils/types';
-import { getToken } from '../services/apiServices';
+import { getAnonimousToken, getToken } from '../services/apiServices';
 
 export const AuthContext = createContext<{
 	user: IUserLogin | null;
@@ -35,8 +35,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
 	function signOut(callback: () => void) {
 		setUser(null); // юзера больше нет, делаю переадресацию
-		localStorage.removeItem('token');
-		localStorage.removeItem('userData');
+		localStorage.clear();
+		getAnonimousToken();
 		callback();
 		// в callback() функция navigate, для разлогинивания
 		// пользователя можно было сделать переадресацию на главную
