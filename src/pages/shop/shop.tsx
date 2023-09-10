@@ -1,6 +1,7 @@
+/* eslint-disable operator-linebreak */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import style from './shop.module.scss';
 import Filter from './filter/filter';
@@ -24,6 +25,10 @@ export default function Shop(): React.ReactElement {
 	const [offset, setOffset] = useState(localOffset || 0);
 	const [id, setId] = useState('2a736cf8-ad85-4d6e-a9ef-1adf95915f8d');
 	const [images, setImages] = useState<string[]>([]);
+	const [limit, setLimit] = useState<string>();
+
+	const prev = useRef<null | HTMLButtonElement>(null);
+	const next = useRef<null | HTMLButtonElement>(null);
 
 	useEffect(() => {
 		getProductForId(id)
@@ -44,13 +49,17 @@ export default function Shop(): React.ReactElement {
 	};
 
 	const handleOffsetNext = (nextOffset: number) => {
-		setOffset(nextOffset + 9);
-		localStorage.setItem('offset', (nextOffset + 9).toString());
+		if (limit && Math.ceil((nextOffset + 9) / +limit) < Math.ceil(+limit / 9)) {
+			setOffset(nextOffset + 9);
+			localStorage.setItem('offset', (nextOffset + 9).toString());
+		}
 	};
 
 	const handleOffsetPrev = (prevOffset: number) => {
-		setOffset(prevOffset - 9);
-		localStorage.setItem('offset', (prevOffset - 9).toString());
+		if (prevOffset - 9 >= 0) {
+			setOffset(prevOffset - 9);
+			localStorage.setItem('offset', (prevOffset - 9).toString());
+		}
 	};
 
 	const handleId = (productId: string) => {
@@ -63,27 +72,104 @@ export default function Shop(): React.ReactElement {
 			getAnonimousToken().then(() => {
 				getFilter(9, offset || localOffset, filter)
 					.then((data) => {
-						if (data) setProducts(data.productsArr);
+						if (data) {
+							setProducts(data.productsArr);
+							setLimit(data.totalQuantity);
+
+							if (next.current && prev.current && limit && offset === 0 && +limit <= 9) {
+								next.current.disabled = true;
+								prev.current.disabled = true;
+							}
+
+							if (offset === 0 && prev.current) {
+								prev.current.disabled = true;
+							} else if (prev.current) {
+								prev.current.disabled = false;
+							}
+
+							if (
+								next.current &&
+								limit &&
+								offset > 0 &&
+								Math.ceil(+limit / offset) === Math.ceil(+limit / 9)
+							) {
+								next.current.disabled = true;
+							} else if (next.current) {
+								next.current.disabled = false;
+							}
+						}
 					})
 					.catch((error) => error);
 			});
 		} else {
-			getFilter(9, offset || localOffset, filter)
+			getFilter(9, 0, filter)
 				.then((data) => {
-					if (data) setProducts(data.productsArr);
+					if (data) {
+						setProducts(data.productsArr);
+						setOffset(0);
+						setLimit(data.totalQuantity);
+
+						if (next.current && prev.current && limit && offset === 0 && +limit <= 9) {
+							next.current.disabled = true;
+							prev.current.disabled = true;
+						}
+
+						if (offset === 0 && prev.current) {
+							prev.current.disabled = true;
+						} else if (prev.current) {
+							prev.current.disabled = false;
+						}
+
+						if (
+							next.current &&
+							limit &&
+							offset > 0 &&
+							Math.ceil(+limit / offset) === Math.ceil(+limit / 9)
+						) {
+							next.current.disabled = true;
+						} else if (next.current) {
+							next.current.disabled = false;
+						}
+					}
 				})
 				.catch((error) => error);
 		}
 	}, [filter]);
 
 	useEffect(() => {
-		getFilter(9, offset || localOffset, localFilter || filter)
+		getFilter(9, offset, localFilter || filter)
 			.then((data) => {
-				if (data) setProducts(data.productsArr);
+				if (data) {
+					setProducts(data.productsArr);
+					setLimit(data.totalQuantity);
+
+					if (next.current && prev.current && limit && offset === 0 && +limit <= 9) {
+						next.current.disabled = true;
+						prev.current.disabled = true;
+					}
+
+					if (offset === 0 && prev.current) {
+						prev.current.disabled = true;
+					} else if (prev.current) {
+						prev.current.disabled = false;
+					}
+
+					if (
+						next.current &&
+						limit &&
+						offset > 0 &&
+						Math.ceil(+limit / offset) === Math.ceil(+limit / 9)
+					) {
+						next.current.disabled = true;
+					} else if (next.current) {
+						next.current.disabled = false;
+					}
+				}
 			})
 			.catch((error) => error);
 	}, [offset]);
 	localStorage.setItem('path', window.location.pathname);
+
 	return (
 		<section className={style.catalog}>
 			<h3 className={style.catalogTitle}>Shop The Latest</h3>
@@ -148,10 +234,10 @@ export default function Shop(): React.ReactElement {
 				</Link>
 			</SliderModal>
 			<div className={style.pagination}>
-				<button onClick={() => handleOffsetPrev(offset)} type='button'>
+				<button ref={prev} onClick={() => handleOffsetPrev(offset)} type='button'>
 					❮
 				</button>
-				<button onClick={() => handleOffsetNext(offset)} type='button'>
+				<button ref={next} onClick={() => handleOffsetNext(offset)} type='button'>
 					❯
 				</button>
 			</div>

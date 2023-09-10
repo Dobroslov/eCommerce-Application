@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { changeQuantityProductForCart, getCart } from '../../services/apiServices';
+import {
+	DeleteProductForCart,
+	changeQuantityProductForCart,
+	getCart,
+} from '../../services/apiServices';
 import { IProductCart } from '../../utils/types';
 import SubmitButton from '../../components/buttons/submitButton';
 
@@ -33,13 +37,18 @@ function CartPage() {
 		changeQuantityProductForCart(id, newValue);
 	};
 
+	const handleRemoveItem = (productId: string) => {
+		DeleteProductForCart(productId);
+		setValue(value + 1);
+	};
+
 	return (
 		<div className={style.cart}>
 			<h4 className={style.cartTitle}>Shopping Cart</h4>
 			<div className={style.body}>
 				<div className={style.cartList}>
 					{products.map((product) => (
-						<div className={style.product}>
+						<div key={product.id} className={style.product}>
 							<div>
 								<img src={product.image} alt='' />
 								<div className={style.productBody}>
@@ -59,12 +68,16 @@ function CartPage() {
 									<button onClick={() => handleMinus(product.quantity, product.id)} type='button'>
 										-
 									</button>
-									<input type='number' value={product.quantity} />
+									<input onChange={() => 0} type='number' value={product.quantity} />
 									<button onClick={() => handlePlus(product.quantity, product.id)} type='button'>
 										+
 									</button>
 								</div>
-								<button type='button' className={style.deleteButton}>
+								<button
+									onClick={() => handleRemoveItem(product.id)}
+									type='button'
+									className={style.deleteButton}
+								>
 									✖
 								</button>
 							</div>
