@@ -21,6 +21,7 @@ import NotFoundPage from '../pages/notFoundPage/notFoundPage';
 import Modal from '../components/modal/modal';
 
 import './App.scss';
+import CartPage from '../pages/cartPage/cart';
 
 function App(): React.ReactElement {
 	const { user, autoSignIn } = useAuth();
@@ -33,13 +34,14 @@ function App(): React.ReactElement {
 				const anonimous = localStorage.getItem('anonimous') as string;
 				checkAnonimousToken(anonimous);
 			} else {
-				getAnonimousToken();
+				getAnonimousToken().then(() => {
+					getCart();
+				});
 			}
 		}
 
 		const token = localStorage.getItem('token');
 		const userString = localStorage.getItem('userData');
-
 		if (userString && token) {
 			const { email } = JSON.parse(userString);
 			autoSignIn(email, () => {
@@ -57,7 +59,7 @@ function App(): React.ReactElement {
 			});
 		}
 	}, []);
-	getCart();
+
 	return (
 		<div className='wrapper'>
 			<Routes>
@@ -73,6 +75,7 @@ function App(): React.ReactElement {
 						element={user ? <Navigate to='/account_page' /> : <RegistrationPage />}
 					/>
 					<Route path='shop' element={<Shop />} />
+					<Route path='cart' element={<CartPage />} />
 					<Route path='shop/:id' element={<ShopSinglPageProduct />} />
 					<Route
 						path='account_page'

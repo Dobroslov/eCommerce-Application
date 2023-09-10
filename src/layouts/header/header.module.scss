@@ -214,7 +214,14 @@
 			position: absolute;
 			right: 60px;
 			z-index: 10;
-
+			.quantity{
+				position: absolute;
+				bottom:10px;
+				right: 10px;
+				background-color: #ffd700;
+				border-radius: 50%;
+				padding: 0 4px;
+			}
 			&:hover {
 				color: #000000;
 				transform: scale(1.4);
@@ -390,6 +397,7 @@
 
 			.account__button {
 				margin-top: 24px;
+				color:#000000;
 
 				&:before {
 					position: absolute;

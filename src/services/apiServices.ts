@@ -141,8 +141,6 @@ export async function getCustomerForId(email: string, password: string | undefin
 		};
 		localStorage.setItem('userData', JSON.stringify(responseData));
 		store.dispatch(addCartData(cart));
-		console.log(store.getState());
-
 		return responseData;
 	} catch (error) {
 		console.error('Error getting customer data:', error);
@@ -235,27 +233,6 @@ export async function checkToken(token: string): Promise<{ active: string } | vo
 		});
 
 	// return customer;
-}
-
-export async function checkAnonimousToken(
-	token: string,
-): Promise<{ email: string; active: string } | void> {
-	const url = `${AUTH_URL}/oauth/introspect?token=${token}`;
-	const headers = HEADERS_BASIC;
-	const data = '';
-
-	await axios
-		.post(url, data, {
-			headers,
-		})
-		.then((response) => {
-			if (response.data.active === false) {
-				getAnonimousToken();
-			}
-		})
-		.catch((error) => {
-			console.log(error);
-		});
 }
 
 export async function getFilter(
@@ -617,6 +594,7 @@ export async function addAddress(addressData: IAddress) {
 }
 
 export async function createCart() {
+	const productIdArr: { item: string; product: string; }[] = [];
 	const data = JSON.stringify({
 		currency: 'EUR',
 	});
@@ -628,7 +606,18 @@ export async function createCart() {
 			headers,
 		})
 		.then((response) => {
-			console.log(response.data);
+			response.data.lineItems.forEach(
+				(item: { id: string; productId: string; }) => {
+					const idData: {
+						item: string;
+						product: string;
+					} = {
+						item: item.id,
+						product: item.productId,
+					};
+					productIdArr.push(idData);
+				});
+			localStorage.setItem('productsCartId', JSON.stringify(productIdArr));
 			const cartData = {
 				id: response.data.id,
 				version: response.data.version,
@@ -644,7 +633,6 @@ export async function createCart() {
 export async function getCart() {
 	const url = `${API_URL}/${PROJECT_KEY}/me/active-cart`;
 	const headers = getHeaders();
-
 	const cart: void | ICartData = await axios
 		.get(url, {
 			headers,
@@ -841,6 +829,29 @@ export async function DeleteProductForCart(itemId: string) {
 			setTimeout(() => {
 				store.dispatch(hideModal());
 			}, 5000);
+		})
+		.catch((error) => {
+			console.log(error);
+		});
+}
+
+export async function checkAnonimousToken(
+	token: string,
+): Promise<{ email: string; active: string } | void> {
+	const url = `${AUTH_URL}/oauth/introspect?token=${token}`;
+	const headers = HEADERS_BASIC;
+	const data = '';
+
+	await axios
+		.post(url, data, {
+			headers,
+		})
+		.then((response) => {
+			if (response.data.active === false) {
+				getAnonimousToken().then(() => {
+					getCart();
+				});
+			}
 		})
 		.catch((error) => {
 			console.log(error);

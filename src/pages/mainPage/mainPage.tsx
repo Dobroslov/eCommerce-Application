@@ -3,8 +3,6 @@ import { Link } from 'react-router-dom';
 import ProductCardsList from '../../components/productCardsList/productCardsList';
 import { IProduct } from '../../utils/types';
 import { getAnonimousToken, getFilter } from '../../services/apiServices';
-import CartPage from '../cartPage/cart';
-
 import styles from './mainPage.module.scss';
 
 function MainPage(): React.ReactElement {
@@ -56,7 +54,6 @@ function MainPage(): React.ReactElement {
 				</div>
 				<ProductCardsList products={products} handleProductClick={handleProductClick} />
 			</div>
-			<CartPage />
 		</>
 	);
 }
