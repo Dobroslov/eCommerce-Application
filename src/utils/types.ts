@@ -38,7 +38,8 @@ export interface ModalProperties {
 }
 export interface ICart {
 	id:string,
-	version:string
+	version:string,
+	quantity:number
 }
 export interface ICartData{
 		productArr: IProductCart[];
@@ -90,6 +91,10 @@ export interface IProduct {
 	currencyCode: string;
 	price: string;
 	discount: string;
+}
+export interface IProductCatalog{
+	totalQuantity:string,
+	productsArr:IProduct[]
 }
 
 export interface IProductCart {

@@ -15,14 +15,21 @@ function MainPage(): React.ReactElement {
 			getAnonimousToken().then(() => {
 				getFilter(6, 0, '&sort=createdAt+asc')
 					.then((data) => {
-						if (data) setProducts(data);
+						if (data) {
+							setProducts(data.productsArr);
+							console.log(data.totalQuantity);
+						}
 					})
 					.catch((error) => error);
 			});
 		} else {
 			getFilter(6, 0, '&sort=createdAt+asc')
 				.then((data) => {
-					if (data) setProducts(data);
+					if (data) {
+						setProducts(data.productsArr);
+						console.log(data.totalQuantity);
+						console.log(data.productsArr);
+					}
 				})
 				.catch((error) => error);
 		}
