@@ -58,7 +58,8 @@ function CartPage() {
 											Metall: {product.metall} / Weight: {product.weight}g
 										</div>
 										<div className={style.price}>
-											{product.price} {product.currencyCode}
+											{(+product.price / product.quantity).toFixed(2)} {product.currencyCode} /
+											Total : {product.price} {product.currencyCode}
 										</div>
 									</div>
 								</div>

@@ -107,10 +107,10 @@
 }
 //===========================================================================================================================
 .price {
-  font-size: 16px;
+  font-size: 14px;
   color: #A18A68;
   @media (min-width: 320px) and (max-width: 1240px) {
-  @include respons-property(font-size, 12, 16);
+  @include respons-property(font-size, 12, 14);
   }
   @media (max-width: 768px){
     display: flex;

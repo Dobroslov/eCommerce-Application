@@ -76,26 +76,33 @@ export default function Shop(): React.ReactElement {
 							setProducts(data.productsArr);
 							setLimit(data.totalQuantity);
 
-							if (next.current && prev.current && limit && offset === 0 && +limit <= 9) {
-								next.current.disabled = true;
-								prev.current.disabled = true;
-							}
+							switch (true) {
+								case offset === 0 && +data.totalQuantity <= 9:
+									if (prev.current && next.current) {
+										next.current.disabled = true;
+										prev.current.disabled = true;
+									}
+									break;
+								case offset === 0:
+									if (prev.current && next.current) {
+										prev.current.disabled = true;
+										next.current.disabled = false;
+									}
 
-							if (offset === 0 && prev.current) {
-								prev.current.disabled = true;
-							} else if (prev.current) {
-								prev.current.disabled = false;
-							}
+									break;
+								case limit && offset > 0 && Math.ceil(+limit / offset) === Math.ceil(+limit / 9):
+									if (next.current && prev.current) {
+										next.current.disabled = true;
+										prev.current.disabled = false;
+									}
 
-							if (
-								next.current &&
-								limit &&
-								offset > 0 &&
-								Math.ceil(+limit / offset) === Math.ceil(+limit / 9)
-							) {
-								next.current.disabled = true;
-							} else if (next.current) {
-								next.current.disabled = false;
+									break;
+								default:
+									if (prev.current && next.current) {
+										prev.current.disabled = false;
+										next.current.disabled = false;
+									}
+									break;
 							}
 						}
 					})
@@ -109,26 +116,33 @@ export default function Shop(): React.ReactElement {
 						setOffset(0);
 						setLimit(data.totalQuantity);
 
-						if (next.current && prev.current && limit && offset === 0 && +limit <= 9) {
-							next.current.disabled = true;
-							prev.current.disabled = true;
-						}
+						switch (true) {
+							case offset === 0 && +data.totalQuantity <= 9:
+								if (prev.current && next.current) {
+									next.current.disabled = true;
+									prev.current.disabled = true;
+								}
+								break;
+							case offset === 0:
+								if (prev.current && next.current) {
+									prev.current.disabled = true;
+									next.current.disabled = false;
+								}
 
-						if (offset === 0 && prev.current) {
-							prev.current.disabled = true;
-						} else if (prev.current) {
-							prev.current.disabled = false;
-						}
+								break;
+							case limit && offset > 0 && Math.ceil(+limit / offset) === Math.ceil(+limit / 9):
+								if (next.current && prev.current) {
+									next.current.disabled = true;
+									prev.current.disabled = false;
+								}
 
-						if (
-							next.current &&
-							limit &&
-							offset > 0 &&
-							Math.ceil(+limit / offset) === Math.ceil(+limit / 9)
-						) {
-							next.current.disabled = true;
-						} else if (next.current) {
-							next.current.disabled = false;
+								break;
+							default:
+								if (prev.current && next.current) {
+									prev.current.disabled = false;
+									next.current.disabled = false;
+								}
+								break;
 						}
 					}
 				})
@@ -143,26 +157,33 @@ export default function Shop(): React.ReactElement {
 					setProducts(data.productsArr);
 					setLimit(data.totalQuantity);
 
-					if (next.current && prev.current && limit && offset === 0 && +limit <= 9) {
-						next.current.disabled = true;
-						prev.current.disabled = true;
-					}
+					switch (true) {
+						case offset === 0 && +data.totalQuantity <= 9:
+							if (prev.current && next.current) {
+								next.current.disabled = true;
+								prev.current.disabled = true;
+							}
+							break;
+						case offset === 0:
+							if (prev.current && next.current) {
+								prev.current.disabled = true;
+								next.current.disabled = false;
+							}
 
-					if (offset === 0 && prev.current) {
-						prev.current.disabled = true;
-					} else if (prev.current) {
-						prev.current.disabled = false;
-					}
+							break;
+						case limit && offset > 0 && Math.ceil(+limit / offset) === Math.ceil(+limit / 9):
+							if (next.current && prev.current) {
+								next.current.disabled = true;
+								prev.current.disabled = false;
+							}
 
-					if (
-						next.current &&
-						limit &&
-						offset > 0 &&
-						Math.ceil(+limit / offset) === Math.ceil(+limit / 9)
-					) {
-						next.current.disabled = true;
-					} else if (next.current) {
-						next.current.disabled = false;
+							break;
+						default:
+							if (prev.current && next.current) {
+								prev.current.disabled = false;
+								next.current.disabled = false;
+							}
+							break;
 					}
 				}
 			})

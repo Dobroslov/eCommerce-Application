@@ -199,6 +199,21 @@
     transition: all ease 0.3s;
     cursor: pointer;
   }
+  button:disabled {
+    border: 1px solid#BFC1C8;
+    cursor: default;
+  }
+
+  button:disabled:hover {
+    background-color: inherit;
+    color: #BFC1C8;
+    transition: all ease 0.3s;
+  }
+
+  button:disabled:active {
+    background-color: inherit;
+    color: #BFC1C8;
+  }
 
   button:hover {
     background-color: #000;
