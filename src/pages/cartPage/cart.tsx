@@ -8,6 +8,7 @@ import { IProductCart } from '../../utils/types';
 import SubmitButton from '../../components/buttons/submitButton';
 
 import style from './cart.module.scss';
+import CART from '../../../public/assets/svg/basket.svg';
 
 function CartPage() {
 	const [products, setProducts] = useState<IProductCart[]>([]);
@@ -44,70 +45,86 @@ function CartPage() {
 
 	return (
 		<div className={style.cart}>
-			<h4 className={style.cartTitle}>Shopping Cart</h4>
-			<div className={style.body}>
-				<div className={style.cartList}>
-					{products.map((product) => (
-						<div key={product.id} className={style.product}>
-							<div>
-								<img src={product.image} alt='' />
-								<div className={style.productBody}>
-									<div className={style.productInfo}>
-										<div className={style.productName}>{product.name}</div>
-										<div className={style.productDescription}>
-											Metall: {product.metall} / Weight: {product.weight}g
-										</div>
-										<div className={style.price}>
-											{(+product.price / product.quantity).toFixed(2)} {product.currencyCode} /
-											Total : {product.price} {product.currencyCode}
+			{products.length > 0 ? (
+				<>
+					<h4 className={style.cartTitle}>Shopping Cart</h4>
+					<div className={style.body}>
+						<div className={style.cartList}>
+							{products.map((product) => (
+								<div key={product.id} className={style.product}>
+									<div>
+										<img src={product.image} alt='' />
+										<div className={style.productBody}>
+											<div className={style.productInfo}>
+												<div className={style.productName}>{product.name}</div>
+												<div className={style.productDescription}>
+													Metall: {product.metall} / Weight: {product.weight}g
+												</div>
+												<div className={style.price}>
+													{(+product.price / product.quantity).toFixed(2)} {product.currencyCode} /
+													Total : {product.price} {product.currencyCode}
+												</div>
+											</div>
 										</div>
 									</div>
+									<div className={style.buttons}>
+										<div className={style.counter}>
+											<button
+												onClick={() => handleMinus(product.quantity, product.id)}
+												type='button'
+											>
+												-
+											</button>
+											<input onChange={() => 0} type='number' value={product.quantity} />
+											<button
+												onClick={() => handlePlus(product.quantity, product.id)}
+												type='button'
+											>
+												+
+											</button>
+										</div>
+										<button
+											onClick={() => handleRemoveItem(product.id)}
+											type='button'
+											className={style.deleteButton}
+										>
+											✖
+										</button>
+									</div>
 								</div>
-							</div>
-							<div className={style.buttons}>
-								<div className={style.counter}>
-									<button onClick={() => handleMinus(product.quantity, product.id)} type='button'>
-										-
-									</button>
-									<input onChange={() => 0} type='number' value={product.quantity} />
-									<button onClick={() => handlePlus(product.quantity, product.id)} type='button'>
-										+
-									</button>
+							))}
+							<div className={style.clearCoupon}>
+								<SubmitButton value='CLEAR CART' />
+								<div className={style.coupon}>
+									<div className={style.inputBody}>
+										<div className={style.inputSearch}>
+											<input className={style.input} type='text' placeholder='Coupon code' />
+										</div>
+										<i className={style.underline} />
+									</div>
+									<SubmitButton value='APPLY COUPON' />
 								</div>
-								<button
-									onClick={() => handleRemoveItem(product.id)}
-									type='button'
-									className={style.deleteButton}
-								>
-									✖
-								</button>
 							</div>
 						</div>
-					))}
-					<div className={style.clearCoupon}>
-						<SubmitButton value='CLEAR CART' />
-						<div className={style.coupon}>
-							<div className={style.inputBody}>
-								<div className={style.inputSearch}>
-									<input className={style.input} type='text' placeholder='Coupon code' />
-								</div>
-								<i className={style.underline} />
+						<div className={style.cartTotal}>
+							<p className={style.totalTitle}>Cart totals</p>
+							<div className={style.totalPrice}>
+								<p>TOTAL</p>
+								<p>
+									{total} {currency}
+								</p>
 							</div>
-							<SubmitButton value='APPLY COUPON' />
+							<SubmitButton value='PROCEED TO CHECKOUT' />
 						</div>
 					</div>
+				</>
+			) : (
+				<div className={style.empty}>
+					<img className={style.emptyImage} src={CART} alt='' />
+					<p className={style.addSomeProducts}>Your cart is currently empty!</p>
+					<SubmitButton value='Go to catalog' />
 				</div>
-				<div className={style.cartTotal}>
-					<p className={style.totalTitle}>Cart totals</p>
-					<div className={style.totalPrice}>
-						<p>TOTAL</p>
-						<p>
-							{total} {currency}
-						</p>
-					</div>
-					<SubmitButton value='PROCEED TO CHECKOUT' />
-				</div>
-			</div>
+			)}
 		</div>
 	);
 }

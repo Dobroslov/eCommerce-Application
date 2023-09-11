@@ -334,3 +334,30 @@
     }
   }
 }
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  row-gap: 20px;
+  button {
+    width: 290px;
+  }
+}
+.emptyImage {
+  width: 200px;
+  object-fit: contain;
+  margin-right: 40px;
+  @media (min-width: 320px) and (max-width: 1240px) {
+    @include respons-property(width, 100, 200);
+    @include respons-property(margin-right, 10, 40);
+  }
+}
+
+.addSomeProducts {
+  font-size: 24px;
+  @media (min-width: 320px) and (max-width: 1240px) {
+    @include respons-property(font-size, 12, 24);
+  }
+}
