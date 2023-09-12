@@ -62,7 +62,8 @@ export default function Filter(props: ISort): React.ReactElement {
 	};
 
 	const handleApplyFilters = () => {
-		const priceRange = `&filter=variants.price.centAmount:range (${value[0] * 100} to ${value[1] * 100
+		const priceRange = `&filter=variants.price.centAmount:range (${value[0] * 100} to ${
+			value[1] * 100
 		})`;
 		const searchInput = `&text.en-US=${search}`;
 		const metallValues = filterObject.metallValue.join(',');
@@ -134,7 +135,7 @@ export default function Filter(props: ISort): React.ReactElement {
 				className={style.slider}
 				defaultValue={[10, 1000]}
 				max={1000}
-				min={35}
+				min={10}
 				onChange={(newValue) => setValue(newValue)}
 			/>
 			<div className={style.price}>

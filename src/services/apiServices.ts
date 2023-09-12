@@ -94,7 +94,7 @@ export async function createCustomer(
 			navigate('/', {
 				replace: true,
 			});
-		}, 5000);
+		}, 2500);
 	} catch (error) {
 		if (axios.isAxiosError(error)) {
 			console.log(error);
@@ -109,7 +109,7 @@ export async function createCustomer(
 
 			setTimeout(() => {
 				store.dispatch(hideModal());
-			}, 5000);
+			}, 2500);
 
 			console.error('Axios Error:', error);
 		}
@@ -117,7 +117,10 @@ export async function createCustomer(
 	}
 }
 
-export async function getCustomerForId(email: string, password: string | undefined): Promise<IUserDataRespons | undefined> {
+export async function getCustomerForId(
+	email: string,
+	password: string | undefined,
+): Promise<IUserDataRespons | undefined> {
 	const cartData = store.getState().data.cart as ICart;
 	const data = JSON.stringify({
 		email: `${email}`,
@@ -134,7 +137,7 @@ export async function getCustomerForId(email: string, password: string | undefin
 			headers,
 		});
 		const responseData: IUserDataRespons = response.data.customer;
-		const cart:ICart = {
+		const cart: ICart = {
 			id: response.data.cart.id,
 			version: response.data.cart.version,
 			quantity: response.data.cart.totalLineItemQuantity,
@@ -176,7 +179,7 @@ export async function getToken(params: IUserLogin): Promise<void> {
 			}
 			setTimeout(() => {
 				store.dispatch(hideModal());
-			}, 5000);
+			}, 2500);
 		})
 		.catch((error) => {
 			store.dispatch(
@@ -188,7 +191,7 @@ export async function getToken(params: IUserLogin): Promise<void> {
 			);
 			setTimeout(() => {
 				store.dispatch(hideModal());
-			}, 5000);
+			}, 2500);
 		});
 }
 /* export async function refreshToken(params: IUserLogin): Promise<void> {
@@ -359,7 +362,7 @@ export async function changePassword({ oldPassword, newPassword }: IUpdatePasswo
 			);
 			setTimeout(() => {
 				store.dispatch(hideModal());
-			}, 5000);
+			}, 2500);
 		})
 		.catch((error) => {
 			store.dispatch(
@@ -371,7 +374,7 @@ export async function changePassword({ oldPassword, newPassword }: IUpdatePasswo
 			);
 			setTimeout(() => {
 				store.dispatch(hideModal());
-			}, 5000);
+			}, 2500);
 		});
 }
 
@@ -425,7 +428,7 @@ export async function changeCustomerValues({
 			setTimeout(() => {
 				store.dispatch(hideModal());
 				window.location.reload();
-			}, 5000);
+			}, 2500);
 		})
 		.catch((error) => {
 			store.dispatch(
@@ -437,7 +440,7 @@ export async function changeCustomerValues({
 			);
 			setTimeout(() => {
 				store.dispatch(hideModal());
-			}, 5000);
+			}, 2500);
 		});
 }
 
@@ -473,7 +476,7 @@ export async function changeAddress(addressId: string, addressData: IAddress) {
 			);
 			setTimeout(() => {
 				store.dispatch(hideModal());
-			}, 5000);
+			}, 2500);
 		})
 		.catch((error) => {
 			store.dispatch(
@@ -485,7 +488,7 @@ export async function changeAddress(addressId: string, addressData: IAddress) {
 			);
 			setTimeout(() => {
 				store.dispatch(hideModal());
-			}, 5000);
+			}, 2500);
 		});
 }
 
@@ -529,7 +532,7 @@ export async function addressActions(addressAction: string, addressId: string) {
 			);
 			setTimeout(() => {
 				store.dispatch(hideModal());
-			}, 5000);
+			}, 2500);
 		})
 		.catch((error) => {
 			store.dispatch(
@@ -541,7 +544,7 @@ export async function addressActions(addressAction: string, addressId: string) {
 			);
 			setTimeout(() => {
 				store.dispatch(hideModal());
-			}, 5000);
+			}, 2500);
 		});
 }
 
@@ -576,7 +579,7 @@ export async function addAddress(addressData: IAddress) {
 			);
 			setTimeout(() => {
 				store.dispatch(hideModal());
-			}, 5000);
+			}, 2500);
 			return responseData;
 		})
 		.catch((error) => {
@@ -589,12 +592,12 @@ export async function addAddress(addressData: IAddress) {
 			);
 			setTimeout(() => {
 				store.dispatch(hideModal());
-			}, 5000);
+			}, 2500);
 		});
 }
 
 export async function createCart() {
-	const productIdArr: { item: string; product: string; }[] = [];
+	const productIdArr: { item: string; product: string }[] = [];
 	const data = JSON.stringify({
 		currency: 'EUR',
 	});
@@ -606,17 +609,16 @@ export async function createCart() {
 			headers,
 		})
 		.then((response) => {
-			response.data.lineItems.forEach(
-				(item: { id: string; productId: string; }) => {
-					const idData: {
-						item: string;
-						product: string;
-					} = {
-						item: item.id,
-						product: item.productId,
-					};
-					productIdArr.push(idData);
-				});
+			response.data.lineItems.forEach((item: { id: string; productId: string }) => {
+				const idData: {
+					item: string;
+					product: string;
+				} = {
+					item: item.id,
+					product: item.productId,
+				};
+				productIdArr.push(idData);
+			});
 			localStorage.setItem('productsCartId', JSON.stringify(productIdArr));
 			const cartData = {
 				id: response.data.id,
@@ -720,7 +722,7 @@ export async function addProductForCart(productId: string | undefined, quantity:
 				item: string;
 				product: string;
 			}[] = [];
-			const cart:ICart = {
+			const cart: ICart = {
 				id: response.data.id,
 				version: response.data.version,
 				quantity: response.data.totalLineItemQuantity,
@@ -747,7 +749,7 @@ export async function addProductForCart(productId: string | undefined, quantity:
 			);
 			setTimeout(() => {
 				store.dispatch(hideModal());
-			}, 5000);
+			}, 2500);
 		})
 		.catch((error) => {
 			console.log(error);
@@ -780,16 +782,6 @@ export async function changeQuantityProductForCart(itemId: string, quantity: num
 				quantity: response.data.totalLineItemQuantity,
 			};
 			store.dispatch(addCartData(cart));
-			store.dispatch(
-				showModal({
-					title: 'Success',
-					description: '+',
-					url: successModal,
-				}),
-			);
-			setTimeout(() => {
-				store.dispatch(hideModal());
-			}, 5000);
 		})
 		.catch((error) => {
 			console.log(error);
@@ -828,19 +820,19 @@ export async function DeleteProductForCart(itemId: string) {
 			);
 			setTimeout(() => {
 				store.dispatch(hideModal());
-			}, 5000);
+			}, 2500);
 		})
 		.catch((error) => {
 			console.log(error);
 		});
 }
 
-export async function clearCart(products:IProductCart[]) {
+export async function clearCart(products: IProductCart[]) {
 	const cartData = store.getState().data.cart as ICart;
 	const url = `${API_URL}/${PROJECT_KEY}/me/carts/${cartData.id}`;
 	const headers = getHeaders();
-	const items: { action: string; lineItemId: string; }[] = [];
-	products.forEach((product: { id: string; }) => {
+	const items: { action: string; lineItemId: string }[] = [];
+	products.forEach((product: { id: string }) => {
 		items.push({ action: 'removeLineItem', lineItemId: product.id });
 	});
 	const data = JSON.stringify({
@@ -867,7 +859,7 @@ export async function clearCart(products:IProductCart[]) {
 			);
 			setTimeout(() => {
 				store.dispatch(hideModal());
-			}, 5000);
+			}, 2500);
 		})
 		.catch((error) => {
 			console.log(error);

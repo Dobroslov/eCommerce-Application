@@ -46,6 +46,11 @@ function CartPage() {
 		setValue(value + 1);
 	};
 
+	const handleClearCart = (clearProducts: IProductCart[]) => {
+		clearCart(clearProducts);
+		setValue(value + 1);
+	};
+
 	return (
 		<div className={style.cart}>
 			{products.length > 0 ? (
@@ -96,8 +101,12 @@ function CartPage() {
 									</div>
 								</div>
 							))}
-							<div className={style.clearCoupon}>
-								<button onClick={() => clearCart(products)} type='button' className={style.button}>
+							<div className={style.clearСart}>
+								<button
+									onClick={() => handleClearCart(products)}
+									type='button'
+									className={style.button}
+								>
 									CLEAR CART
 								</button>
 
@@ -129,7 +138,7 @@ function CartPage() {
 					<img className={style.emptyImage} src={CART} alt='' />
 					<p className={style.addSomeProducts}>Your cart is currently empty!</p>
 					<Link to='/shop' className={style.button}>
-						Go to catalog
+						<SubmitButton value='Go to catalog' />
 					</Link>
 				</div>
 			)}
