@@ -134,10 +134,11 @@ export async function getCustomerForId(email: string, password: string | undefin
 			headers,
 		});
 		const responseData: IUserDataRespons = response.data.customer;
-		const cart:ICart = {
+		const cart: ICart = {
 			id: response.data.cart.id,
 			version: response.data.cart.version,
 			quantity: response.data.cart.totalLineItemQuantity,
+			total: response.data.cart.totalPrice.centAmount,
 		};
 		localStorage.setItem('userData', JSON.stringify(responseData));
 		store.dispatch(addCartData(cart));
@@ -622,6 +623,7 @@ export async function createCart() {
 				id: response.data.id,
 				version: response.data.version,
 				quantity: response.data.totalLineItemQuantity,
+				total: response.data.totalPrice.centAmount,
 			};
 			store.dispatch(addCartData(cartData));
 			console.log(store.getState());
@@ -685,6 +687,7 @@ export async function getCart() {
 				id: response.data.id,
 				version: response.data.version,
 				quantity: response.data.totalLineItemQuantity,
+				total: response.data.totalPrice.centAmount,
 			};
 			store.dispatch(addCartData(cartData));
 			return { productArr, totalPrice, currencyCode, totalQuantity };
@@ -720,10 +723,11 @@ export async function addProductForCart(productId: string | undefined, quantity:
 				item: string;
 				product: string;
 			}[] = [];
-			const cart:ICart = {
+			const cart: ICart = {
 				id: response.data.id,
 				version: response.data.version,
 				quantity: response.data.totalLineItemQuantity,
+				total: response.data.totalPrice.centAmount,
 			};
 			store.dispatch(addCartData(cart));
 			response.data.lineItems.forEach((item: { id: string; productId: string }) => {
@@ -778,6 +782,7 @@ export async function changeQuantityProductForCart(itemId: string, quantity: num
 				id: response.data.id,
 				version: response.data.version,
 				quantity: response.data.totalLineItemQuantity,
+				total: response.data.totalPrice.centAmount,
 			};
 			store.dispatch(addCartData(cart));
 			store.dispatch(
@@ -817,6 +822,7 @@ export async function DeleteProductForCart(itemId: string) {
 				id: response.data.id,
 				version: response.data.version,
 				quantity: response.data.totalLineItemQuantity,
+				total: response.data.totalPrice.centAmount,
 			};
 			store.dispatch(addCartData(cart));
 			store.dispatch(
@@ -835,7 +841,7 @@ export async function DeleteProductForCart(itemId: string) {
 		});
 }
 
-export async function clearCart(products:IProductCart[]) {
+export async function clearCart(products: IProductCart[]) {
 	const cartData = store.getState().data.cart as ICart;
 	const url = `${API_URL}/${PROJECT_KEY}/me/carts/${cartData.id}`;
 	const headers = getHeaders();
@@ -856,6 +862,7 @@ export async function clearCart(products:IProductCart[]) {
 				id: response.data.id,
 				version: response.data.version,
 				quantity: response.data.totalLineItemQuantity,
+				total: response.data.totalPrice.centAmount,
 			};
 			store.dispatch(addCartData(cart));
 			store.dispatch(
@@ -872,6 +879,103 @@ export async function clearCart(products:IProductCart[]) {
 		.catch((error) => {
 			console.log(error);
 		});
+}
+
+export async function addPromoCode(promo: string) {
+	const cartData = store.getState().data.cart as ICart;
+	const totalPrice = (store.getState().data.cart?.total as number / 100).toFixed(2);
+	const data = {
+		version: cartData.version,
+		actions: [{
+			action: 'addDiscountCode',
+			code: promo,
+		},
+		],
+	};
+	const url = `${API_URL}/${PROJECT_KEY}/me/carts/${cartData.id}`;
+	const headers = getHeaders();
+
+	const cartDataValue: void | {
+		productArr: IProductCart[];
+		totalPrice: string;
+		currencyCode: string;
+		totalQuantity: number;
+		totalDiscount: string;
+	} = await axios
+		.post(url, data, {
+			headers,
+		})
+		.then((response) => {
+			// const promoCode = response.data.discountCodes[0].discountCode.id
+			// console.log(promoCode);
+			const productIdArr: {
+				item: string;
+				product: string;
+			}[] = [];
+			const productArr: IProductCart[] = [];
+			const totalDiscount = (response.data.totalPrice.centAmount / 100).toFixed(2);
+			const { currencyCode } = response.data.totalPrice;
+			const totalQuantity = response.data.totalLineItemQuantity;
+			response.data.lineItems.forEach(
+				(item: {
+					productId: string;
+					id: string;
+					name: { [x: string]: string };
+					variant: {
+						attributes: { value: string }[];
+						images: { url: string }[];
+					};
+					totalPrice: { centAmount: number };
+					quantity: number;
+				}) => {
+					const productCart: IProductCart = {
+						id: item.id,
+						productId: item.productId,
+						name: item.name['en-US'],
+						weight: item.variant.attributes[1].value,
+						metall: item.variant.attributes[4].value[0],
+						image: item.variant.images[0].url,
+						currencyCode: response.data.totalPrice.currencyCode,
+						price: (item.totalPrice.centAmount / 100).toFixed(2) as string,
+						quantity: item.quantity,
+					};
+					const idData: {
+						item: string;
+						product: string;
+					} = {
+						item: item.id,
+						product: item.productId,
+					};
+					productArr.push(productCart);
+					productIdArr.push(idData);
+				},
+			);
+			localStorage.setItem('productsCartId', JSON.stringify(productIdArr));
+			const cart = {
+				id: response.data.id,
+				version: response.data.version,
+				quantity: response.data.totalLineItemQuantity,
+				total: response.data.totalPrice.centAmount,
+			};
+			store.dispatch(addCartData(cart));
+			store.dispatch(
+				showModal({
+					title: 'Success',
+					description: 'Code completed',
+					url: successModal,
+				}),
+			);
+			setTimeout(() => {
+				store.dispatch(hideModal());
+			}, 5000);
+			const discount = Math.round(100 - (+totalDiscount / +totalPrice) * 100);
+			return { productArr, totalPrice, currencyCode, totalQuantity, totalDiscount, discount };
+		})
+		.catch ((error) => {
+			console.log(error);
+		});
+	console.log(cartDataValue);
+	return cartDataValue;
 }
 
 export async function checkAnonimousToken(

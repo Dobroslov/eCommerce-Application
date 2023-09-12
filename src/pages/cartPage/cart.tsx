@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
 	DeleteProductForCart,
+	addPromoCode,
 	changeQuantityProductForCart,
 	clearCart,
 	getCart,
@@ -111,7 +112,13 @@ function CartPage() {
 										</div>
 										<i className={style.underline} />
 									</div>
-									<SubmitButton value='APPLY COUPON' />
+									<button
+										onClick={() => addPromoCode('zzZ')}
+										type='button'
+										className={style.button}
+									>
+										APPLY COUPON
+									</button>
 								</div>
 							</div>
 						</div>

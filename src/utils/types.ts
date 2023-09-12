@@ -39,7 +39,8 @@ export interface ModalProperties {
 export interface ICart {
 	id:string|undefined,
 	version:string|undefined,
-	quantity:number|undefined
+	quantity:number|undefined,
+	total:number|undefined
 }
 export interface ICartData{
 		productArr: IProductCart[];
