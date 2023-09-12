@@ -12,8 +12,11 @@ import SubmitButton from '../../components/buttons/submitButton';
 
 import style from './cart.module.scss';
 import CART from '../../../public/assets/svg/basket.svg';
+import store from '../../store/store';
 
 function CartPage() {
+	localStorage.removeItem('path');
+
 	const [products, setProducts] = useState<IProductCart[]>([]);
 	const [total, setTotal] = useState<string>('');
 	const [currency, setCurrency] = useState<string>('');
@@ -45,6 +48,7 @@ function CartPage() {
 		DeleteProductForCart(productId);
 		setValue(value + 1);
 	};
+	console.log(store.getState().code);
 
 	return (
 		<div className={style.cart}>
@@ -64,8 +68,8 @@ function CartPage() {
 													Metall: {product.metall} / Weight: {product.weight}g
 												</div>
 												<div className={style.price}>
-													{(+product.price / product.quantity).toFixed(2)} {product.currencyCode} /
-													Total : {product.price} {product.currencyCode}
+													{(+product.totalPrice / product.quantity).toFixed(2)} {product.currencyCode} /
+													Total : {product.totalPrice} {product.currencyCode}
 												</div>
 											</div>
 										</div>

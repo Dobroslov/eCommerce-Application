@@ -106,8 +106,10 @@ export interface IProductCart {
 	metall:string,
 	image: string,
 	currencyCode: string,
-	price: string,
+	price?: string,
 	quantity: number
+	discount?:string,
+	totalPrice:string
 }
 export interface IProductbyId {
 	name: string;
