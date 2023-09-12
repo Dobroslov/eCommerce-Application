@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
 	DeleteProductForCart,
 	changeQuantityProductForCart,
+	clearCart,
 	getCart,
 } from '../../services/apiServices';
 import { IProductCart } from '../../utils/types';
@@ -15,15 +17,15 @@ function CartPage() {
 	const [total, setTotal] = useState<string>('');
 	const [currency, setCurrency] = useState<string>('');
 	const [value, setValue] = useState<number>(products.length);
-
 	useEffect(() => {
 		getCart().then((data) => {
-			if (data) {
-				setProducts(data.productArr);
-				setTotal(data.totalPrice);
-				setCurrency(data.currencyCode);
-				setValue(data.productArr.length);
+			if (!data) {
+				return;
 			}
+			setProducts(data.productArr);
+			setTotal(data.totalPrice);
+			setCurrency(data.currencyCode);
+			setValue(data.productArr.length);
 		});
 	}, [value]);
 
@@ -94,7 +96,14 @@ function CartPage() {
 								</div>
 							))}
 							<div className={style.clearCoupon}>
-								<SubmitButton value='CLEAR CART' />
+								<button
+									onClick={() => clearCart(products)}
+									type='button'
+									className={style.button}
+								>
+									CLEAR CART
+								</button>
+
 								<div className={style.coupon}>
 									<div className={style.inputBody}>
 										<div className={style.inputSearch}>
@@ -122,7 +131,7 @@ function CartPage() {
 				<div className={style.empty}>
 					<img className={style.emptyImage} src={CART} alt='' />
 					<p className={style.addSomeProducts}>Your cart is currently empty!</p>
-					<SubmitButton value='Go to catalog' />
+					<Link to='/shop' className={style.button}>Go to catalog</Link>
 				</div>
 			)}
 		</div>
