@@ -13,6 +13,7 @@
     }
 }
 
+
 .cartTitle {
   align-self: center;
   padding-bottom: 64px;
@@ -27,6 +28,10 @@
     }
 }
 
+.cartTitleNone {
+  display: none;
+}
+
 .body {
   display: flex;
   column-gap: 140px;
@@ -37,6 +42,10 @@
   @media (max-width: 768px){
     flex-direction: column;
 }
+}
+
+.bodyEmpty {
+  display: none;
 }
 
 .cartList {
@@ -344,6 +353,10 @@
   button {
     width: 290px;
   }
+}
+
+.cartFull {
+  display: none;
 }
 .emptyImage {
   width: 200px;

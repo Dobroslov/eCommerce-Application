@@ -45,11 +45,16 @@ export default function Shop(): React.ReactElement {
 	}, [id]);
 
 	const handleSortChange = (filterData: string) => {
-		setFilter(filterData);
+		if (filter !== filterData) {
+			setFilter(filterData);
+			setOffset(0);
+		} else {
+			setFilter(filterData);
+		}
 	};
 
 	const handleOffsetNext = (nextOffset: number) => {
-		if (limit && Math.ceil((nextOffset + 9) / +limit) < Math.ceil(+limit / 9)) {
+		if (limit && Math.ceil(nextOffset / +limit) < Math.ceil(+limit / 9)) {
 			setOffset(nextOffset + 9);
 			localStorage.setItem('offset', (nextOffset + 9).toString());
 		}
@@ -90,7 +95,8 @@ export default function Shop(): React.ReactElement {
 									}
 
 									break;
-								case limit && offset > 0 && Math.ceil(+limit / offset) === Math.ceil(+limit / 9):
+								case offset > 0 &&
+									Math.ceil(offset / 9) === Math.ceil((+data.totalQuantity - 9) / 9):
 									if (next.current && prev.current) {
 										next.current.disabled = true;
 										prev.current.disabled = false;
@@ -109,11 +115,10 @@ export default function Shop(): React.ReactElement {
 					.catch((error) => error);
 			});
 		} else {
-			getFilter(9, 0, filter)
+			getFilter(9, offset, filter)
 				.then((data) => {
 					if (data) {
 						setProducts(data.productsArr);
-						setOffset(0);
 						setLimit(data.totalQuantity);
 
 						switch (true) {
@@ -121,19 +126,24 @@ export default function Shop(): React.ReactElement {
 								if (prev.current && next.current) {
 									next.current.disabled = true;
 									prev.current.disabled = true;
+									console.log(1);
 								}
 								break;
 							case offset === 0:
 								if (prev.current && next.current) {
 									prev.current.disabled = true;
 									next.current.disabled = false;
+									console.log(2);
 								}
 
 								break;
-							case limit && offset > 0 && Math.ceil(+limit / offset) === Math.ceil(+limit / 9):
+							case offset > 0 && Math.ceil(offset / 9) === Math.ceil((+data.totalQuantity - 9) / 9):
 								if (next.current && prev.current) {
 									next.current.disabled = true;
 									prev.current.disabled = false;
+									console.log(3);
+									console.log(offset);
+									console.log(+data.totalQuantity);
 								}
 
 								break;
@@ -141,6 +151,9 @@ export default function Shop(): React.ReactElement {
 								if (prev.current && next.current) {
 									prev.current.disabled = false;
 									next.current.disabled = false;
+									console.log(4);
+									console.log(offset);
+									console.log(+data.totalQuantity);
 								}
 								break;
 						}
@@ -148,47 +161,8 @@ export default function Shop(): React.ReactElement {
 				})
 				.catch((error) => error);
 		}
-	}, [filter]);
+	}, [filter, offset]);
 
-	useEffect(() => {
-		getFilter(9, offset, localFilter || filter)
-			.then((data) => {
-				if (data) {
-					setProducts(data.productsArr);
-					setLimit(data.totalQuantity);
-
-					switch (true) {
-						case offset === 0 && +data.totalQuantity <= 9:
-							if (prev.current && next.current) {
-								next.current.disabled = true;
-								prev.current.disabled = true;
-							}
-							break;
-						case offset === 0:
-							if (prev.current && next.current) {
-								prev.current.disabled = true;
-								next.current.disabled = false;
-							}
-
-							break;
-						case limit && offset > 0 && Math.ceil(+limit / offset) === Math.ceil(+limit / 9):
-							if (next.current && prev.current) {
-								next.current.disabled = true;
-								prev.current.disabled = false;
-							}
-
-							break;
-						default:
-							if (prev.current && next.current) {
-								prev.current.disabled = false;
-								next.current.disabled = false;
-							}
-							break;
-					}
-				}
-			})
-			.catch((error) => error);
-	}, [offset]);
 	localStorage.setItem('path', window.location.pathname);
 
 	return (

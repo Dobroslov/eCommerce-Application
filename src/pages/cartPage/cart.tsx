@@ -14,7 +14,7 @@ function CartPage() {
 	const [products, setProducts] = useState<IProductCart[]>([]);
 	const [total, setTotal] = useState<string>('');
 	const [currency, setCurrency] = useState<string>('');
-	const [value, setValue] = useState<number>(products.length);
+	const [value, setValue] = useState<number>(10);
 
 	useEffect(() => {
 		getCart().then((data) => {
