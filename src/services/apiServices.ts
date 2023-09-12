@@ -835,6 +835,45 @@ export async function DeleteProductForCart(itemId: string) {
 		});
 }
 
+export async function clearCart(products:IProductCart[]) {
+	const cartData = store.getState().data.cart as ICart;
+	const url = `${API_URL}/${PROJECT_KEY}/me/carts/${cartData.id}`;
+	const headers = getHeaders();
+	const items: { action: string; lineItemId: string; }[] = [];
+	products.forEach((product: { id: string; }) => {
+		items.push({ action: 'removeLineItem', lineItemId: product.id });
+	});
+	const data = JSON.stringify({
+		version: cartData.version,
+		actions: items,
+	});
+	await axios
+		.post(url, data, {
+			headers,
+		})
+		.then((response) => {
+			const cart = {
+				id: response.data.id,
+				version: response.data.version,
+				quantity: response.data.totalLineItemQuantity,
+			};
+			store.dispatch(addCartData(cart));
+			store.dispatch(
+				showModal({
+					title: 'Success',
+					description: 'Cart clear',
+					url: successModal,
+				}),
+			);
+			setTimeout(() => {
+				store.dispatch(hideModal());
+			}, 5000);
+		})
+		.catch((error) => {
+			console.log(error);
+		});
+}
+
 export async function checkAnonimousToken(
 	token: string,
 ): Promise<{ email: string; active: string } | void> {

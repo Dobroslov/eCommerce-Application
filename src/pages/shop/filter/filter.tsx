@@ -12,7 +12,7 @@ interface ISort {
 
 export default function Filter(props: ISort): React.ReactElement {
 	const { onValueChange } = props;
-	const [value, setValue] = useState<number[]>([35, 1000]);
+	const [value, setValue] = useState<number[]>([10, 1000]);
 	const [sort, setSorting] = useState<string>('&sort=createdAt+asc');
 	const [category, setCategory] = useState<string>('');
 	const [search, setSearch] = useState<string>('');
@@ -132,7 +132,7 @@ export default function Filter(props: ISort): React.ReactElement {
 			</select>
 			<ReactSlider
 				className={style.slider}
-				defaultValue={[35, 1000]}
+				defaultValue={[10, 1000]}
 				max={1000}
 				min={35}
 				onChange={(newValue) => setValue(newValue)}
