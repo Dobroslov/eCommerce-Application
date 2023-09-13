@@ -648,6 +648,9 @@ export async function getCart() {
 			const totalPrice = (response.data.totalPrice.centAmount / 100).toFixed(2);
 			const { currencyCode } = response.data.totalPrice;
 			const totalQuantity = response.data.totalLineItemQuantity;
+			const totalDiscount = (response.data.totalPrice.centAmount / 100).toFixed(2);
+			const discountProcent = Math.round(100 - (+totalDiscount / +totalPrice) * 100);
+
 			response.data.lineItems.forEach(
 				(item: { id: string;
 					productId: string;
@@ -695,13 +698,12 @@ export async function getCart() {
 				total: response.data.totalPrice.centAmount,
 			};
 			store.dispatch(addCartData(cartData));
-			return { productArr, totalPrice, currencyCode, totalQuantity };
+			return { productArr, totalPrice, currencyCode, totalQuantity, totalDiscount, discountProcent };
 		})
 		.catch(() => {
 			createCart();
 		});
 	console.log(cart);
-
 	return cart;
 }
 

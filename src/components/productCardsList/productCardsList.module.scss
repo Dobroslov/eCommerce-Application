@@ -5,7 +5,7 @@
 	gap: 45px;
 	flex-wrap: wrap;
 	justify-content: space-between;
-	margin: 39px 0 330px 0;
+	margin: 39px 0 50px 0;
 	@media (min-width: 300px) and (max-width: 1248px) {
 		@include respons-property(gap, 14, 20);
 	}
