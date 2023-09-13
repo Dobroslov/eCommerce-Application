@@ -1,7 +1,11 @@
 import { BurgerAction, BurgerActionTypes } from './actions';
 
-const initialState = {
-	burger: false,
+type BurgerState = {
+	burger: boolean | null | undefined;
+  };
+
+const initialState:BurgerState = {
+	burger: null,
 };
 
 function burgerReducer(state = initialState, action: BurgerAction) {

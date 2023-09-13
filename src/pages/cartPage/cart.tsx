@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import {
 	DeleteProductForCart,
 	addPromoCode,
@@ -13,6 +14,8 @@ import SubmitButton from '../../components/buttons/submitButton';
 import style from './cart.module.scss';
 import CART from '../../../public/assets/svg/basket.svg';
 import store from '../../store/store';
+import { addValue } from '../../store/actions';
+import { RootState } from '../../store/reducers';
 
 function CartPage() {
 	localStorage.removeItem('path');
@@ -20,35 +23,32 @@ function CartPage() {
 	const [products, setProducts] = useState<IProductCart[]>([]);
 	const [total, setTotal] = useState<string>('');
 	const [currency, setCurrency] = useState<string>('');
-	const [value, setValue] = useState<number>(products.length);
+	const value = useSelector((state:RootState) => state.value?.value);
 	useEffect(() => {
 		getCart().then((data) => {
 			if (!data) {
 				return;
 			}
+			store.dispatch(addValue(data.totalQuantity as unknown as number));
 			setProducts(data.productArr);
 			setTotal(data.totalPrice);
 			setCurrency(data.currencyCode);
-			setValue(data.productArr.length);
 		});
 	}, [value]);
 
 	const handlePlus = (valuePlus: number, id: string) => {
 		const newValue = valuePlus + 1;
-		setValue(value + 1);
+		store.dispatch(addValue(newValue));
 		changeQuantityProductForCart(id, newValue);
 	};
 	const handleMinus = (valueMinus: number, id: string) => {
 		const newValue = valueMinus - 1;
-		setValue(value - 1);
 		changeQuantityProductForCart(id, newValue);
 	};
 
 	const handleRemoveItem = (productId: string) => {
 		DeleteProductForCart(productId);
-		setValue(value + 1);
 	};
-	console.log(store.getState().code);
 
 	return (
 		<div className={style.cart}>

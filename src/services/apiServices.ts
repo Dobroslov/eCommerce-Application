@@ -644,12 +644,11 @@ export async function getCart() {
 				item: string;
 				product: string;
 			}[] = [];
+			const priceArr:number[] = [];
 			const productArr: IProductCart[] = [];
-			const totalPrice = (response.data.totalPrice.centAmount / 100).toFixed(2);
 			const { currencyCode } = response.data.totalPrice;
 			const totalQuantity = response.data.totalLineItemQuantity;
 			const totalDiscount = (response.data.totalPrice.centAmount / 100).toFixed(2);
-			const discountProcent = Math.round(100 - (+totalDiscount / +totalPrice) * 100);
 
 			response.data.lineItems.forEach(
 				(item: { id: string;
@@ -688,6 +687,7 @@ export async function getCart() {
 					};
 					productArr.push(productCart);
 					productIdArr.push(idData);
+					priceArr.push(item.price.value.centAmount * item.quantity);
 				},
 			);
 			localStorage.setItem('productsCartId', JSON.stringify(productIdArr));
@@ -697,6 +697,8 @@ export async function getCart() {
 				quantity: response.data.totalLineItemQuantity,
 				total: response.data.totalPrice.centAmount,
 			};
+			const totalPrice = ((priceArr.reduce((a, b) => a + b)) / 100).toFixed(2);
+			const discountProcent = Math.round(100 - (+totalDiscount / +totalPrice) * 100);
 			store.dispatch(addCartData(cartData));
 			return { productArr, totalPrice, currencyCode, totalQuantity, totalDiscount, discountProcent };
 		})
@@ -768,6 +770,7 @@ export async function addProductForCart(productId: string | undefined, quantity:
 }
 
 export async function changeQuantityProductForCart(itemId: string, quantity: number) {
+	console.log(store.getState());
 	const cartData = store.getState().data.cart as ICart;
 	const data = JSON.stringify({
 		version: cartData.version,
@@ -904,13 +907,7 @@ export async function addPromoCode(promo: string) {
 	const url = `${API_URL}/${PROJECT_KEY}/me/carts/${cartData.id}`;
 	const headers = getHeaders();
 
-	const cartDataValue: void | {
-		productArr: IProductCart[];
-		totalPrice: string;
-		currencyCode: string;
-		totalQuantity: number;
-		totalDiscount: string;
-	} = await axios
+	const cartDataValue: ICartData|void = await axios
 		.post(url, data, {
 			headers,
 		})
@@ -982,8 +979,8 @@ export async function addPromoCode(promo: string) {
 			setTimeout(() => {
 				store.dispatch(hideModal());
 			}, 5000);
-			const discount = Math.round(100 - (+totalDiscount / +totalPrice) * 100);
-			return { productArr, totalPrice, currencyCode, totalQuantity, totalDiscount, discount };
+			const discountProcent = Math.round(100 - (+totalDiscount / +totalPrice) * 100);
+			return { productArr, totalPrice, currencyCode, totalQuantity, totalDiscount, discountProcent };
 		})
 		.catch((error) => {
 			store.dispatch(

@@ -3,6 +3,10 @@ import { ICart, ModalProperties } from '../utils/types';
 export enum DataActionTypes {
 	AddCartData = 'ADD'
 }
+export enum ValueActionTypes {
+	AddValue = 'ADD_VALUE'
+}
+
 export enum CodeActionTypes {
 	AddCode = 'ADD_CODE'
 }
@@ -11,8 +15,8 @@ export enum ModalActionTypes {
 	HideModal,
 }
 export enum BurgerActionTypes {
-	ShowBurger,
-	HideBurger
+	ShowBurger = 2,
+	HideBurger = 3
 }
 export interface ModalAction {
 	type: ModalActionTypes;
@@ -21,6 +25,11 @@ export interface ModalAction {
 export interface DataAction {
 	type: DataActionTypes;
 	payload?: ICart;
+}
+
+export interface ValueAction {
+	type: ValueActionTypes;
+	payload?: number|null;
 }
 export interface CodeAction {
 	type: CodeActionTypes;
@@ -50,6 +59,14 @@ export function addCartData(payload: ICart) {
 		payload,
 	};
 }
+
+export function addValue(payload: number) {
+	return {
+		type: ValueActionTypes.AddValue,
+		payload,
+	};
+}
+
 export function addCode(payload: string | null) {
 	return {
 		type: CodeActionTypes.AddCode,

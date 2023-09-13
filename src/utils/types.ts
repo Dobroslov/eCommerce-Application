@@ -47,6 +47,8 @@ export interface ICartData{
 		totalPrice: string;
 		currencyCode: string;
 		totalQuantity: string;
+		totalDiscount:string,
+		discountProcent:number
 }
 export interface IUserDataRespons {
 	id: string;
