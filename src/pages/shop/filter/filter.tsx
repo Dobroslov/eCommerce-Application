@@ -188,8 +188,8 @@ export default function Filter(props: ISort): React.ReactElement {
 				</label>
 			</div>
 			<div className={style.submitButtons}>
-				<SubmitButton onclick={handleResetFilters} value='Reset' />
-				<SubmitButton onclick={handleApplyFilters} value='Apply filters' />
+				<SubmitButton onClick={handleResetFilters} value='Reset' />
+				<SubmitButton onClick={handleApplyFilters} value='Apply filters' />
 			</div>
 		</div>
 	);

@@ -153,9 +153,9 @@ export default function ShopSinglPageProduct(): React.ReactElement {
 						</div>
 						<div className={style.addtoCartButton}>
 							{id && products.includes(id) ? (
-								<SubmitButton onclick={handleRemoveItem} value='Remove from Cart' />
+								<SubmitButton onClick={handleRemoveItem} value='Remove from Cart' />
 							) : (
-								<SubmitButton onclick={handleItem} value='Add to Cart' />
+								<SubmitButton onClick={handleItem} value='Add to Cart' />
 							)}
 						</div>
 						<p className={style.skuMobile}>

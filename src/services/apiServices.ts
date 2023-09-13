@@ -19,6 +19,7 @@ import store from '../store/store';
 import { addCartData, addCode, hideModal, showModal } from '../store/actions';
 import errorModal from '../../public/assets/svg/error.svg';
 import successModal from '../../public/assets/svg/success.svg';
+// import { $CombinedState } from '@reduxjs/toolkit';
 
 const PROJECT_KEY = 'glitter-magazine';
 const API_URL = 'https://api.europe-west1.gcp.commercetools.com';
@@ -94,7 +95,7 @@ export async function createCustomer(
 			navigate('/', {
 				replace: true,
 			});
-		}, 2500);
+		}, 5000);
 	} catch (error) {
 		if (axios.isAxiosError(error)) {
 			console.log(error);
@@ -109,7 +110,7 @@ export async function createCustomer(
 
 			setTimeout(() => {
 				store.dispatch(hideModal());
-			}, 2500);
+			}, 5000);
 
 			console.error('Axios Error:', error);
 		}
@@ -180,7 +181,7 @@ export async function getToken(params: IUserLogin): Promise<void> {
 			}
 			setTimeout(() => {
 				store.dispatch(hideModal());
-			}, 2500);
+			}, 5000);
 		})
 		.catch((error) => {
 			store.dispatch(
@@ -192,7 +193,7 @@ export async function getToken(params: IUserLogin): Promise<void> {
 			);
 			setTimeout(() => {
 				store.dispatch(hideModal());
-			}, 2500);
+			}, 5000);
 		});
 }
 /* export async function refreshToken(params: IUserLogin): Promise<void> {
@@ -363,7 +364,7 @@ export async function changePassword({ oldPassword, newPassword }: IUpdatePasswo
 			);
 			setTimeout(() => {
 				store.dispatch(hideModal());
-			}, 2500);
+			}, 5000);
 		})
 		.catch((error) => {
 			store.dispatch(
@@ -375,7 +376,7 @@ export async function changePassword({ oldPassword, newPassword }: IUpdatePasswo
 			);
 			setTimeout(() => {
 				store.dispatch(hideModal());
-			}, 2500);
+			}, 5000);
 		});
 }
 
@@ -429,7 +430,7 @@ export async function changeCustomerValues({
 			setTimeout(() => {
 				store.dispatch(hideModal());
 				window.location.reload();
-			}, 2500);
+			}, 5000);
 		})
 		.catch((error) => {
 			store.dispatch(
@@ -441,7 +442,7 @@ export async function changeCustomerValues({
 			);
 			setTimeout(() => {
 				store.dispatch(hideModal());
-			}, 2500);
+			}, 5000);
 		});
 }
 
@@ -477,7 +478,7 @@ export async function changeAddress(addressId: string, addressData: IAddress) {
 			);
 			setTimeout(() => {
 				store.dispatch(hideModal());
-			}, 2500);
+			}, 5000);
 		})
 		.catch((error) => {
 			store.dispatch(
@@ -489,7 +490,7 @@ export async function changeAddress(addressId: string, addressData: IAddress) {
 			);
 			setTimeout(() => {
 				store.dispatch(hideModal());
-			}, 2500);
+			}, 5000);
 		});
 }
 
@@ -533,7 +534,7 @@ export async function addressActions(addressAction: string, addressId: string) {
 			);
 			setTimeout(() => {
 				store.dispatch(hideModal());
-			}, 2500);
+			}, 5000);
 		})
 		.catch((error) => {
 			store.dispatch(
@@ -545,7 +546,7 @@ export async function addressActions(addressAction: string, addressId: string) {
 			);
 			setTimeout(() => {
 				store.dispatch(hideModal());
-			}, 2500);
+			}, 5000);
 		});
 }
 
@@ -580,7 +581,7 @@ export async function addAddress(addressData: IAddress) {
 			);
 			setTimeout(() => {
 				store.dispatch(hideModal());
-			}, 2500);
+			}, 5000);
 			return responseData;
 		})
 		.catch((error) => {
@@ -593,7 +594,7 @@ export async function addAddress(addressData: IAddress) {
 			);
 			setTimeout(() => {
 				store.dispatch(hideModal());
-			}, 2500);
+			}, 5000);
 		});
 }
 
@@ -646,20 +647,24 @@ export async function getCart() {
 				item: string;
 				product: string;
 			}[] = [];
+			const priceArr: number[] = [];
 			const productArr: IProductCart[] = [];
-			const totalPrice = (response.data.totalPrice.centAmount / 100).toFixed(2);
 			const { currencyCode } = response.data.totalPrice;
 			const totalQuantity = response.data.totalLineItemQuantity;
+			const totalDiscount = (response.data.totalPrice.centAmount / 100).toFixed(2);
+
 			response.data.lineItems.forEach(
-				(item: { id: string;
+				(item: {
+					id: string;
 					productId: string;
-					name: { [x: string]: string; };
-					variant: { attributes: { value: string }[];
-					images: { url: string; }[]; }; totalPrice: { centAmount: number; };
-					price: { value: { centAmount: number; }; };
-					discountedPrice: { value: { centAmount: number; }; };
-					quantity: number; }) => {
-					let discount:string;
+					name: { [x: string]: string };
+					variant: { attributes: { value: string }[]; images: { url: string }[] };
+					totalPrice: { centAmount: number };
+					price: { value: { centAmount: number } };
+					discountedPrice: { value: { centAmount: number } };
+					quantity: number;
+				}) => {
+					let discount: string;
 					if (item.discountedPrice) {
 						discount = (item.discountedPrice.value.centAmount / 100).toFixed(2) as string;
 					} else {
@@ -687,6 +692,7 @@ export async function getCart() {
 					};
 					productArr.push(productCart);
 					productIdArr.push(idData);
+					priceArr.push(item.price.value.centAmount * item.quantity);
 				},
 			);
 			localStorage.setItem('productsCartId', JSON.stringify(productIdArr));
@@ -696,14 +702,22 @@ export async function getCart() {
 				quantity: response.data.totalLineItemQuantity,
 				total: response.data.totalPrice.centAmount,
 			};
+			const totalPrice = (priceArr.reduce((a, b) => a + b) / 100).toFixed(2);
+			const discountProcent = Math.round(100 - (+totalDiscount / +totalPrice) * 100);
 			store.dispatch(addCartData(cartData));
-			return { productArr, totalPrice, currencyCode, totalQuantity };
+			return {
+				productArr,
+				totalPrice,
+				currencyCode,
+				totalQuantity,
+				totalDiscount,
+				discountProcent,
+			};
 		})
 		.catch(() => {
 			createCart();
 		});
 	console.log(cart);
-
 	return cart;
 }
 
@@ -760,7 +774,7 @@ export async function addProductForCart(productId: string | undefined, quantity:
 			);
 			setTimeout(() => {
 				store.dispatch(hideModal());
-			}, 2500);
+			}, 5000);
 		})
 		.catch((error) => {
 			console.log(error);
@@ -768,6 +782,7 @@ export async function addProductForCart(productId: string | undefined, quantity:
 }
 
 export async function changeQuantityProductForCart(itemId: string, quantity: number) {
+	console.log(store.getState());
 	const cartData = store.getState().data.cart as ICart;
 	const data = JSON.stringify({
 		version: cartData.version,
@@ -794,6 +809,16 @@ export async function changeQuantityProductForCart(itemId: string, quantity: num
 				total: response.data.totalPrice.centAmount,
 			};
 			store.dispatch(addCartData(cart));
+			store.dispatch(
+				showModal({
+					title: 'Success',
+					description: '+',
+					url: successModal,
+				}),
+			);
+			setTimeout(() => {
+				store.dispatch(hideModal());
+			}, 5000);
 		})
 		.catch((error) => {
 			console.log(error);
@@ -833,7 +858,7 @@ export async function DeleteProductForCart(itemId: string) {
 			);
 			setTimeout(() => {
 				store.dispatch(hideModal());
-			}, 2500);
+			}, 5000);
 		})
 		.catch((error) => {
 			console.log(error);
@@ -873,7 +898,7 @@ export async function clearCart(products: IProductCart[]) {
 			);
 			setTimeout(() => {
 				store.dispatch(hideModal());
-			}, 2500);
+			}, 5000);
 		})
 		.catch((error) => {
 			console.log(error);
@@ -882,25 +907,20 @@ export async function clearCart(products: IProductCart[]) {
 
 export async function addPromoCode(promo: string) {
 	const cartData = store.getState().data.cart as ICart;
-	const totalPrice = (store.getState().data.cart?.total as number / 100).toFixed(2);
+	const totalPrice = ((store.getState().data.cart?.total as number) / 100).toFixed(2);
 	const data = {
 		version: cartData.version,
-		actions: [{
-			action: 'addDiscountCode',
-			code: promo,
-		},
+		actions: [
+			{
+				action: 'addDiscountCode',
+				code: promo,
+			},
 		],
 	};
 	const url = `${API_URL}/${PROJECT_KEY}/me/carts/${cartData.id}`;
 	const headers = getHeaders();
 
-	const cartDataValue: void | {
-		productArr: IProductCart[];
-		totalPrice: string;
-		currencyCode: string;
-		totalQuantity: number;
-		totalDiscount: string;
-	} = await axios
+	const cartDataValue: ICartData | void = await axios
 		.post(url, data, {
 			headers,
 		})
@@ -916,15 +936,17 @@ export async function addPromoCode(promo: string) {
 			const { currencyCode } = response.data.totalPrice;
 			const totalQuantity = response.data.totalLineItemQuantity;
 			response.data.lineItems.forEach(
-				(item: { id: string;
+				(item: {
+					id: string;
 					productId: string;
-					name: { [x: string]: string; };
-					variant: { attributes: { value: string }[];
-					images: { url: string; }[]; }; totalPrice: { centAmount: number; };
-					price: { value: { centAmount: number; }; };
-					discountedPrice: { value: { centAmount: number; }; };
-					quantity: number; }) => {
-					let discount:string;
+					name: { [x: string]: string };
+					variant: { attributes: { value: string }[]; images: { url: string }[] };
+					totalPrice: { centAmount: number };
+					price: { value: { centAmount: number } };
+					discountedPrice: { value: { centAmount: number } };
+					quantity: number;
+				}) => {
+					let discount: string;
 					if (item.discountedPrice) {
 						discount = (item.discountedPrice.value.centAmount / 100).toFixed(2) as string;
 					} else {
@@ -972,8 +994,15 @@ export async function addPromoCode(promo: string) {
 			setTimeout(() => {
 				store.dispatch(hideModal());
 			}, 5000);
-			const discount = Math.round(100 - (+totalDiscount / +totalPrice) * 100);
-			return { productArr, totalPrice, currencyCode, totalQuantity, totalDiscount, discount };
+			const discountProcent = Math.round(100 - (+totalDiscount / +totalPrice) * 100);
+			return {
+				productArr,
+				totalPrice,
+				currencyCode,
+				totalQuantity,
+				totalDiscount,
+				discountProcent,
+			};
 		})
 		.catch((error) => {
 			store.dispatch(
@@ -1022,13 +1051,14 @@ export async function removePromoCode() {
 		const cartData = store.getState().data.cart as ICart;
 		const data = {
 			version: cartData.version,
-			actions: [{
-				action: 'removeDiscountCode',
-				discountCode: {
-					typeId: 'discount-code',
-					id: promoId,
+			actions: [
+				{
+					action: 'removeDiscountCode',
+					discountCode: {
+						typeId: 'discount-code',
+						id: promoId,
+					},
 				},
-			},
 			],
 		};
 		const url = `${API_URL}/${PROJECT_KEY}/me/carts/${cartData.id}`;
@@ -1036,7 +1066,8 @@ export async function removePromoCode() {
 		await axios
 			.post(url, data, {
 				headers,
-			}).then((response) => {
+			})
+			.then((response) => {
 				const cart = {
 					id: response.data.id,
 					version: response.data.version,
@@ -1044,7 +1075,8 @@ export async function removePromoCode() {
 					total: response.data.totalPrice.centAmount,
 				};
 				store.dispatch(addCartData(cart));
-			}).catch((error) => {
+			})
+			.catch((error) => {
 				console.log(error);
 			});
 	}

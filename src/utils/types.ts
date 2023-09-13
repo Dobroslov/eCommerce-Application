@@ -29,7 +29,7 @@ export interface IAddress {
 
 export interface ISubmitButton {
 	value: string;
-	onclick?(): void;
+	onClick?(): void;
 }
 export interface ModalProperties {
 	title: string;
@@ -37,16 +37,18 @@ export interface ModalProperties {
 	url: string;
 }
 export interface ICart {
-	id:string|undefined,
-	version:string|undefined,
-	quantity:number|undefined,
-	total:number|undefined
+	id: string | undefined;
+	version: string | undefined;
+	quantity: number | undefined;
+	total: number | undefined;
 }
-export interface ICartData{
-		productArr: IProductCart[];
-		totalPrice: string;
-		currencyCode: string;
-		totalQuantity: string;
+export interface ICartData {
+	productArr: IProductCart[];
+	totalPrice: string;
+	currencyCode: string;
+	totalQuantity: string;
+	totalDiscount: string;
+	discountProcent: number;
 }
 export interface IUserDataRespons {
 	id: string;
@@ -93,23 +95,23 @@ export interface IProduct {
 	price: string;
 	discount: string;
 }
-export interface IProductCatalog{
-	totalQuantity:string,
-	productsArr:IProduct[]
+export interface IProductCatalog {
+	totalQuantity: string;
+	productsArr: IProduct[];
 }
 
 export interface IProductCart {
-	id: string,
-	productId:string,
-	name: string,
-	weight: string,
-	metall:string,
-	image: string,
-	currencyCode: string,
-	price?: string,
-	quantity: number
-	discount?:string,
-	totalPrice:string
+	id: string;
+	productId: string;
+	name: string;
+	weight: string;
+	metall: string;
+	image: string;
+	currencyCode: string;
+	price?: string;
+	quantity: number;
+	discount?: string;
+	totalPrice: string;
 }
 export interface IProductbyId {
 	name: string;
@@ -122,8 +124,8 @@ export interface IProductbyId {
 	stone: boolean;
 	standard: number;
 	metall: string;
-	discount?:string;
-	sku:string
+	discount?: string;
+	sku: string;
 }
 export interface ISorting {
 	sortLimit: number | string;

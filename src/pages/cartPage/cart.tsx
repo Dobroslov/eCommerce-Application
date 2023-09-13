@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from 'react';
+/* eslint-disable no-mixed-spaces-and-tabs */
+/* eslint-disable indent */
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
 	DeleteProductForCart,
@@ -12,48 +14,70 @@ import SubmitButton from '../../components/buttons/submitButton';
 
 import style from './cart.module.scss';
 import CART from '../../../public/assets/svg/basket.svg';
-import store from '../../store/store';
 
 function CartPage() {
 	localStorage.removeItem('path');
 
 	const [products, setProducts] = useState<IProductCart[]>([]);
 	const [total, setTotal] = useState<string>('');
+	const [discountPrice, setdiscountPrice] = useState<string>('');
 	const [currency, setCurrency] = useState<string>('');
-	const [value, setValue] = useState<number>(10);
+	const [value, setValue] = useState<number>(0);
+	const [coupon, setCoupon] = useState<boolean>(false);
+	const [percent, setPercent] = useState<number>();
+
+	const couponInput = useRef<HTMLInputElement | null>(null);
 
 	useEffect(() => {
 		getCart().then((data) => {
 			if (!data) {
+				setProducts([]);
 				return;
 			}
 			setProducts(data.productArr);
 			setTotal(data.totalPrice);
+			setdiscountPrice(data.totalDiscount);
 			setCurrency(data.currencyCode);
-			setValue(data.productArr.length);
+			setPercent(data.discountProcent);
+			setValue(1);
+			console.log('get cart');
 		});
 	}, [value]);
 
 	const handlePlus = (valuePlus: number, id: string) => {
 		const newValue = valuePlus + 1;
-		setValue(value + 1);
+		setValue(5);
 		changeQuantityProductForCart(id, newValue);
+		getCart();
 	};
 	const handleMinus = (valueMinus: number, id: string) => {
 		const newValue = valueMinus - 1;
-		setValue(value - 1);
+		setValue(6);
 		changeQuantityProductForCart(id, newValue);
 	};
 
 	const handleRemoveItem = (productId: string) => {
 		DeleteProductForCart(productId);
-		setValue(value + 1);
+		setValue(7);
 	};
-	console.log(store.getState().code);
 
 	const handleClearCart = (clearProducts: IProductCart[]) => {
 		clearCart(clearProducts);
-		setValue(value + 1);
+		setValue(8);
+	};
+
+	const handlePromocode = () => {
+		console.log(couponInput.current);
+		if (couponInput.current) {
+			const promocode = couponInput.current?.value;
+			addPromoCode(promocode).then((response) => {
+				if (response) {
+					setPercent(response.discountProcent);
+					setValue(9);
+					setCoupon(true);
+				}
+			});
+		}
 	};
 
 	return (
@@ -74,8 +98,19 @@ function CartPage() {
 													Metall: {product.metall} / Weight: {product.weight}g
 												</div>
 												<div className={style.price}>
-													{(+product.totalPrice / product.quantity).toFixed(2)} {product.currencyCode} /
-													Total : {product.totalPrice} {product.currencyCode}
+													<div>
+														{+product.totalPrice / product.quantity === +product.totalPrice
+															? `${(+product.totalPrice / product.quantity).toFixed(2)} ${
+																	product.currencyCode
+															  }`
+															: `${(+product.totalPrice / product.quantity).toFixed(2)}
+														${product.currencyCode} / Total : ${product.totalPrice} ${product.currencyCode}`}
+													</div>
+													<div className={style.lineThrough}>
+														{+product.totalPrice / product.quantity === Number(product.price)
+															? ''
+															: `${product.price} ${product.currencyCode}`}
+													</div>
 												</div>
 											</div>
 										</div>
@@ -107,28 +142,21 @@ function CartPage() {
 								</div>
 							))}
 							<div className={style.clearСart}>
-								<button
-									onClick={() => handleClearCart(products)}
-									type='button'
-									className={style.button}
-								>
-									CLEAR CART
-								</button>
+								<SubmitButton onClick={() => handleClearCart(products)} value='CLEAR CART' />
 
 								<div className={style.coupon}>
 									<div className={style.inputBody}>
 										<div className={style.inputSearch}>
-											<input className={style.input} type='text' placeholder='Coupon code' />
+											<input
+												ref={couponInput}
+												className={style.input}
+												type='text'
+												placeholder='Coupon code'
+											/>
 										</div>
 										<i className={style.underline} />
 									</div>
-									<button
-										onClick={() => addPromoCode('zzZ')}
-										type='button'
-										className={style.button}
-									>
-										APPLY COUPON
-									</button>
+									<SubmitButton onClick={() => handlePromocode()} value='APPLY COUPON' />
 								</div>
 							</div>
 						</div>
@@ -136,9 +164,17 @@ function CartPage() {
 							<p className={style.totalTitle}>Cart totals</p>
 							<div className={style.totalPrice}>
 								<p>TOTAL</p>
-								<p>
-									{total} {currency}
-								</p>
+								<div>
+									{!coupon ? (
+										`${total} ${currency}`
+									) : (
+										<div className={style.discount}>
+											<p>{`${discountPrice} ${currency}`}</p>
+											<p className={style.lineThrough}>{`${total} ${currency}`}</p>
+											<span className={style.discountPercent}>-{percent}%</span>
+										</div>
+									)}
+								</div>
 							</div>
 							<SubmitButton value='PROCEED TO CHECKOUT' />
 						</div>
