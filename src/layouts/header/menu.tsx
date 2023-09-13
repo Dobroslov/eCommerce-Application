@@ -18,7 +18,8 @@ function Menu(): React.JSX.Element {
 			setToggle(!active);
 		}
 	};
-	const quantity = useSelector((state:RootState) => state.data.cart?.quantity);
+	const quantity = useSelector((state:RootState) => state.data.cart?.quantity,
+	);
 	const node = useRef<HTMLDivElement>(null);
 	useOnClickOutside(node, (): void => closeSearch());
 	return (

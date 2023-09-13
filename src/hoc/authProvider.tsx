@@ -42,6 +42,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 			id: undefined,
 			version: undefined,
 			quantity: undefined,
+			total: undefined,
 		}));
 		getAnonimousToken().then(() => {
 			getCart();

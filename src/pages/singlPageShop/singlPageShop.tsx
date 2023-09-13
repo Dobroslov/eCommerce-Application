@@ -20,6 +20,7 @@ interface IidData {
 }
 
 export default function ShopSinglPageProduct(): React.ReactElement {
+	localStorage.removeItem('path');
 	const localCart: IidData[] = JSON.parse(localStorage.getItem('productsCartId') as string);
 	const items: string[] = [];
 	const products: string[] = [];

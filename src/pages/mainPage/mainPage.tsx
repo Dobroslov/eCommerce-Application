@@ -6,6 +6,7 @@ import { addProductForCart, getAnonimousToken, getFilter } from '../../services/
 import styles from './mainPage.module.scss';
 
 function MainPage(): React.ReactElement {
+	localStorage.removeItem('path');
 	const [products, setProducts] = useState<IProduct[]>([]);
 	useEffect(() => {
 		const localAnonymousToken = localStorage.getItem('anonimous');

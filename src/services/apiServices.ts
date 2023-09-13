@@ -16,7 +16,7 @@ import {
 	ICart,
 } from '../utils/types';
 import store from '../store/store';
-import { addCartData, hideModal, showModal } from '../store/actions';
+import { addCartData, addCode, hideModal, showModal } from '../store/actions';
 import errorModal from '../../public/assets/svg/error.svg';
 import successModal from '../../public/assets/svg/success.svg';
 
@@ -141,6 +141,7 @@ export async function getCustomerForId(
 			id: response.data.cart.id,
 			version: response.data.cart.version,
 			quantity: response.data.cart.totalLineItemQuantity,
+			total: response.data.cart.totalPrice.centAmount,
 		};
 		localStorage.setItem('userData', JSON.stringify(responseData));
 		store.dispatch(addCartData(cart));
@@ -624,6 +625,7 @@ export async function createCart() {
 				id: response.data.id,
 				version: response.data.version,
 				quantity: response.data.totalLineItemQuantity,
+				total: response.data.totalPrice.centAmount,
 			};
 			store.dispatch(addCartData(cartData));
 			console.log(store.getState());
@@ -649,17 +651,20 @@ export async function getCart() {
 			const { currencyCode } = response.data.totalPrice;
 			const totalQuantity = response.data.totalLineItemQuantity;
 			response.data.lineItems.forEach(
-				(item: {
+				(item: { id: string;
 					productId: string;
-					id: string;
-					name: { [x: string]: string };
-					variant: {
-						attributes: { value: string }[];
-						images: { url: string }[];
-					};
-					totalPrice: { centAmount: number };
-					quantity: number;
-				}) => {
+					name: { [x: string]: string; };
+					variant: { attributes: { value: string }[];
+					images: { url: string; }[]; }; totalPrice: { centAmount: number; };
+					price: { value: { centAmount: number; }; };
+					discountedPrice: { value: { centAmount: number; }; };
+					quantity: number; }) => {
+					let discount:string;
+					if (item.discountedPrice) {
+						discount = (item.discountedPrice.value.centAmount / 100).toFixed(2) as string;
+					} else {
+						discount = '';
+					}
 					const productCart: IProductCart = {
 						id: item.id,
 						productId: item.productId,
@@ -668,7 +673,9 @@ export async function getCart() {
 						metall: item.variant.attributes[4].value[0],
 						image: item.variant.images[0].url,
 						currencyCode: response.data.totalPrice.currencyCode,
-						price: (item.totalPrice.centAmount / 100).toFixed(2) as string,
+						totalPrice: (item.totalPrice.centAmount / 100).toFixed(2) as string,
+						price: (item.price.value.centAmount / 100).toFixed(2) as string,
+						discount,
 						quantity: item.quantity,
 					};
 					const idData: {
@@ -687,6 +694,7 @@ export async function getCart() {
 				id: response.data.id,
 				version: response.data.version,
 				quantity: response.data.totalLineItemQuantity,
+				total: response.data.totalPrice.centAmount,
 			};
 			store.dispatch(addCartData(cartData));
 			return { productArr, totalPrice, currencyCode, totalQuantity };
@@ -694,6 +702,8 @@ export async function getCart() {
 		.catch(() => {
 			createCart();
 		});
+	console.log(cart);
+
 	return cart;
 }
 
@@ -726,6 +736,7 @@ export async function addProductForCart(productId: string | undefined, quantity:
 				id: response.data.id,
 				version: response.data.version,
 				quantity: response.data.totalLineItemQuantity,
+				total: response.data.totalPrice.centAmount,
 			};
 			store.dispatch(addCartData(cart));
 			response.data.lineItems.forEach((item: { id: string; productId: string }) => {
@@ -780,6 +791,7 @@ export async function changeQuantityProductForCart(itemId: string, quantity: num
 				id: response.data.id,
 				version: response.data.version,
 				quantity: response.data.totalLineItemQuantity,
+				total: response.data.totalPrice.centAmount,
 			};
 			store.dispatch(addCartData(cart));
 		})
@@ -809,6 +821,7 @@ export async function DeleteProductForCart(itemId: string) {
 				id: response.data.id,
 				version: response.data.version,
 				quantity: response.data.totalLineItemQuantity,
+				total: response.data.totalPrice.centAmount,
 			};
 			store.dispatch(addCartData(cart));
 			store.dispatch(
@@ -848,6 +861,7 @@ export async function clearCart(products: IProductCart[]) {
 				id: response.data.id,
 				version: response.data.version,
 				quantity: response.data.totalLineItemQuantity,
+				total: response.data.totalPrice.centAmount,
 			};
 			store.dispatch(addCartData(cart));
 			store.dispatch(
@@ -864,6 +878,117 @@ export async function clearCart(products: IProductCart[]) {
 		.catch((error) => {
 			console.log(error);
 		});
+}
+
+export async function addPromoCode(promo: string) {
+	const cartData = store.getState().data.cart as ICart;
+	const totalPrice = (store.getState().data.cart?.total as number / 100).toFixed(2);
+	const data = {
+		version: cartData.version,
+		actions: [{
+			action: 'addDiscountCode',
+			code: promo,
+		},
+		],
+	};
+	const url = `${API_URL}/${PROJECT_KEY}/me/carts/${cartData.id}`;
+	const headers = getHeaders();
+
+	const cartDataValue: void | {
+		productArr: IProductCart[];
+		totalPrice: string;
+		currencyCode: string;
+		totalQuantity: number;
+		totalDiscount: string;
+	} = await axios
+		.post(url, data, {
+			headers,
+		})
+		.then((response) => {
+			const promoCodeID: string = response.data.discountCodes[0].discountCode.id;
+			store.dispatch(addCode(promoCodeID));
+			const productIdArr: {
+				item: string;
+				product: string;
+			}[] = [];
+			const productArr: IProductCart[] = [];
+			const totalDiscount = (response.data.totalPrice.centAmount / 100).toFixed(2);
+			const { currencyCode } = response.data.totalPrice;
+			const totalQuantity = response.data.totalLineItemQuantity;
+			response.data.lineItems.forEach(
+				(item: { id: string;
+					productId: string;
+					name: { [x: string]: string; };
+					variant: { attributes: { value: string }[];
+					images: { url: string; }[]; }; totalPrice: { centAmount: number; };
+					price: { value: { centAmount: number; }; };
+					discountedPrice: { value: { centAmount: number; }; };
+					quantity: number; }) => {
+					let discount:string;
+					if (item.discountedPrice) {
+						discount = (item.discountedPrice.value.centAmount / 100).toFixed(2) as string;
+					} else {
+						discount = '';
+					}
+					const productCart: IProductCart = {
+						id: item.id,
+						productId: item.productId,
+						name: item.name['en-US'],
+						weight: item.variant.attributes[1].value,
+						metall: item.variant.attributes[4].value[0],
+						image: item.variant.images[0].url,
+						currencyCode: response.data.totalPrice.currencyCode,
+						totalPrice: (item.totalPrice.centAmount / 100).toFixed(2) as string,
+						price: (item.price.value.centAmount / 100).toFixed(2) as string,
+						discount,
+						quantity: item.quantity,
+					};
+					const idData: {
+						item: string;
+						product: string;
+					} = {
+						item: item.id,
+						product: item.productId,
+					};
+					productArr.push(productCart);
+					productIdArr.push(idData);
+				},
+			);
+			localStorage.setItem('productsCartId', JSON.stringify(productIdArr));
+			const cart = {
+				id: response.data.id,
+				version: response.data.version,
+				quantity: response.data.totalLineItemQuantity,
+				total: response.data.totalPrice.centAmount,
+			};
+			store.dispatch(addCartData(cart));
+			store.dispatch(
+				showModal({
+					title: 'Success',
+					description: 'Code completed',
+					url: successModal,
+				}),
+			);
+			setTimeout(() => {
+				store.dispatch(hideModal());
+			}, 5000);
+			const discount = Math.round(100 - (+totalDiscount / +totalPrice) * 100);
+			return { productArr, totalPrice, currencyCode, totalQuantity, totalDiscount, discount };
+		})
+		.catch((error) => {
+			store.dispatch(
+				showModal({
+					title: 'Fault',
+					description: error.response?.data.message,
+					url: errorModal,
+				}),
+			);
+			setTimeout(() => {
+				store.dispatch(hideModal());
+			}, 5000);
+		});
+	console.log(cartDataValue);
+	return cartDataValue;
 }
 
 export async function checkAnonimousToken(
@@ -889,4 +1014,38 @@ export async function checkAnonimousToken(
 		.catch((error) => {
 			console.log(error);
 		});
+}
+
+export async function removePromoCode() {
+	if (store.getState().code.code) {
+		const promoId = store.getState().code.code;
+		const cartData = store.getState().data.cart as ICart;
+		const data = {
+			version: cartData.version,
+			actions: [{
+				action: 'removeDiscountCode',
+				discountCode: {
+					typeId: 'discount-code',
+					id: promoId,
+				},
+			},
+			],
+		};
+		const url = `${API_URL}/${PROJECT_KEY}/me/carts/${cartData.id}`;
+		const headers = getHeaders();
+		await axios
+			.post(url, data, {
+				headers,
+			}).then((response) => {
+				const cart = {
+					id: response.data.id,
+					version: response.data.version,
+					quantity: response.data.totalLineItemQuantity,
+					total: response.data.totalPrice.centAmount,
+				};
+				store.dispatch(addCartData(cart));
+			}).catch((error) => {
+				console.log(error);
+			});
+	}
 }

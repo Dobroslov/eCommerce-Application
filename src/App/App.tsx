@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Routes, Route, useNavigate, useLocation, Navigate } from 'react-router-dom';
 
-import { getAnonimousToken, checkAnonimousToken, getCart } from '../services/apiServices';
+import { getAnonimousToken, checkAnonimousToken, getCart, removePromoCode } from '../services/apiServices';
 import useAuth from '../hooks/useAuth';
 import RequireAuthorisation from '../hoc/requireAuthorisation';
 import MainPage from '../pages/mainPage/mainPage';
@@ -60,7 +60,7 @@ function App(): React.ReactElement {
 			});
 		}
 	}, []);
-
+	window.onbeforeunload = () => removePromoCode();
 	return (
 		<div className='wrapper'>
 			<Routes>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
 	DeleteProductForCart,
+	addPromoCode,
 	changeQuantityProductForCart,
 	clearCart,
 	getCart,
@@ -11,8 +12,11 @@ import SubmitButton from '../../components/buttons/submitButton';
 
 import style from './cart.module.scss';
 import CART from '../../../public/assets/svg/basket.svg';
+import store from '../../store/store';
 
 function CartPage() {
+	localStorage.removeItem('path');
+
 	const [products, setProducts] = useState<IProductCart[]>([]);
 	const [total, setTotal] = useState<string>('');
 	const [currency, setCurrency] = useState<string>('');
@@ -45,6 +49,7 @@ function CartPage() {
 		DeleteProductForCart(productId);
 		setValue(value + 1);
 	};
+	console.log(store.getState().code);
 
 	const handleClearCart = (clearProducts: IProductCart[]) => {
 		clearCart(clearProducts);
@@ -69,8 +74,8 @@ function CartPage() {
 													Metall: {product.metall} / Weight: {product.weight}g
 												</div>
 												<div className={style.price}>
-													{(+product.price / product.quantity).toFixed(2)} {product.currencyCode} /
-													Total : {product.price} {product.currencyCode}
+													{(+product.totalPrice / product.quantity).toFixed(2)} {product.currencyCode} /
+													Total : {product.totalPrice} {product.currencyCode}
 												</div>
 											</div>
 										</div>
@@ -117,7 +122,13 @@ function CartPage() {
 										</div>
 										<i className={style.underline} />
 									</div>
-									<SubmitButton value='APPLY COUPON' />
+									<button
+										onClick={() => addPromoCode('zzZ')}
+										type='button'
+										className={style.button}
+									>
+										APPLY COUPON
+									</button>
 								</div>
 							</div>
 						</div>

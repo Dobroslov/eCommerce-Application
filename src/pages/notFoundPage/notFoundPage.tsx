@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import style from './notFoundPage.module.scss';
 
 function NotFoundPage(): React.JSX.Element {
+	localStorage.removeItem('path');
 	return (
 		<div className={style.not__page}>
 			<div className={style.container}>
