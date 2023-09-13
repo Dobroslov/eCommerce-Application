@@ -2,6 +2,7 @@
 /* eslint-disable indent */
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import {
 	DeleteProductForCart,
 	addPromoCode,
@@ -14,56 +15,55 @@ import SubmitButton from '../../components/buttons/submitButton';
 
 import style from './cart.module.scss';
 import CART from '../../../public/assets/svg/basket.svg';
+import store from '../../store/store';
+import { addValue } from '../../store/actions';
+import { RootState } from '../../store/reducers';
 
 function CartPage() {
 	localStorage.removeItem('path');
-
 	const [products, setProducts] = useState<IProductCart[]>([]);
 	const [total, setTotal] = useState<string>('');
 	const [discountPrice, setdiscountPrice] = useState<string>('');
 	const [currency, setCurrency] = useState<string>('');
-	const [value, setValue] = useState<number>(0);
-	const [coupon, setCoupon] = useState<boolean>(false);
 	const [percent, setPercent] = useState<number>();
 
 	const couponInput = useRef<HTMLInputElement | null>(null);
-
+	const value = useSelector((state: RootState) => state.value?.value);
 	useEffect(() => {
 		getCart().then((data) => {
 			if (!data) {
 				setProducts([]);
 				return;
 			}
+			store.dispatch(addValue(data.totalQuantity as unknown as number));
 			setProducts(data.productArr);
 			setTotal(data.totalPrice);
 			setdiscountPrice(data.totalDiscount);
 			setCurrency(data.currencyCode);
 			setPercent(data.discountProcent);
-			setValue(1);
-			console.log('get cart');
 		});
 	}, [value]);
 
 	const handlePlus = (valuePlus: number, id: string) => {
 		const newValue = valuePlus + 1;
-		setValue(5);
+		store.dispatch(addValue(newValue));
 		changeQuantityProductForCart(id, newValue);
-		getCart();
 	};
+
 	const handleMinus = (valueMinus: number, id: string) => {
 		const newValue = valueMinus - 1;
-		setValue(6);
+		store.dispatch(addValue(newValue));
 		changeQuantityProductForCart(id, newValue);
 	};
 
 	const handleRemoveItem = (productId: string) => {
+		store.dispatch(addValue(+productId));
 		DeleteProductForCart(productId);
-		setValue(7);
 	};
 
 	const handleClearCart = (clearProducts: IProductCart[]) => {
+		store.dispatch(addValue(clearProducts.length));
 		clearCart(clearProducts);
-		setValue(8);
 	};
 
 	const handlePromocode = () => {
@@ -72,9 +72,8 @@ function CartPage() {
 			const promocode = couponInput.current?.value;
 			addPromoCode(promocode).then((response) => {
 				if (response) {
+					store.dispatch(addValue(+response.totalDiscount));
 					setPercent(response.discountProcent);
-					setValue(9);
-					setCoupon(true);
 				}
 			});
 		}
@@ -165,7 +164,7 @@ function CartPage() {
 							<div className={style.totalPrice}>
 								<p>TOTAL</p>
 								<div>
-									{!coupon ? (
+									{discountPrice === total ? (
 										`${total} ${currency}`
 									) : (
 										<div className={style.discount}>

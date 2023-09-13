@@ -13,6 +13,7 @@ function Menu(): React.JSX.Element {
 	// const toggleSearch = ():void => {
 	// 	setToggle(!active);
 	// };
+
 	const closeSearch = (): void => {
 		if (active) {
 			setToggle(!active);
