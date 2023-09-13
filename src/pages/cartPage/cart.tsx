@@ -44,6 +44,7 @@ function CartPage() {
 	const handleMinus = (valueMinus: number, id: string) => {
 		const newValue = valueMinus - 1;
 		changeQuantityProductForCart(id, newValue);
+		store.dispatch(addValue(newValue));
 	};
 
 	const handleRemoveItem = (productId: string) => {
