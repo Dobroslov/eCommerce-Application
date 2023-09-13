@@ -126,14 +126,12 @@ export default function Shop(): React.ReactElement {
 								if (prev.current && next.current) {
 									next.current.disabled = true;
 									prev.current.disabled = true;
-									console.log(1);
 								}
 								break;
 							case offset === 0:
 								if (prev.current && next.current) {
 									prev.current.disabled = true;
 									next.current.disabled = false;
-									console.log(2);
 								}
 
 								break;
@@ -141,9 +139,6 @@ export default function Shop(): React.ReactElement {
 								if (next.current && prev.current) {
 									next.current.disabled = true;
 									prev.current.disabled = false;
-									console.log(3);
-									console.log(offset);
-									console.log(+data.totalQuantity);
 								}
 
 								break;
@@ -151,9 +146,6 @@ export default function Shop(): React.ReactElement {
 								if (prev.current && next.current) {
 									prev.current.disabled = false;
 									next.current.disabled = false;
-									console.log(4);
-									console.log(offset);
-									console.log(+data.totalQuantity);
 								}
 								break;
 						}

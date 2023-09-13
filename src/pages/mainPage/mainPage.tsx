@@ -16,7 +16,6 @@ function MainPage(): React.ReactElement {
 					.then((data) => {
 						if (data) {
 							setProducts(data.productsArr);
-							console.log(data.totalQuantity);
 						}
 					})
 					.catch((error) => error);
@@ -26,8 +25,6 @@ function MainPage(): React.ReactElement {
 				.then((data) => {
 					if (data) {
 						setProducts(data.productsArr);
-						console.log(data.totalQuantity);
-						console.log(data.productsArr);
 					}
 				})
 				.catch((error) => error);

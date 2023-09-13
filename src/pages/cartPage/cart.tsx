@@ -67,7 +67,6 @@ function CartPage() {
 	};
 
 	const handlePromocode = () => {
-		console.log(couponInput.current);
 		if (couponInput.current) {
 			const promocode = couponInput.current?.value;
 			addPromoCode(promocode).then((response) => {

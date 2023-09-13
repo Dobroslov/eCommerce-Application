@@ -59,7 +59,6 @@ export default function ShopSinglPageProduct(): React.ReactElement {
 
 	const handleItem = () => {
 		if (id) {
-			console.log(`Count: ${productCout} id: ${id}`);
 			addProductForCart(id, productCout);
 		}
 	};
