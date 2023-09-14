@@ -31,6 +31,11 @@ function Navigation(): React.JSX.Element {
 					Shop
 				</NavLink>
 			</li>
+			<li>
+				<NavLink to='/about-us' className={style.nav__link}>
+					About
+				</NavLink>
+			</li>
 		</ul>
 	);
 }

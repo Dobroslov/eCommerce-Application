@@ -56,9 +56,9 @@ main {
 
 .title_h5 {
 	font-weight: 500;
-	font-size: 20px;
-	@include respons-property(font-size, 12, 20);
-	line-height: 1;
+	font-size: 16px;
+	@include respons-property(font-size, 12, 16);
+	line-height: 1.3;
 }
 
 .active {

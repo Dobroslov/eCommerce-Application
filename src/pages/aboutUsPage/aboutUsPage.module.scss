@@ -1,0 +1,123 @@
+@import '../../styles/mixins';
+
+.about_us__page {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	margin-top: 60px;
+	@include respons-property(margin-top, 30, 60);
+	margin-bottom: 40px;
+	@include respons-property(margin-bottom, 20, 40);
+	margin-top: 40px;
+	@include respons-property(margin-top, 20, 40);
+}
+
+.title {
+	text-align: center;
+	margin-bottom: 40px;
+	@include respons-property(margin-bottom, 20, 40);
+}
+
+.member {
+	padding-bottom: 30px;
+	position: relative;
+	&:after {
+		content: '';
+		position: absolute;
+		bottom: 0px;
+		left: 0;
+		right: 0;
+		border-bottom: 1px solid #757575;
+	}
+}
+
+.name {
+	margin-bottom: 10px;
+	position: relative;
+	padding-left: 90px;
+	&::before {
+		content: '';
+		position: absolute;
+		width: 70px;
+		height: 1px;
+		background-color: #757575;
+		left: 0;
+		bottom: 17px;
+	}
+}
+
+.title_h3 {
+	margin: 20px 0 5px 0;
+}
+
+.about {
+	margin-bottom: 5px;
+	color: black;
+	line-height: 1.5;
+}
+
+.color {
+	margin-bottom: 5px;
+	color: black;
+}
+
+.link {
+	color: #e0bf02;
+	transition: all ease-in 0.3s;
+	&:hover {
+		color: #8c7702;
+	}
+}
+
+.list_members_team {
+	margin: 0 auto;
+}
+
+.list_members_team {
+	display: flex;
+	flex-direction: column;
+	gap: 30px;
+}
+
+.member_container {
+	display: flex;
+	gap: 20px;
+	justify-content: space-between;
+}
+.contributions {
+	padding: 10px;
+}
+
+.contributions__text {
+	color: #757575;
+}
+
+.contributions__item {
+	list-style-type: circle;
+	padding: 5px 10px;
+}
+
+.profile_photo {
+	background: url(/public/assets/images/silver_ring.jpg);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+	width: 200px;
+	height: 200px;
+	box-shadow: inset 0 0 0 9px rgba(55, 55, 55, 0.524);
+	order: 1;
+	justify-content: center;
+	
+}
+
+.sergei {
+  background: url(/public/assets/images/sergei.jpg);
+  background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+	width: 200px;
+	height: 200px;
+  border-radius: 50%;
+}
+

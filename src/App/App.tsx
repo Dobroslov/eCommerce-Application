@@ -20,6 +20,7 @@ import NotFoundPage from '../pages/notFoundPage/notFoundPage';
 import Modal from '../components/modal/modal';
 
 import './App.scss';
+import AboutUsPage from '../pages/aboutUsPage/aboutUsPage';
 
 function App(): React.ReactElement {
 	const { user, autoSignIn } = useAuth();
@@ -79,11 +80,7 @@ function App(): React.ReactElement {
 						<Route path='addresses' element={<Addresses />} />
 						<Route path='account-details' element={<AccountDetails />} />
 					</Route>
-					{/* <Route path='about' element={<AboutUs />} />
-					<Route path='about-us' element={<Navigate to='/about' replace />} /> */}
-					{/* About - эти две строки это пример редиректа, если он нужен будет в дальнейшем
-					import { Routes, Route, Navigate } from 'react-router-dom'; - добавить в импортах
-					*/}
+					<Route path='about-us' element={<AboutUsPage />} />
 					<Route path='*' element={<NotFoundPage />} />
 				</Route>
 			</Routes>
