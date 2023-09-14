@@ -152,11 +152,25 @@
 			}
 
 			.basket {
-				background-image: url(/public/assets/svg/basket.svg);
+				background: url(/public/assets/svg/basket.svg) 50% 50% no-repeat;
+        padding: 15px;
+				position: relative;
+				.quantity{
+					position: absolute;
+					z-index: 15;
+					border-radius: 50%;
+					background-color: #ffd700;
+					color:#000000;
+					line-height: 16px;
+					font-size: 12px;
+					padding: 0 5px;
+					bottom: 15px;
+					right: -3px;
+				}
 			}
 
 			.profile {
-				background-image: url(/public/assets/svg/profile.svg);
+				background: url(/public/assets/svg/profile.svg) 50% 50% no-repeat;
 			}
 		}
 
@@ -223,13 +237,21 @@
 			position: absolute;
 			right: 60px;
 			z-index: 10;
-
+			.quantity{
+				position: absolute;
+				bottom:10px;
+				right: -5px;
+				background-color: #ffd700;
+				border-radius: 50%;
+				padding: 0 4px;
+			}
 			&:hover {
 				color: #000000;
 				transform: scale(1.4);
 				transition: transform 0.3s;
 			}
 		}
+		
 
 		.nav__button {
 			position: absolute;
@@ -306,7 +328,7 @@
 			border-radius: 5px;
 			transform: translateX(110%);
 			transition: transform 0.5s;
-			padding: 70px 15px 10px 15px;
+			padding: 50px 15px 10px 15px;
 			display: flex;
 			flex-direction: column;
 
@@ -398,6 +420,7 @@
 
 			.account__button {
 				margin-top: 24px;
+				color:#000000;
 
 				&:before {
 					position: absolute;
@@ -443,6 +466,7 @@
 				top: 0;
 				width: 100vw;
 				height: 100vh;
+				padding: 50px 15px 10px 40px;
 
 				.search__form {
 					top: 10px;

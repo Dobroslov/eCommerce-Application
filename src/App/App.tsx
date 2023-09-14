@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Routes, Route, useNavigate, useLocation, Navigate } from 'react-router-dom';
 
-import { getAnonimousToken } from '../services/apiServices';
+import { getAnonimousToken, checkAnonimousToken, getCart, removePromoCode } from '../services/apiServices';
 import useAuth from '../hooks/useAuth';
 import RequireAuthorisation from '../hoc/requireAuthorisation';
 import MainPage from '../pages/mainPage/mainPage';
@@ -21,6 +21,7 @@ import Modal from '../components/modal/modal';
 
 import './App.scss';
 import AboutUsPage from '../pages/aboutUsPage/aboutUsPage';
+import CartPage from '../pages/cartPage/cart';
 
 function App(): React.ReactElement {
 	const { user, autoSignIn } = useAuth();
@@ -29,20 +30,28 @@ function App(): React.ReactElement {
 
 	useEffect(() => {
 		if (!user && !localStorage.getItem('token')) {
-			getAnonimousToken();
+			if (localStorage.getItem('anonimous')) {
+				const anonimous = localStorage.getItem('anonimous') as string;
+				checkAnonimousToken(anonimous);
+			} else {
+				getAnonimousToken().then(() => {
+					getCart();
+				});
+			}
 		}
 
 		const token = localStorage.getItem('token');
 		const userString = localStorage.getItem('userData');
-
 		if (userString && token) {
+			getCart();
 			const { email } = JSON.parse(userString);
 			autoSignIn(email, () => {
 				if (location.state?.from) {
 					navigate(location.state.from, {
 						replace: true,
 					});
-				} if (localStorage.getItem('path')) {
+				}
+				if (localStorage.getItem('path')) {
 					const path = localStorage.getItem('path') as string;
 					navigate(path);
 				} else {
@@ -51,7 +60,7 @@ function App(): React.ReactElement {
 			});
 		}
 	}, []);
-
+	window.onbeforeunload = () => removePromoCode();
 	return (
 		<div className='wrapper'>
 			<Routes>
@@ -67,14 +76,15 @@ function App(): React.ReactElement {
 						element={user ? <Navigate to='/account_page' /> : <RegistrationPage />}
 					/>
 					<Route path='shop' element={<Shop />} />
+					<Route path='cart' element={<CartPage />} />
 					<Route path='shop/:id' element={<ShopSinglPageProduct />} />
 					<Route
 						path='account_page'
-						element={(
+						element={
 							<RequireAuthorisation>
 								<PrivateAccountPage />
 							</RequireAuthorisation>
-						)}
+						}
 					>
 						<Route index element={<UserDashboard />} />
 						<Route path='addresses' element={<Addresses />} />

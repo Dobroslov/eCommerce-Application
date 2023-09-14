@@ -9,6 +9,7 @@ import style from './registrationPage.module.scss';
 import RegistrationButton from '../../components/buttons/registrationButton';
 
 export default function RegistrationPage(): React.ReactElement {
+	localStorage.removeItem('path');
 	const navigate = useNavigate();
 	// Создаем состояние для хранения значений полей формы
 	const [registrationFormData, setRegistrationFormData] = useState<IRegistrationForm>({

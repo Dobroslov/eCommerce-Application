@@ -1,20 +1,20 @@
-import { ISorting } from '../utils/types';
+import { ICart } from '../utils/types';
 import { DataAction, DataActionTypes } from './actions';
 
 type DataState = {
-  data: ISorting | null | undefined;
+  cart: ICart | null | undefined;
 };
 
 const initialState: DataState = {
-	data: null,
+	cart: null,
 };
 
 function dataReducer(state = initialState, action:DataAction): DataState {
 	switch (action.type) {
-		case DataActionTypes.AddSort:
+		case DataActionTypes.AddCartData:
 			return {
 				...state,
-				data: action.payload,
+				cart: action.payload,
 			};
 
 		default:

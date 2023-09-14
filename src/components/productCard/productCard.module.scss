@@ -20,6 +20,7 @@
 			background-color: $light-gray;
 			visibility: visible;
 			color: $dark-gray;
+			border: none;
 		}
 	}
 
@@ -34,7 +35,7 @@
 		background-position-y: 0px;
 		@media (min-width: 300px) and (max-width: 1248px) {
 			@include respons-property(height, 136, 380);
-			@include respons-property(background-position-y, -34, 0);
+			//@include respons-property(background-position-y, -34, 0);
 		}
 
 		@media (min-width: 300px) and (max-width: 1248px) {
