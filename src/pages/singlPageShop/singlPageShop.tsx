@@ -6,6 +6,7 @@ import {
 	DeleteProductForCart,
 	addProductForCart,
 	getAnonimousToken,
+	getCart,
 	getProductForId,
 } from '../../services/apiServices';
 import CarouselCompound from '../../components/slider/carouselCompound/carouselCompound';
@@ -24,10 +25,12 @@ export default function ShopSinglPageProduct(): React.ReactElement {
 	const localCart: IidData[] = JSON.parse(localStorage.getItem('productsCartId') as string);
 	const items: string[] = [];
 	const products: string[] = [];
-	localCart.forEach((item) => {
-		items.push(item.item);
-		products.push(item.product);
-	});
+	if (localCart) {
+		localCart.forEach((item) => {
+			items.push(item.item);
+			products.push(item.product);
+		});
+	}
 	const { id } = useParams(); // получаем параметры ссылки
 	// два параметра: 1)куда перенаправить пользователя 2)
 	const [productCout, setProductCount] = useState(1);
@@ -80,10 +83,10 @@ export default function ShopSinglPageProduct(): React.ReactElement {
 	useEffect(() => {
 		const token = localStorage.getItem('anonimous');
 		if (id && token) {
-			localStorage.setItem('productsCartId', JSON.stringify([]));
 			getProductForId(id)
 				.then((data) => {
 					if (data) {
+						getCart();
 						setProduct(data);
 					} else {
 						console.error('No data received from API');
@@ -95,10 +98,10 @@ export default function ShopSinglPageProduct(): React.ReactElement {
 		} else {
 			getAnonimousToken().then(() => {
 				if (id) {
-					localStorage.setItem('productsCartId', JSON.stringify([]));
 					getProductForId(id)
 						.then((data) => {
 							if (data) {
+								getCart();
 								setProduct(data);
 							} else {
 								console.error('No data received from API');
