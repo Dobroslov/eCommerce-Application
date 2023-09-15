@@ -164,12 +164,4 @@
 
 .text {
 	color: #707070;
-	&:after {
-		content: '';
-		position: absolute;
-		bottom: 0px;
-		left: 0;
-		right: 0;
-		border-bottom: 1px solid #757575;
-	}
 }
