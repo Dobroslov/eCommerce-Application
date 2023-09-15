@@ -116,7 +116,8 @@ export default function ShopSinglPageProduct(): React.ReactElement {
 	}, []);
 
 	useEffect(() => {
-		if (id) {
+		const token = localStorage.getItem('anonimous');
+		if (id && token) {
 			getProductForId(id)
 				.then((data) => {
 					if (data) {
@@ -128,6 +129,22 @@ export default function ShopSinglPageProduct(): React.ReactElement {
 				.catch((error) => {
 					console.error('API request failed:', error);
 				});
+		} else {
+			getAnonimousToken().then(() => {
+				if (id) {
+					getProductForId(id)
+						.then((data) => {
+							if (data) {
+								setProduct(data);
+							} else {
+								console.error('No data received from API');
+							}
+						})
+						.catch((error) => {
+							console.error('API request failed:', error);
+						});
+				}
+			});
 		}
 	}, [product]);
 
