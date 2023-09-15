@@ -1,8 +1,8 @@
 @import '/src/styles/mixins';
 
 .registration {
-	padding-top: 128px;
-	@include respons-property(padding-top, 24, 128);
+	margin-top: 60px;
+	@include respons-property(margin-top, 24, 60);
 }
 
 .container {
@@ -15,12 +15,12 @@
 .body {
 	width: 100%;
 	max-width: 500px;
+	@include respons-property(max-width, 288, 500);
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	padding-bottom: 326px;
-	@include respons-property(max-width, 288, 500);
-	@include respons-property(padding-bottom, 90, 326);
+	padding-bottom: 100px;
+	@include respons-property(padding-bottom, 50, 100);
 }
 
 .title {
@@ -38,9 +38,9 @@
 	border-radius: 8px;
 	padding: 5px;
 	column-gap: 5px;
-	margin-bottom: 114px;
+	margin-bottom: 70px;
 	@include respons-property(font-size, 20, 33);
-	@include respons-property(margin-bottom, 50, 114);
+	@include respons-property(margin-bottom, 35, 70);
 }
 
 .inputs {

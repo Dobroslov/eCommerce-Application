@@ -73,7 +73,7 @@ export default function AboutUsPage() {
 						<div className={`${style.profile_photo} ${style.marat}`} />
 						<div>
 							<h2 className={`${style.name} title_h2`}>Marat Nikolaev</h2>
-							<p className={`${style.text} title_h5`}>
+							<p className={`${style.about} title_h5`}>
 								My name is Marat Nikolaev, I am 21 years old, live in Belarus, Vitebskaya voblast, Vitebsk.
 								In 2020 I am graduated from the Educational Institution `Vitebsk State Medical College named after Academician I.P. Antonov` / Medical-preventive business.
 								After finishing my studies and starting my professional career,
@@ -135,7 +135,7 @@ export default function AboutUsPage() {
 						<div className={`${style.profile_photo} ${style.vladimir}`} />
 						<div>
 							<h2 className={`${style.name} title_h2`}>Arshinnikov Vladimir</h2>
-							<p className={`${style.text} title_h5`}>
+							<p className={`${style.about} title_h5`}>
 								I am 39 years old. Creative developer based in Ukrain. I am specializes in JavaScript, React and SCSS.
 							</p>
 							<h3 className={`${style.title_h3} title_h3`}>Contribution:</h3>

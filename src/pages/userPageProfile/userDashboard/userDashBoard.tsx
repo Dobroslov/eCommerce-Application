@@ -26,7 +26,7 @@ export default function UserDashboard() {
 
 	return (
 		<div className={style.user__dashboard}>
-			<h4 className={style.title_h3}>
+			<h4 className='title_h3'>
 				Hello,
 				{' '}
 				{userFullName}

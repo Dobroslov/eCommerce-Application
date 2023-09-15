@@ -149,7 +149,8 @@ export default function AccountDetails(): React.ReactElement {
 							errorMessage="Passwords don't match!"
 							pattern={datePassword.newPassword}
 						/>
-
+					</div>
+					<div className={style.inputs_sub_button}>
 						<SubmitButton value='Save changes' />
 					</div>
 				</form>
