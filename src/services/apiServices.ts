@@ -198,28 +198,7 @@ export async function getToken(params: IUserLogin): Promise<void> {
 			}, 5000);
 		});
 }
-/* export async function refreshToken(params: IUserLogin): Promise<void> {
-	const { email, password } = params;
-	const url = `${AUTH_URL}/oauth/${PROJECT_KEY}/customers/token?grant_type=password&username=${email}&password=${password}`;
-	const headers = {
-		Authorization:
-			'Basic Y1NuZjhlM3RLSllqMmhmdm1uc0E5UmtMOnJNLXExemFGTDl0dVRvUUdQV3E4ZlVQX2piOEY0aW9O',
-	};
-	const data = '';
 
-	await axios
-		.post(url, data, {
-			headers,
-		})
-		.then(async (response) => {
-			localStorage.setItem('token', response.data.access_token);
-			await getCustomerForId(email,password);
-		})
-		.catch((error) => {
-			console.log('file: apiServices.ts:170 ~ refreshToken ~ error:', error);
-		});
-}
-*/
 export async function checkToken(token: string): Promise<{ active: string } | void> {
 	const url = `${AUTH_URL}/oauth/introspect?token=${token}`;
 	const headers = HEADERS_BASIC;
@@ -653,7 +632,6 @@ export function setDefaultBillingAddress(addressId: string) {
 			addressId,
 		},
 	];
-	console.log('file: apiServices.ts:661 ~ setDefaultBillingAddress:', data);
 
 	return doRequest(data, CUSTOMER_URL);
 }
@@ -676,7 +654,6 @@ export function removeAddress(addressId: string) {
 			addressId,
 		},
 	];
-	console.log('file: apiServices.ts:661 ~ setDefaultBillingAddress:', data);
 
 	return doRequest(data, CUSTOMER_URL);
 }
@@ -732,12 +709,12 @@ export async function createCart() {
 				total: response.data.totalPrice.centAmount,
 			};
 			store.dispatch(addCartData(cartData));
-			console.log(store.getState());
 		})
 		.catch((error) => {
 			console.log(error);
 		});
 }
+
 export async function getCart() {
 	const url = `${API_URL}/${PROJECT_KEY}/me/active-cart`;
 	const headers = getHeaders();
@@ -820,7 +797,6 @@ export async function getCart() {
 		.catch(() => {
 			createCart();
 		});
-	console.log(cart);
 	return cart;
 }
 
@@ -885,7 +861,6 @@ export async function addProductForCart(productId: string | undefined, quantity:
 }
 
 export async function changeQuantityProductForCart(itemId: string, quantity: number) {
-	console.log(store.getState());
 	const cartData = store.getState().data.cart as ICart;
 	const data = JSON.stringify({
 		version: cartData.version,
@@ -927,6 +902,7 @@ export async function changeQuantityProductForCart(itemId: string, quantity: num
 			console.log(error);
 		});
 }
+
 export async function DeleteProductForCart(itemId: string) {
 	const cartData = store.getState().data.cart as ICart;
 	const url = `${API_URL}/${PROJECT_KEY}/me/carts/${cartData.id}`;
@@ -1119,7 +1095,6 @@ export async function addPromoCode(promo: string) {
 				store.dispatch(hideModal());
 			}, 5000);
 		});
-	console.log(cartDataValue);
 	return cartDataValue;
 }
 

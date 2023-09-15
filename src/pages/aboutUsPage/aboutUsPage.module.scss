@@ -71,7 +71,7 @@
 }
 
 .list_members_team {
-	margin: 0 auto;
+	margin: 0 auto 30px 0;
 }
 
 .list_members_team {
@@ -99,25 +99,77 @@
 }
 
 .profile_photo {
-	background: url(/public/assets/images/silver_ring.jpg);
-	background-repeat: no-repeat;
-	background-position: center;
-	background-size: cover;
-	width: 200px;
-	height: 200px;
 	box-shadow: inset 0 0 0 9px rgba(55, 55, 55, 0.524);
 	order: 1;
 	justify-content: center;
-	
+	flex: 1 0 auto;
+	width: 200px;
+	@include respons-property(width, 100, 200);
+	height: 200px;
+	@include respons-property(height, 100, 200);
+	border-radius: 50%;
 }
 
 .sergei {
-  background: url(/public/assets/images/sergei.jpg);
-  background-repeat: no-repeat;
+	background: url(/public/assets/images/sergei.jpg);
+	background-repeat: no-repeat;
 	background-position: center;
 	background-size: cover;
-	width: 200px;
-	height: 200px;
-  border-radius: 50%;
 }
 
+.marat {
+	background: url(/public/assets/images/marat.jpg);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+}
+
+.vladimir {
+	background: url(/public/assets/images/vlaidimir.jpg);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+}
+
+.block_logo {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 20px;
+	margin-top: 20px;
+}
+
+.social__link {
+	fill: #707070;
+	transition: 0.3s;
+	width: 120px;
+	height: 60px;
+
+	&:hover {
+		fill: #000000;
+		transform: scale(1.1);
+		transition: 0.3s;
+	}
+}
+
+.logo_container {
+	flex: 1 0 auto;
+	width: 100px;
+	height: 100px;
+	background: url(/public/assets/images/logo_gruop.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+}
+
+.text {
+	color: #707070;
+	&:after {
+		content: '';
+		position: absolute;
+		bottom: 0px;
+		left: 0;
+		right: 0;
+		border-bottom: 1px solid #757575;
+	}
+}

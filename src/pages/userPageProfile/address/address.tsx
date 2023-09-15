@@ -49,7 +49,6 @@ export default function Addresses() {
 	};
 
 	const handleInputChange = (newValue: string, id: string): void => {
-		// console.log(newValue, id);
 		setChangedAddress((prevUserData) => ({
 			...prevUserData,
 			[id]: newValue,

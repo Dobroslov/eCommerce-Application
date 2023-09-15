@@ -5,27 +5,11 @@ import store from '../../store/store';
 import { hideBurger } from '../../store/actions';
 
 function Navigation(): React.JSX.Element {
-	const closeBurger = ():void => {
+	const closeBurger = (): void => {
 		store.dispatch(hideBurger());
 	};
 	return (
 		<ul className={style.navigation}>
-			{/*
-				<li>
-					<a href='#top' className={style.nav__link}>
-						Shop
-					</a>
-				</li>
-				<li>
-				<a href='#top' className={header.nav__link}>
-					Contacts
-				</a>
-			</li>
-			<li>
-				<a href='#top' className={header.nav__link}>
-					Out Story
-				</a>
-			</li> */}
 			<li>
 				<NavLink to='/' className={style.nav__link} onClick={closeBurger}>
 					Main
@@ -37,7 +21,7 @@ function Navigation(): React.JSX.Element {
 				</NavLink>
 			</li>
 			<li>
-				<NavLink to='/about-us' className={style.nav__link}>
+				<NavLink to='/about-us' className={style.nav__link} onClick={closeBurger}>
 					About
 				</NavLink>
 			</li>
