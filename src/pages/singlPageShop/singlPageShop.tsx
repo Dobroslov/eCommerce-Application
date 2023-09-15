@@ -5,7 +5,7 @@ import { Link, useParams } from 'react-router-dom';
 import {
 	DeleteProductForCart,
 	addProductForCart,
-	getCart,
+	getAnonimousToken,
 	getProductForId,
 } from '../../services/apiServices';
 import CarouselCompound from '../../components/slider/carouselCompound/carouselCompound';
@@ -66,16 +66,26 @@ export default function ShopSinglPageProduct(): React.ReactElement {
 	const handleRemoveItem = () => {
 		if (id) {
 			const index = products.indexOf(id);
+			const filteredCart = localCart.filter((elem) => {
+				if (elem.product !== id) {
+					return elem;
+				}
+				return false;
+			});
+			localStorage.setItem('productsCartId', JSON.stringify(filteredCart));
 			DeleteProductForCart(items[index]);
 		}
 	};
 
 	useEffect(() => {
-		if (id) {
+		const token = localStorage.getItem('anonimous');
+		if (id && token) {
+			localStorage.setItem('productsCartId', JSON.stringify([]));
 			getProductForId(id)
 				.then((data) => {
 					if (data) {
 						setProduct(data);
+						console.log(id);
 					} else {
 						console.error('No data received from API');
 					}
@@ -83,8 +93,26 @@ export default function ShopSinglPageProduct(): React.ReactElement {
 				.catch((error) => {
 					console.error('API request failed:', error);
 				});
+		} else {
+			getAnonimousToken().then(() => {
+				if (id) {
+					localStorage.setItem('productsCartId', JSON.stringify([]));
+					getProductForId(id)
+						.then((data) => {
+							if (data) {
+								setProduct(data);
+								console.log(id);
+							} else {
+								console.error('No data received from API');
+							}
+						})
+						.catch((error) => {
+							console.error('API request failed:', error);
+						});
+				}
+			});
 		}
-	}, [id]);
+	}, []);
 
 	useEffect(() => {
 		if (id) {
@@ -92,7 +120,6 @@ export default function ShopSinglPageProduct(): React.ReactElement {
 				.then((data) => {
 					if (data) {
 						setProduct(data);
-						getCart();
 					} else {
 						console.error('No data received from API');
 					}
@@ -101,7 +128,7 @@ export default function ShopSinglPageProduct(): React.ReactElement {
 					console.error('API request failed:', error);
 				});
 		}
-	}, [products]);
+	}, [product]);
 
 	return (
 		<div className={style.main}>

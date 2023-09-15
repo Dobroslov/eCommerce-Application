@@ -46,7 +46,7 @@ function CartPage() {
 
 	const handlePlus = (valuePlus: number, id: string) => {
 		const newValue = valuePlus + 1;
-		store.dispatch(addValue(newValue));
+		store.dispatch(addValue(valuePlus - 1));
 		changeQuantityProductForCart(id, newValue);
 	};
 
@@ -62,7 +62,7 @@ function CartPage() {
 	};
 
 	const handleClearCart = (clearProducts: IProductCart[]) => {
-		store.dispatch(addValue(clearProducts.length));
+		store.dispatch(addValue(clearProducts.length + 1));
 		clearCart(clearProducts);
 	};
 
