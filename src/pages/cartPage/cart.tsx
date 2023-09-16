@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable indent */
 import React, { useEffect, useRef, useState } from 'react';
@@ -18,6 +19,7 @@ import CART from '../../../public/assets/svg/basket.svg';
 import store from '../../store/store';
 import { addValue } from '../../store/actions';
 import { RootState } from '../../store/reducers';
+import Spinner from '../../components/spinner/spinner';
 
 function CartPage() {
 	localStorage.removeItem('path');
@@ -26,6 +28,7 @@ function CartPage() {
 	const [discountPrice, setdiscountPrice] = useState<string>('');
 	const [currency, setCurrency] = useState<string>('');
 	const [percent, setPercent] = useState<number>();
+	const [isLoadingProducts, setIsLoadingProducts] = useState(true);
 
 	const couponInput = useRef<HTMLInputElement | null>(null);
 	const value = useSelector((state: RootState) => state.value?.value);
@@ -33,6 +36,7 @@ function CartPage() {
 		getCart().then((data) => {
 			if (!data) {
 				setProducts([]);
+				setIsLoadingProducts(false);
 				return;
 			}
 			store.dispatch(addValue(data.totalQuantity as unknown as number));
@@ -41,6 +45,7 @@ function CartPage() {
 			setdiscountPrice(data.totalDiscount);
 			setCurrency(data.currencyCode);
 			setPercent(data.discountProcent);
+			setIsLoadingProducts(false);
 		});
 	}, [value]);
 
@@ -80,7 +85,9 @@ function CartPage() {
 
 	return (
 		<div className={style.cart}>
-			{products.length > 0 ? (
+			{isLoadingProducts ? (
+				<Spinner />
+			) : products.length > 0 ? (
 				<>
 					<h4 className={style.cartTitle}>Shopping Cart</h4>
 					<div className={style.body}>
@@ -98,9 +105,8 @@ function CartPage() {
 												<div className={style.price}>
 													<div>
 														{+product.totalPrice / product.quantity === +product.totalPrice
-															? `${(+product.totalPrice / product.quantity).toFixed(2)} ${
-																	product.currencyCode
-															  }`
+															? `${(+product.totalPrice / product.quantity).toFixed(2)} ${product.currencyCode
+															}`
 															: `${(+product.totalPrice / product.quantity).toFixed(2)}
 														${product.currencyCode} / Total : ${product.totalPrice} ${product.currencyCode}`}
 													</div>
