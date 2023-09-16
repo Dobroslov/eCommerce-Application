@@ -8,6 +8,8 @@ import styles from './mainPage.module.scss';
 function MainPage(): React.ReactElement {
 	localStorage.removeItem('path');
 	const [products, setProducts] = useState<IProduct[]>([]);
+	const [isLoadingProducts, setIsLoadingProducts] = useState(true);
+
 	useEffect(() => {
 		const localAnonymousToken = localStorage.getItem('anonimous');
 		if (!localAnonymousToken) {
@@ -16,6 +18,7 @@ function MainPage(): React.ReactElement {
 					.then((data) => {
 						if (data) {
 							setProducts(data.productsArr);
+							setIsLoadingProducts(false);
 						}
 					})
 					.catch((error) => error);
@@ -25,6 +28,7 @@ function MainPage(): React.ReactElement {
 				.then((data) => {
 					if (data) {
 						setProducts(data.productsArr);
+						setIsLoadingProducts(false);
 					}
 				})
 				.catch((error) => error);
@@ -50,7 +54,7 @@ function MainPage(): React.ReactElement {
 						View All
 					</Link>
 				</div>
-				<ProductCardsList products={products} handleProductClick={handleProductClick} />
+				<ProductCardsList products={products} handleProductClick={handleProductClick} isLoadingProducts={isLoadingProducts} />
 			</div>
 		</>
 	);
