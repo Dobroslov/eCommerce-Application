@@ -5,6 +5,7 @@ import { Link, useParams } from 'react-router-dom';
 import {
 	DeleteProductForCart,
 	addProductForCart,
+	getAnonimousToken,
 	getCart,
 	getProductForId,
 } from '../../services/apiServices';
@@ -24,10 +25,12 @@ export default function ShopSinglPageProduct(): React.ReactElement {
 	const localCart: IidData[] = JSON.parse(localStorage.getItem('productsCartId') as string);
 	const items: string[] = [];
 	const products: string[] = [];
-	localCart.forEach((item) => {
-		items.push(item.item);
-		products.push(item.product);
-	});
+	if (localCart) {
+		localCart.forEach((item) => {
+			items.push(item.item);
+			products.push(item.product);
+		});
+	}
 	const { id } = useParams(); // получаем параметры ссылки
 	// два параметра: 1)куда перенаправить пользователя 2)
 	const [productCout, setProductCount] = useState(1);
@@ -66,15 +69,24 @@ export default function ShopSinglPageProduct(): React.ReactElement {
 	const handleRemoveItem = () => {
 		if (id) {
 			const index = products.indexOf(id);
+			const filteredCart = localCart.filter((elem) => {
+				if (elem.product !== id) {
+					return elem;
+				}
+				return false;
+			});
+			localStorage.setItem('productsCartId', JSON.stringify(filteredCart));
 			DeleteProductForCart(items[index]);
 		}
 	};
 
 	useEffect(() => {
-		if (id) {
+		const token = localStorage.getItem('anonimous');
+		if (id && token) {
 			getProductForId(id)
 				.then((data) => {
 					if (data) {
+						getCart();
 						setProduct(data);
 					} else {
 						console.error('No data received from API');
@@ -83,16 +95,33 @@ export default function ShopSinglPageProduct(): React.ReactElement {
 				.catch((error) => {
 					console.error('API request failed:', error);
 				});
+		} else {
+			getAnonimousToken().then(() => {
+				if (id) {
+					getProductForId(id)
+						.then((data) => {
+							if (data) {
+								getCart();
+								setProduct(data);
+							} else {
+								console.error('No data received from API');
+							}
+						})
+						.catch((error) => {
+							console.error('API request failed:', error);
+						});
+				}
+			});
 		}
-	}, [id]);
+	}, []);
 
 	useEffect(() => {
-		if (id) {
+		const token = localStorage.getItem('anonimous');
+		if (id && token) {
 			getProductForId(id)
 				.then((data) => {
 					if (data) {
 						setProduct(data);
-						getCart();
 					} else {
 						console.error('No data received from API');
 					}
@@ -100,8 +129,24 @@ export default function ShopSinglPageProduct(): React.ReactElement {
 				.catch((error) => {
 					console.error('API request failed:', error);
 				});
+		} else {
+			getAnonimousToken().then(() => {
+				if (id) {
+					getProductForId(id)
+						.then((data) => {
+							if (data) {
+								setProduct(data);
+							} else {
+								console.error('No data received from API');
+							}
+						})
+						.catch((error) => {
+							console.error('API request failed:', error);
+						});
+				}
+			});
 		}
-	}, [products]);
+	}, [product]);
 
 	return (
 		<div className={style.main}>
