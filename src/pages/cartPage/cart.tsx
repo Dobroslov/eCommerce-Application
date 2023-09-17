@@ -22,7 +22,6 @@ import { RootState } from '../../store/reducers';
 import Spinner from '../../components/spinner/spinner';
 
 function CartPage() {
-	localStorage.removeItem('path');
 	const [products, setProducts] = useState<IProductCart[]>([]);
 	const [total, setTotal] = useState<string>('');
 	const [discountPrice, setdiscountPrice] = useState<string>('');

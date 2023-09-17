@@ -9,7 +9,7 @@ import style from './registrationPage.module.scss';
 import RegistrationButton from '../../components/buttons/registrationButton';
 
 export default function RegistrationPage(): React.ReactElement {
-	localStorage.removeItem('path');
+	// localStorage.removeItem('path');
 	const navigate = useNavigate();
 	// Создаем состояние для хранения значений полей формы
 	const [registrationFormData, setRegistrationFormData] = useState<IRegistrationForm>({
@@ -24,7 +24,11 @@ export default function RegistrationPage(): React.ReactElement {
 		e.preventDefault();
 
 		try {
-			await createCustomer(registrationFormData, navigate);
+			// await createCustomer(registrationFormData, navigate);
+			await createCustomer(registrationFormData);
+			navigate('/', {
+				replace: true,
+			});
 		} catch (error) {
 			console.error('Error handleSubmit:', error);
 			// Обработайте ошибку, если что-то пошло не так

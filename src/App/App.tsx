@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Routes, Route, useNavigate, useLocation, Navigate } from 'react-router-dom';
 
-import { getAnonimousToken, checkAnonimousToken, getCart, removePromoCode } from '../services/apiServices';
+import { getAnonimousToken, checkAnonimousToken, getCart } from '../services/apiServices';
 import useAuth from '../hooks/useAuth';
 import RequireAuthorisation from '../hoc/requireAuthorisation';
 import MainPage from '../pages/mainPage/mainPage';
@@ -60,7 +60,36 @@ function App(): React.ReactElement {
 			});
 		}
 	}, []);
-	window.onbeforeunload = () => removePromoCode();
+
+	useEffect(() => {
+		localStorage.setItem('path', window.location.pathname);
+	}, [window.location.pathname]);
+
+	useEffect(() => {
+		document.addEventListener('DOMContentLoaded', () => {
+			const currenPath = localStorage.getItem('path') as string;
+			if (currenPath) {
+				navigate(currenPath);
+			}
+		});
+
+		return () => {
+			document.removeEventListener('DOMContentLoaded', () => {
+				const currenPath = localStorage.getItem('path') as string;
+				if (currenPath) {
+					navigate(currenPath);
+				}
+			});
+		};
+	}, []);
+
+	// useEffect(() => {
+	// 	first
+	// 	return () => {
+	// 		second
+	// 	}
+	// }, [third])
+
 	return (
 		<div className='wrapper'>
 			<Routes>

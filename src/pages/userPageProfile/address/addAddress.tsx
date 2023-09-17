@@ -91,7 +91,6 @@ export default function AddNewAddress({ addressType }: { addressType: string }):
 								onChange={handleSelectChange}
 								name='country'
 								id='country'
-								defaultValue='RU'
 								value={address.country}
 							>
 								<option value='RU'>Russia</option>

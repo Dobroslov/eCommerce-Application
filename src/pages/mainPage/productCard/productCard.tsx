@@ -1,5 +1,5 @@
 import React from 'react';
-import { IProduct } from '../../utils/types';
+import { IProduct } from '../../../utils/types';
 import styles from './productCard.module.scss';
 
 interface IProductCardItem extends IProduct {

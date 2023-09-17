@@ -34,6 +34,25 @@
 		color: $white;
 	}
 
+	&__promo {
+		position: absolute;
+		padding: 30px;
+		@include respons-property(padding, 15, 30);
+		border-radius: 10px;
+		color: $light-gray;
+		background-color: $secondary;
+		margin-top: 40px;
+		margin-left: 39px;
+		@include respons-property(margin-left, 8, 39);
+	}
+
+	&__product_card_info {
+		position: absolute;
+		margin-top: 226px;
+		margin-left: 39px;
+		@include respons-property(margin-left, 8, 39);
+	}
+
 	&__product_card_info {
 		position: absolute;
 		margin-top: 226px;
@@ -50,6 +69,7 @@
 	@include respons-property(margin-top, 21, 64);
 
 	&__title {
+		width: 100%;
 		display: flex;
 		justify-content: space-between;
 		align-items: center;

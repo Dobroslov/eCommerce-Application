@@ -1,6 +1,6 @@
 /* eslint-disable no-unsafe-optional-chaining */
 import axios from 'axios';
-import { NavigateFunction } from 'react-router-dom';
+// import { NavigateFunction } from 'react-router-dom';
 import {
 	IUserLogin,
 	IRegistrationForm,
@@ -69,7 +69,7 @@ export async function getAnonimousToken(): Promise<void> {
 
 export async function createCustomer(
 	params: IRegistrationForm,
-	navigate: NavigateFunction,
+	// navigate: NavigateFunction,
 ): Promise<void> {
 	// Здесь вы можете указать конкретный тип, который ожидаете получить от сервера
 	const data: string = JSON.stringify(params);
@@ -94,9 +94,9 @@ export async function createCustomer(
 		setTimeout(() => {
 			store.dispatch(hideModal());
 			// Перенаправить пользователя после закрытия модального окна
-			navigate('/', {
-				replace: true,
-			});
+			// navigate('/', {
+			// 	replace: true,
+			// });
 		}, 5000);
 	} catch (error) {
 		if (axios.isAxiosError(error)) {

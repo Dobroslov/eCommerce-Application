@@ -161,8 +161,6 @@ export default function Shop(): React.ReactElement {
 		}
 	}, [filter, offset]);
 
-	localStorage.setItem('path', window.location.pathname);
-
 	return (
 		<section className={style.catalog}>
 			<h3 className={style.catalogTitle}>Shop The Latest</h3>

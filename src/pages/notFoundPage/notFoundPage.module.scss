@@ -6,6 +6,7 @@
 	align-items: center;
 	flex-direction: column;
 	text-align: center;
+	margin-top: 200px;
 	.title {
 		font-size: 50px;
 		@include respons-property(font-size, 20, 50);

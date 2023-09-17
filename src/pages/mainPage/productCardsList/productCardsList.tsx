@@ -1,8 +1,9 @@
 import React from 'react';
-import { IProduct } from '../../utils/types';
+
 import ProductCard from '../productCard/productCard';
 import styles from './productCardsList.module.scss';
-import Spinner from '../spinner/spinner';
+import Spinner from '../../../components/spinner/spinner';
+import { IProduct } from '../../../utils/types';
 
 interface IProductListProps {
 	products: IProduct[],
