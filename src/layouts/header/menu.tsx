@@ -7,19 +7,21 @@ import Navigation from './navigation';
 import HeaderButton from '../../components/buttons/headerButton';
 import SearchForm from './searchForm';
 import { RootState } from '../../store/reducers';
+import { hideSearch, showSearch } from '../../store/actions';
+import store from '../../store/store';
 
 function Menu(): React.JSX.Element {
-	const [active, setToggle] = useState(false);
 	const [activeSearch, setactiveSearch] = useState(false);
 
 	const toggleSearch = (): void => {
-		setToggle(!active);
+		store.dispatch(showSearch());
 		setactiveSearch(true);
 	};
+	const search = useSelector((state:RootState) => state.search.search);
 
 	const closeSearch = (): void => {
-		if (active) {
-			setToggle(!active);
+		if (search) {
+			store.dispatch(hideSearch());
 			setactiveSearch(false);
 		}
 	};
@@ -44,7 +46,7 @@ function Menu(): React.JSX.Element {
 			</div>
 			<SearchForm
 				activeSearch={activeSearch}
-				className={active ? `${header.search__form} ${header.open}` : header.search__form}
+				className={search ? `${header.search__form} ${header.open}` : header.search__form}
 			/>
 		</div>
 	);
