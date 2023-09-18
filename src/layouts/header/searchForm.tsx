@@ -9,7 +9,7 @@ import { hideSearch } from '../../store/actions';
 interface Props {
 	className: string;
 	onClick?: () => void;
-	activeSearch: boolean;
+	activesearch: boolean;
 }
 function SearchForm({ ...props }: Props): React.JSX.Element {
 	const [products, setProducts] = useState<IProduct[]>([]);
@@ -17,7 +17,7 @@ function SearchForm({ ...props }: Props): React.JSX.Element {
 	const input = useRef<HTMLInputElement | null>(null);
 
 	useEffect(() => {
-		if (search.length > 0 && props.activeSearch) {
+		if (search.length > 0 && props.activesearch) {
 			getFilter(100, 0, `&text.en-US=${search}`).then((data) => {
 				if (data) {
 					setProducts(data.productsArr);
@@ -34,11 +34,12 @@ function SearchForm({ ...props }: Props): React.JSX.Element {
 				}
 			});
 		}
-	}, [search, props.activeSearch]);
+	}, [search, props.activesearch]);
 
 	const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setSearch(e.target.value);
 	};
+
 	const closeSearch = (): void => {
 		store.dispatch(hideSearch());
 		if (input.current) {
@@ -46,6 +47,7 @@ function SearchForm({ ...props }: Props): React.JSX.Element {
 		}
 		setSearch('');
 	};
+
 	return (
 		<form {...props}>
 			<input

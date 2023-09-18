@@ -11,18 +11,18 @@ import { hideSearch, showSearch } from '../../store/actions';
 import store from '../../store/store';
 
 function Menu(): React.JSX.Element {
-	const [activeSearch, setactiveSearch] = useState(false);
+	const [activesearch, setActiveSearch] = useState(false);
 
 	const toggleSearch = (): void => {
 		store.dispatch(showSearch());
-		setactiveSearch(true);
+		setActiveSearch(true);
 	};
 	const search = useSelector((state:RootState) => state.search.search);
 
 	const closeSearch = (): void => {
 		if (search) {
 			store.dispatch(hideSearch());
-			setactiveSearch(false);
+			setActiveSearch(false);
 		}
 	};
 
@@ -45,7 +45,7 @@ function Menu(): React.JSX.Element {
 				<Link to='/account_page' className={`${header.profile} ${header.button__header}`} />
 			</div>
 			<SearchForm
-				activeSearch={activeSearch}
+				activesearch={activesearch}
 				className={search ? `${header.search__form} ${header.open}` : header.search__form}
 			/>
 		</div>
