@@ -887,16 +887,6 @@ export async function changeQuantityProductForCart(itemId: string, quantity: num
 				total: response.data.totalPrice.centAmount,
 			};
 			store.dispatch(addCartData(cart));
-			store.dispatch(
-				showModal({
-					title: 'Success',
-					description: '+',
-					url: successModal,
-				}),
-			);
-			setTimeout(() => {
-				store.dispatch(hideModal());
-			}, 5000);
 		})
 		.catch((error) => {
 			console.log(error);
@@ -931,13 +921,13 @@ export async function DeleteProductForCart(itemId: string) {
 			store.dispatch(
 				showModal({
 					title: 'Success',
-					description: 'delete',
+					description: 'Product removed',
 					url: successModal,
 				}),
 			);
 			setTimeout(() => {
 				store.dispatch(hideModal());
-			}, 5000);
+			}, 1500);
 		})
 		.catch((error) => {
 			console.log(error);
@@ -984,7 +974,70 @@ export async function clearCart(products: IProductCart[]) {
 		});
 }
 
+export async function checkAnonimousToken(
+	token: string,
+): Promise<{ email: string; active: string } | void> {
+	const url = `${AUTH_URL}/oauth/introspect?token=${token}`;
+	const headers = HEADERS_BASIC;
+	const data = '';
+
+	await axios
+		.post(url, data, {
+			headers,
+		})
+		.then((response) => {
+			if (response.data.active === false) {
+				getAnonimousToken().then(() => {
+					getCart();
+				});
+			} else {
+				getCart();
+			}
+		})
+		.catch((error) => {
+			console.log(error);
+		});
+}
+
+export async function removePromoCode() {
+	if (store.getState().code.code) {
+		const promoId = store.getState().code.code;
+		const cartData = store.getState().data.cart as ICart;
+		const data = {
+			version: cartData.version,
+			actions: [
+				{
+					action: 'removeDiscountCode',
+					discountCode: {
+						typeId: 'discount-code',
+						id: promoId,
+					},
+				},
+			],
+		};
+		const url = `${API_URL}/${PROJECT_KEY}/me/carts/${cartData.id}`;
+		const headers = getHeaders();
+		await axios
+			.post(url, data, {
+				headers,
+			})
+			.then((response) => {
+				const cart = {
+					id: response.data.id,
+					version: response.data.version,
+					quantity: response.data.totalLineItemQuantity,
+					total: response.data.totalPrice.centAmount,
+				};
+				store.dispatch(addCartData(cart));
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	}
+}
+
 export async function addPromoCode(promo: string) {
+	await removePromoCode();
 	const cartData = store.getState().data.cart as ICart;
 	const totalPrice = ((store.getState().data.cart?.total as number) / 100).toFixed(2);
 	const data = {
@@ -1096,66 +1149,4 @@ export async function addPromoCode(promo: string) {
 			}, 5000);
 		});
 	return cartDataValue;
-}
-
-export async function checkAnonimousToken(
-	token: string,
-): Promise<{ email: string; active: string } | void> {
-	const url = `${AUTH_URL}/oauth/introspect?token=${token}`;
-	const headers = HEADERS_BASIC;
-	const data = '';
-
-	await axios
-		.post(url, data, {
-			headers,
-		})
-		.then((response) => {
-			if (response.data.active === false) {
-				getAnonimousToken().then(() => {
-					getCart();
-				});
-			} else {
-				getCart();
-			}
-		})
-		.catch((error) => {
-			console.log(error);
-		});
-}
-
-export async function removePromoCode() {
-	if (store.getState().code.code) {
-		const promoId = store.getState().code.code;
-		const cartData = store.getState().data.cart as ICart;
-		const data = {
-			version: cartData.version,
-			actions: [
-				{
-					action: 'removeDiscountCode',
-					discountCode: {
-						typeId: 'discount-code',
-						id: promoId,
-					},
-				},
-			],
-		};
-		const url = `${API_URL}/${PROJECT_KEY}/me/carts/${cartData.id}`;
-		const headers = getHeaders();
-		await axios
-			.post(url, data, {
-				headers,
-			})
-			.then((response) => {
-				const cart = {
-					id: response.data.id,
-					version: response.data.version,
-					quantity: response.data.totalLineItemQuantity,
-					total: response.data.totalPrice.centAmount,
-				};
-				store.dispatch(addCartData(cart));
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-	}
 }

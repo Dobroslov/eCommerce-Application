@@ -55,15 +55,15 @@ export default function AboutUsPage() {
 									</p>
 								</li>
 							</ul>
-							<p className={`${style.color} title_h5`}>GitHub: <a href='#contact' className={`${style.link} title_h5`}>https://github.com/sergey-mak1 </a>
+							<p className={`${style.color} title_h5`}>GitHub: <a href='https://github.com/sergey-mak1' className={`${style.link} title_h5`}>https://github.com/sergey-mak1 </a>
 							</p>
-							<p className={`${style.color} title_h5`}>Email: <a href='#contact' className={`${style.link} title_h5`}>sega0130290@gmail.com</a>
-							</p>
-							<p className={`${style.color} title_h5`}>
-								Discord: <a href='#contact' className={`${style.link} title_h5`}>sergey-mak1#6749</a>
+							<p className={`${style.color} title_h5`}>Email: <a href='mailto:sega0130290@gmail.com' className={`${style.link} title_h5`}>sega0130290@gmail.com</a>
 							</p>
 							<p className={`${style.color} title_h5`}>
-								Telegram: <a href='#contact' className={`${style.link} title_h5`}>@sergeymak1</a>
+								Discord: <a href='https://discord.gg/sergey-mak1#6749' className={`${style.link} title_h5`}>https://discord.gg/sergey-mak1#6749</a>
+							</p>
+							<p className={`${style.color} title_h5`}>
+								Telegram: <a href='https://t.me/@sergeymak1' className={`${style.link} title_h5`}>https://t.me/@sergeymak1</a>
 							</p>
 						</div>
 					</div>
@@ -123,7 +123,7 @@ export default function AboutUsPage() {
 									</p>
 								</li>
 							</ul>
-							<p className={`${style.color} title_h5`}>GitHub: <a href='#contact' className={`${style.link} title_h5`}>https://github.com/AkuLove</a>
+							<p className={`${style.color} title_h5`}>GitHub: <a href='https://github.com/AkuLove' className={`${style.link} title_h5`}>https://github.com/AkuLove</a>
 							</p>
 							<p className={`${style.color} title_h5`}>Email: <a href='mailto:maratnikolaev556@gmail.com' className={`${style.link} title_h5`}>maratnikolaev556@gmail.com</a>
 							</p>
@@ -181,10 +181,12 @@ export default function AboutUsPage() {
 							<p className={`${style.color} title_h5`}>Email: <a href='mailto:lordofrain7@gmail.com' className={`${style.link} title_h5`}>lordofrain7@gmail.com</a>
 							</p>
 							<p className={`${style.color} title_h5`}>
-								LinkedIn: <a href='#contact' className={`${style.link} title_h5`}>https://www.linkedin.com/in/vladimir-arshinnikov-388853223/</a>
+								LinkedIn:
+								<a href='https://www.linkedin.com/in/vladimir-arshinnikov-388853223/' className={`${style.link} title_h5`}> https://www.linkedin.com/in/vladimir-arshinnikov-388853223/
+								</a>
 							</p>
 							<p className={`${style.color} title_h5`}>
-								Telegram: <a href='#contact' className={`${style.link} title_h5`}>https://t.me/Vladimir_Dobroslov</a>
+								Telegram: <a href='https://t.me/Vladimir_Dobroslov' className={`${style.link} title_h5`}>https://t.me/Vladimir_Dobroslov</a>
 							</p>
 						</div>
 					</div>

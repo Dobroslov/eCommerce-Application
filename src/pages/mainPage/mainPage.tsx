@@ -43,7 +43,8 @@ function MainPage(): React.ReactElement {
 	return (
 		<>
 			<div className={styles.main__img_container}>
-				<div className={`${styles.main__promo} title_h2`}>Promo code: gift</div>
+				<div className={`${styles.main__promo} title_h3`}>Promo code: gift</div>
+				<div className={`${styles.main__promo_secondary} title_h4`}>Order amount more than 1000$ <br /> enter promo code: SALE1000</div>
 				<div className={styles.main__product_card_info}>
 					<h2 className={`${styles.title_h1} ${styles.main__title_light}`}>Gold big hoops</h2>
 					<h3 className={`${styles.title_h2} ${styles.main__title_light}`}>$ 63.00</h3>
