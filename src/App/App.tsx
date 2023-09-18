@@ -83,13 +83,6 @@ function App(): React.ReactElement {
 		};
 	}, []);
 
-	// useEffect(() => {
-	// 	first
-	// 	return () => {
-	// 		second
-	// 	}
-	// }, [third])
-
 	return (
 		<div className='wrapper'>
 			<Routes>
