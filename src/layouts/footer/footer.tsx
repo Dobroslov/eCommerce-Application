@@ -9,7 +9,6 @@ import twitter from '../../../public/assets/svg/twitter.svg';
 
 function Footer(): React.JSX.Element {
 	return (
-
 		<footer className={footer.footer}>
 			<div className={footer.container}>
 				<a href='https://rs.school/js/' aria-label='Visit rs.school' className={footer.rss}><ReactSVG src={rsschool} className={footer.social__link} /></a>
@@ -22,7 +21,6 @@ function Footer(): React.JSX.Element {
 					<a href='https://www.facebook.com/' aria-label='Visit facebook'><ReactSVG src={facebook} className={footer.social__link} /></a>
 					<a href='https://www.instagram.com/' aria-label='Visit instagram'><ReactSVG src={instagram} className={footer.social__link} /></a>
 					<a href='https://twitter.com/' aria-label='Visit twitter'><ReactSVG src={twitter} className={footer.social__link} /></a>
-
 				</div>
 			</div>
 		</footer>

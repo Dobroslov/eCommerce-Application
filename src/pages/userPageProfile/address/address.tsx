@@ -78,7 +78,6 @@ export default function Addresses() {
 	};
 
 	useEffect(() => {
-		localStorage.setItem('path', window.location.pathname);
 		const storedUserData = localStorage.getItem('userData');
 		if (storedUserData) {
 			const { addresses, shippingAddressIds, billingAddressIds } = JSON.parse(storedUserData);

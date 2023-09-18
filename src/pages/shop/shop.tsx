@@ -14,7 +14,7 @@ import {
 import SliderModal from '../../components/modal/sliderModal';
 import CarouselCompound from '../../components/slider/carouselCompound/carouselCompound';
 import { IProduct } from '../../utils/types';
-// import { Link, useLocation, useNavigate } from 'react-router-dom';
+import Spinner from '../../components/spinner/spinner';
 
 export default function Shop(): React.ReactElement {
 	const localFilter = localStorage.getItem('filter');
@@ -26,6 +26,7 @@ export default function Shop(): React.ReactElement {
 	const [id, setId] = useState('2a736cf8-ad85-4d6e-a9ef-1adf95915f8d');
 	const [images, setImages] = useState<string[]>([]);
 	const [limit, setLimit] = useState<string>();
+	const [isLoadingProducts, setIsLoadingProducts] = useState(true);
 
 	const prev = useRef<null | HTMLButtonElement>(null);
 	const next = useRef<null | HTMLButtonElement>(null);
@@ -72,6 +73,7 @@ export default function Shop(): React.ReactElement {
 	};
 
 	useEffect(() => {
+		setIsLoadingProducts(true);
 		const localAnonymousToken = localStorage.getItem('anonimous');
 		if (!localAnonymousToken) {
 			getAnonimousToken().then(() => {
@@ -151,11 +153,12 @@ export default function Shop(): React.ReactElement {
 						}
 					}
 				})
-				.catch((error) => error);
+				.catch((error) => error)
+				.finally(() => {
+					setIsLoadingProducts(false); // Устанавливаем isLoadingProducts в false после загрузки
+				});
 		}
 	}, [filter, offset]);
-
-	localStorage.setItem('path', window.location.pathname);
 
 	return (
 		<section className={style.catalog}>
@@ -163,7 +166,7 @@ export default function Shop(): React.ReactElement {
 			<div className={style.body}>
 				<Filter onValueChange={handleSortChange} />
 				<div className={style.products}>
-					{products.map((product) => (
+					{isLoadingProducts ? <Spinner /> : (products.map((product) => (
 						<div key={product.id} className={style.item}>
 							<div className={style.image}>
 								<div
@@ -203,7 +206,8 @@ export default function Shop(): React.ReactElement {
 								Add to cart
 							</button>
 						</div>
-					))}
+					)))}
+					{ }
 				</div>
 			</div>
 			<SliderModal active={modalActive} setActive={setModalActive}>
