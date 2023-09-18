@@ -15,7 +15,6 @@ import SliderModal from '../../components/modal/sliderModal';
 import CarouselCompound from '../../components/slider/carouselCompound/carouselCompound';
 import { IProduct } from '../../utils/types';
 import Spinner from '../../components/spinner/spinner';
-// import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 export default function Shop(): React.ReactElement {
 	const localFilter = localStorage.getItem('filter');
