@@ -14,7 +14,7 @@ function Menu(): React.JSX.Element {
 	const toggleSearch = (): void => {
 		store.dispatch(showSearch());
 	};
-	const search = useSelector((state:RootState) => state.search.search);
+	const search = useSelector((state: RootState) => state.search.search);
 
 	const closeSearch = (): void => {
 		if (search) {
@@ -40,7 +40,9 @@ function Menu(): React.JSX.Element {
 				<Link to='/account_page' className={`${header.profile} ${header.button__header}`} />
 				{/* <HeaderButton area-label='Profile' className={`${header.profile} ${header.button__header}`} /> */}
 			</div>
-			<SearchForm className={search ? `${header.search__form} ${header.open}` : header.search__form} />
+			<SearchForm
+				className={search ? `${header.search__form} ${header.open}` : header.search__form}
+			/>
 		</div>
 	);
 }
