@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import header from './header.module.scss';
 import { IProduct } from '../../utils/types';
 import { getFilter } from '../../services/apiServices';
+import store from "../../store/store";
+import {hideBurger, hideSearch} from "../../store/actions";
 
 interface Props {
 	className: string;
@@ -37,7 +39,13 @@ function SearchForm({ ...props }: Props): React.JSX.Element {
 	const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setSearch(e.target.value);
 	};
-
+	const closeSearch = (): void => {
+		store.dispatch(hideSearch());
+		if (input.current) {
+			input.current.value = '';
+		}
+		setSearch('');
+	};
 	return (
 		<form {...props}>
 			<input
@@ -50,7 +58,7 @@ function SearchForm({ ...props }: Props): React.JSX.Element {
 			<button aria-label='text' type='submit' className={header.search__button} />
 			<div className={products.length > 0 ? header.list : header.listNone}>
 				{products?.map((product) => (
-					<Link key={product.id + 20} to={`/shop/${product.id}`}>
+					<Link key={product.id + 20} to={`/shop/${product.id}`} onClick={closeSearch}>
 						<div className={header.body}>
 							<div>
 								<img src={product.image} alt='product-logo' />
