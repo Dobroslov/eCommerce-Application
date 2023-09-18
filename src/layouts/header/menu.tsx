@@ -11,6 +11,7 @@ import { RootState } from '../../store/reducers';
 function Menu(): React.JSX.Element {
 	const [active, setToggle] = useState(false);
 	const [activeSearch, setactiveSearch] = useState(false);
+
 	const toggleSearch = (): void => {
 		setToggle(!active);
 		setactiveSearch(true);
@@ -22,9 +23,11 @@ function Menu(): React.JSX.Element {
 			setactiveSearch(false);
 		}
 	};
+
 	const quantity = useSelector((state: RootState) => state.data.cart?.quantity);
 	const node = useRef<HTMLDivElement>(null);
 	useOnClickOutside(node, (): void => closeSearch());
+
 	return (
 		<div className={header.menu} ref={node}>
 			<Navigation />
@@ -37,9 +40,7 @@ function Menu(): React.JSX.Element {
 				<Link to='/cart' className={`${header.basket} ${header.button__header}`}>
 					<span className={header.quantity}>{quantity}</span>
 				</Link>
-				{/* <HeaderButton area-label='Basket' className={`${header.basket} ${header.button__header}`}><span className={header.quantity}>{quantity}</span></HeaderButton> */}
 				<Link to='/account_page' className={`${header.profile} ${header.button__header}`} />
-				{/* <HeaderButton area-label='Profile' className={`${header.profile} ${header.button__header}`} /> */}
 			</div>
 			<SearchForm
 				activeSearch={activeSearch}
