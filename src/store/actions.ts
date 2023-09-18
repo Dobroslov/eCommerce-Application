@@ -18,6 +18,12 @@ export enum BurgerActionTypes {
 	ShowBurger = 2,
 	HideBurger = 3
 }
+
+export enum SearchActionTypes {
+	ShowSearch = 4,
+	HideSearch = 5
+}
+
 export interface ModalAction {
 	type: ModalActionTypes;
 	payload?: ModalProperties;
@@ -38,6 +44,11 @@ export interface CodeAction {
 
 export interface BurgerAction {
 	type: BurgerActionTypes;
+	payload?: boolean;
+}
+
+export interface SearchAction {
+	type: SearchActionTypes;
 	payload?: boolean;
 }
 
@@ -82,5 +93,16 @@ export function showBurger(): BurgerAction {
 export function hideBurger(): BurgerAction {
 	return {
 		type: BurgerActionTypes.HideBurger,
+	};
+}
+
+export function showSearch(): SearchAction {
+	return {
+		type: SearchActionTypes.ShowSearch,
+	};
+}
+export function hideSearch(): SearchAction {
+	return {
+		type: SearchActionTypes.HideSearch,
 	};
 }
