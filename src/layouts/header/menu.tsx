@@ -7,21 +7,20 @@ import Navigation from './navigation';
 import HeaderButton from '../../components/buttons/headerButton';
 import SearchForm from './searchForm';
 import { RootState } from '../../store/reducers';
-import {hideSearch, showBurger, showSearch} from "../../store/actions";
-import store from "../../store/store";
+import { hideSearch, showSearch } from '../../store/actions';
+import store from '../../store/store';
 
 function Menu(): React.JSX.Element {
-
 	const [activeSearch, setactiveSearch] = useState(false);
 	const toggleSearch = (): void => {
-		store.dispatch(showSearch())
+		store.dispatch(showSearch());
 		setactiveSearch(true);
 	};
 	const search = useSelector((state:RootState) => state.search.search);
 
 	const closeSearch = (): void => {
 		if (search) {
-			store.dispatch(hideSearch())
+			store.dispatch(hideSearch());
 			setactiveSearch(false);
 		}
 	};

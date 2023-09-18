@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import header from './header.module.scss';
 import { IProduct } from '../../utils/types';
 import { getFilter } from '../../services/apiServices';
-import store from "../../store/store";
-import {hideBurger, hideSearch} from "../../store/actions";
+import store from '../../store/store';
+import { hideSearch } from '../../store/actions';
 
 interface Props {
 	className: string;

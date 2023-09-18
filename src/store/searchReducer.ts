@@ -5,23 +5,23 @@ type SearchState = {
 };
 
 const initialState:SearchState = {
-    search: null,
+	search: null,
 };
 
 function searchReducer(state = initialState, action: SearchAction) {
-    switch (action.type) {
-        case SearchActionTypes.ShowSearch:
-            return {
-                ...state,
-                search: true,
-            };
-        case SearchActionTypes.HideSearch:
-            return {
-                ...state,
-                search: false,
-            };
-        default:
-            return state;
-    }
+	switch (action.type) {
+		case SearchActionTypes.ShowSearch:
+			return {
+				...state,
+				search: true,
+			};
+		case SearchActionTypes.HideSearch:
+			return {
+				...state,
+				search: false,
+			};
+		default:
+			return state;
+	}
 }
-export default searchReducer
+export default searchReducer;
