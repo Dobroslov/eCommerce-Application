@@ -17,6 +17,10 @@ This application icluded:
 - React
 - TypeScript
 - Scss
+- React react
+- Redux/toolkit
+- React slider
+- Axios
 
 ## Run Locally
 
@@ -72,8 +76,8 @@ $ npm run fix
 $ npm run test
 ```
 
-## Features
 
+## Features
 
 - Admin CRUD operations
 - SPA
@@ -90,4 +94,3 @@ $ npm run test
 - Vladimir Dobroslov - [https://github.com/dobroslov](https://github.com/dobroslov)
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
-

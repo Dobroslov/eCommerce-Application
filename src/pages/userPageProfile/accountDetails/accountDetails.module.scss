@@ -63,6 +63,13 @@
 	flex-direction: column;
 	width: 100%;
 	row-gap: 34px;
+	margin-bottom: 90px;
+	@include respons-property(font-size, 40, 90);
+}
+
+.inputs_sub_button {
+	display: flex;
+	flex-direction: column;
 }
 
 .form {

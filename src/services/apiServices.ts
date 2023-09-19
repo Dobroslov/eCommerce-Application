@@ -1,5 +1,6 @@
+/* eslint-disable no-unsafe-optional-chaining */
 import axios from 'axios';
-import { NavigateFunction } from 'react-router-dom';
+// import { NavigateFunction } from 'react-router-dom';
 import {
 	IUserLogin,
 	IRegistrationForm,
@@ -9,21 +10,51 @@ import {
 	IUpdatePassword,
 	IUpdateUserData,
 	IUserDataRespons,
+	IProductCart,
+	ICartData,
+	IProductCatalog,
+	ICart,
 } from '../utils/types';
-
 import store from '../store/store';
-import { hideModal, showModal } from '../store/actions';
+import { addCartData, addCode, hideModal, showModal } from '../store/actions';
+import errorModal from '../../public/assets/svg/error.svg';
+import successModal from '../../public/assets/svg/success.svg';
+// import { $CombinedState } from '@reduxjs/toolkit';
 
 const PROJECT_KEY = 'glitter-magazine';
 const API_URL = 'https://api.europe-west1.gcp.commercetools.com';
 const AUTH_URL = 'https://auth.europe-west1.gcp.commercetools.com';
+const CUSTOMER_URL
+	= 'https://api.europe-west1.gcp.commercetools.com/glitter-magazine/customers/[[id]]';
+const HEADERS_BASIC: {
+	'Content-Type': string;
+	Authorization: string;
+} = {
+	'Content-Type': 'application/json',
+	Authorization:
+		'Basic Y1NuZjhlM3RLSllqMmhmdm1uc0E5UmtMOnJNLXExemFGTDl0dVRvUUdQV3E4ZlVQX2piOEY0aW9O',
+};
+
+function getHeaders(): object {
+	let token = '';
+	if (!localStorage.getItem('token')) {
+		token = localStorage.getItem('anonimous') as string;
+	} else {
+		token = localStorage.getItem('token') as string;
+	}
+	const headers: {
+		'Content-Type': string;
+		Authorization: string;
+	} = {
+		'Content-Type': 'application/json',
+		Authorization: `Bearer ${token}`,
+	};
+	return headers;
+}
 
 export async function getAnonimousToken(): Promise<void> {
 	const url = `${AUTH_URL}/oauth/${PROJECT_KEY}/anonymous/token?grant_type=client_credentials`;
-	const headers = {
-		Authorization:
-			'Basic UWFSY3F3bWdSVktKM25scVQ5NTV2bEhuOllVWk5NeUtWRzgtNnI5WUlVRi1IVWgxbDBxSmlQUFU5',
-	};
+	const headers = HEADERS_BASIC;
 	const data = '';
 
 	await axios
@@ -31,24 +62,19 @@ export async function getAnonimousToken(): Promise<void> {
 			headers,
 		})
 		.then((response) => localStorage.setItem('anonimous', response.data.access_token))
-		.catch((error) => {
+		.catch((error: Error) => {
 			console.log(error);
 		});
 }
 
 export async function createCustomer(
 	params: IRegistrationForm,
-	navigate: NavigateFunction,
+	// navigate: NavigateFunction,
 ): Promise<void> {
 	// Здесь вы можете указать конкретный тип, который ожидаете получить от сервера
-	const token = localStorage.getItem('anonimous');
-	const data = JSON.stringify(params);
+	const data: string = JSON.stringify(params);
 	const url = `${API_URL}/${PROJECT_KEY}/customers`;
-	const headers = {
-		'Content-Type': 'application/json',
-		Authorization: `Bearer ${token}`,
-	};
-
+	const headers = getHeaders();
 	try {
 		const user = await axios
 			.post(url, data, {
@@ -61,16 +87,16 @@ export async function createCustomer(
 			showModal({
 				title: 'Success',
 				description: `User ${user.customer.firstName} ${user.customer.lastName} successfully registered`,
-				color: 'rgb(60, 179, 113,0.5)',
+				url: successModal,
 			}),
 		);
 
 		setTimeout(() => {
 			store.dispatch(hideModal());
 			// Перенаправить пользователя после закрытия модального окна
-			navigate('/', {
-				replace: true,
-			});
+			// navigate('/', {
+			// 	replace: true,
+			// });
 		}, 5000);
 	} catch (error) {
 		if (axios.isAxiosError(error)) {
@@ -80,7 +106,7 @@ export async function createCustomer(
 				showModal({
 					title: 'Fault',
 					description: error.response?.data.message,
-					color: 'rgb(227, 23, 23,0.5)',
+					url: errorModal,
 				}),
 			);
 
@@ -94,22 +120,34 @@ export async function createCustomer(
 	}
 }
 
-export async function getCustomerForId(id: string): Promise<IUserDataRespons | undefined> {
-	// eslint-disable-line consistent-return
-	const token = localStorage.getItem('token');
-	const url = `${API_URL}/${PROJECT_KEY}/customers/${id}`;
-	const headers = {
-		'Content-Type': 'application/json',
-		Authorization: `Bearer ${token}`,
-	};
-
+export async function getCustomerForId(
+	email: string,
+	password: string | undefined,
+): Promise<IUserDataRespons | undefined> {
+	const cartData = store.getState().data.cart as ICart;
+	const data = JSON.stringify({
+		email: `${email}`,
+		password: `${password}`,
+		anonymousCart: {
+			id: `${cartData.id}`,
+			typeId: 'cart',
+		},
+	});
+	const url = `${API_URL}/${PROJECT_KEY}/login`;
+	const headers = getHeaders();
 	try {
-		const response = await axios.get(url, {
+		const response = await axios.post(url, data, {
 			headers,
 		});
-
-		const responseData: IUserDataRespons = response.data;
+		const responseData: IUserDataRespons = response.data.customer;
+		const cart: ICart = {
+			id: response.data.cart.id,
+			version: response.data.cart.version,
+			quantity: response.data.cart.totalLineItemQuantity,
+			total: response.data.cart.totalPrice.centAmount,
+		};
 		localStorage.setItem('userData', JSON.stringify(responseData));
+		store.dispatch(addCartData(cart));
 		return responseData;
 	} catch (error) {
 		console.error('Error getting customer data:', error);
@@ -120,10 +158,7 @@ export async function getCustomerForId(id: string): Promise<IUserDataRespons | u
 export async function getToken(params: IUserLogin): Promise<void> {
 	const { email, password } = params;
 	const url = `${AUTH_URL}/oauth/${PROJECT_KEY}/customers/token?grant_type=password&username=${email}&password=${password}`;
-	const headers = {
-		Authorization:
-			'Basic Y1NuZjhlM3RLSllqMmhmdm1uc0E5UmtMOnJNLXExemFGTDl0dVRvUUdQV3E4ZlVQX2piOEY0aW9O',
-	};
+	const headers = HEADERS_BASIC;
 	const data = '';
 
 	await axios
@@ -132,14 +167,14 @@ export async function getToken(params: IUserLogin): Promise<void> {
 		})
 		.then(async (response) => {
 			localStorage.setItem('token', response.data.access_token);
-			const user = await getCustomerForId(response.data.scope.split(':')[2]);
+			const user = await getCustomerForId(email, password);
 			if (user) {
 				// Проверка на undefined
 				store.dispatch(
 					showModal({
 						title: 'Success',
 						description: `Welcome ${user.firstName} ${user.lastName} `,
-						color: 'rgb(60, 179, 113,0.5)',
+						url: successModal,
 					}),
 				);
 			} else {
@@ -155,7 +190,7 @@ export async function getToken(params: IUserLogin): Promise<void> {
 				showModal({
 					title: 'Fault',
 					description: error.response?.data.message,
-					color: 'rgb(227, 23, 23,0.5)',
+					url: errorModal,
 				}),
 			);
 			setTimeout(() => {
@@ -164,35 +199,9 @@ export async function getToken(params: IUserLogin): Promise<void> {
 		});
 }
 
-export async function refreshToken(params: IUserLogin): Promise<void> {
-	const { email, password } = params;
-	const url = `${AUTH_URL}/oauth/${PROJECT_KEY}/customers/token?grant_type=password&username=${email}&password=${password}`;
-	const headers = {
-		Authorization:
-			'Basic Y1NuZjhlM3RLSllqMmhmdm1uc0E5UmtMOnJNLXExemFGTDl0dVRvUUdQV3E4ZlVQX2piOEY0aW9O',
-	};
-	const data = '';
-
-	await axios
-		.post(url, data, {
-			headers,
-		})
-		.then(async (response) => {
-			localStorage.setItem('token', response.data.access_token);
-			await getCustomerForId(response.data.scope.split(':')[2]);
-		})
-		.catch((error) => {
-			console.log('file: apiServices.ts:170 ~ refreshToken ~ error:', error);
-		});
-}
-
-export async function checkToken(token: string): Promise<{ email: string; active: string } | void> {
+export async function checkToken(token: string): Promise<{ active: string } | void> {
 	const url = `${AUTH_URL}/oauth/introspect?token=${token}`;
-	const headers = {
-		'Content-Type': 'application/json',
-		Authorization:
-			'Basic Y1NuZjhlM3RLSllqMmhmdm1uc0E5UmtMOnJNLXExemFGTDl0dVRvUUdQV3E4ZlVQX2piOEY0aW9O',
-	};
+	const headers = HEADERS_BASIC;
 	const data = '';
 
 	await axios
@@ -200,10 +209,8 @@ export async function checkToken(token: string): Promise<{ email: string; active
 			headers,
 		})
 		.then(async (response) => {
-			const email = await getCustomerForId(response.data.scope.split(':')[2]);
 			const active = JSON.stringify(response.data.active);
 			return {
-				email,
 				active,
 			};
 		})
@@ -214,29 +221,22 @@ export async function checkToken(token: string): Promise<{ email: string; active
 	// return customer;
 }
 
-export function getFilter(limit = 9, offset = 0, filter: string): Promise<void | IProduct[]> {
+export async function getFilter(
+	limit = 9,
+	offset = 0,
+	filter: string,
+): Promise<void | IProductCatalog> {
 	// eslint-disable-line consistent-return
-	let token = '';
-	if (!localStorage.getItem('token')) {
-		token = localStorage.getItem('anonimous') as string;
-	} else {
-		token = localStorage.getItem('token') as string;
-	}
-	const productsArr: IProduct[] = [];
 
-	const url = `https://api.europe-west1.gcp.commercetools.com/glitter-magazine/product-projections/search?fuzzy=true&limit=${limit}&offset=${offset}${filter}`;
-	const headers: {
-		'Content-Type': string;
-		Authorization: string;
-	} = {
-		'Content-Type': 'application/json',
-		Authorization: `Bearer ${token}`,
-	};
-	const products = axios
+	const url = `${API_URL}/${PROJECT_KEY}/product-projections/search?fuzzy=true&limit=${limit}&offset=${offset}${filter}`;
+	const headers = getHeaders();
+	const products = await axios
 		.get(url, {
 			headers,
 		})
 		.then((response) => {
+			const productsArr: IProduct[] = [];
+			const totalQuantity = response.data.total;
 			response.data.results.forEach(
 				(product: {
 					id: string;
@@ -265,7 +265,7 @@ export function getFilter(limit = 9, offset = 0, filter: string): Promise<void |
 					productsArr.push(productValues);
 				},
 			);
-			return productsArr;
+			return { productsArr, totalQuantity };
 		})
 		.catch((error) => {
 			console.log(error);
@@ -273,23 +273,11 @@ export function getFilter(limit = 9, offset = 0, filter: string): Promise<void |
 	return products;
 }
 
-export function getProductForId(id: string): Promise<void | IProductbyId> {
-	let token = '';
-	if (!localStorage.getItem('token')) {
-		token = localStorage.getItem('anonimous') as string;
-	} else {
-		token = localStorage.getItem('token') as string;
-	}
+export async function getProductForId(id: string): Promise<void | IProductbyId> {
+	const url = `${API_URL}/${PROJECT_KEY}/product-projections/${id}`;
+	const headers = getHeaders();
 
-	const url = `https://api.europe-west1.gcp.commercetools.com/glitter-magazine/product-projections/${id}`;
-	const headers: {
-		'Content-Type': string;
-		Authorization: string;
-	} = {
-		'Content-Type': 'application/json',
-		Authorization: `Bearer ${token}`,
-	};
-	const product = axios
+	const product = await axios
 		.get(url, {
 			headers,
 		})
@@ -309,13 +297,11 @@ export function getProductForId(id: string): Promise<void | IProductbyId> {
 				stone: response.data.masterVariant.attributes[2].value[0],
 				standard: response.data.masterVariant.attributes[3].value,
 				metall: response.data.masterVariant.attributes[4].value[0],
-				discount: // eslint-disable-next-line no-unsafe-optional-chaining
-				(response.data.masterVariant.prices[0].discounted?.value.centAmount / 100).toFixed(
-					2,
-				) as string,
+				discount: (
+					response.data.masterVariant.prices[0].discounted?.value.centAmount / 100
+				).toFixed(2) as string,
 				sku: response.data.masterVariant.sku,
 			};
-
 			return productData;
 		})
 		.catch((error) => {
@@ -325,22 +311,19 @@ export function getProductForId(id: string): Promise<void | IProductbyId> {
 	return product;
 }
 
-export function changePassword({ oldPassword, newPassword }: IUpdatePassword): void {
+export async function changePassword({ oldPassword, newPassword }: IUpdatePassword): Promise<void> {
 	const user = localStorage.getItem('userData') as string;
 	const { id, version } = JSON.parse(user);
-	const token = localStorage.getItem('token');
 	const data = JSON.stringify({
 		id,
 		version,
 		currentPassword: `${oldPassword}`,
 		newPassword: `${newPassword}`,
 	});
-	const headers = {
-		'Content-Type': 'application/json',
-		Authorization: `Bearer ${token}`,
-	};
-	const url = 'https://api.europe-west1.gcp.commercetools.com/glitter-magazine/customers/password';
-	axios
+	const headers = getHeaders();
+	const url = `${API_URL}/${PROJECT_KEY}/customers/password`;
+
+	await axios
 		.post(url, data, {
 			headers,
 		})
@@ -357,7 +340,7 @@ export function changePassword({ oldPassword, newPassword }: IUpdatePassword): v
 				showModal({
 					title: 'Success',
 					description: 'Password changed successfully',
-					color: 'rgb(60, 179, 113,0.5)',
+					url: successModal,
 				}),
 			);
 			setTimeout(() => {
@@ -369,7 +352,7 @@ export function changePassword({ oldPassword, newPassword }: IUpdatePassword): v
 				showModal({
 					title: 'Fault',
 					description: error.response?.data.message,
-					color: 'rgb(227, 23, 23,0.5)',
+					url: errorModal,
 				}),
 			);
 			setTimeout(() => {
@@ -378,15 +361,16 @@ export function changePassword({ oldPassword, newPassword }: IUpdatePassword): v
 		});
 }
 
-export function changeCustomerValues({ firstName, lastName, email, dateOfBirth }: IUpdateUserData) {
+export async function changeCustomerValues({
+	firstName,
+	lastName,
+	email,
+	dateOfBirth,
+}: IUpdateUserData) {
 	const user = localStorage.getItem('userData') as string;
 	const { id, version } = JSON.parse(user);
-	const token = localStorage.getItem('token');
-	const headers = {
-		'Content-Type': 'application/json',
-		Authorization: `Bearer ${token}`,
-	};
-	const url = `https://api.europe-west1.gcp.commercetools.com/glitter-magazine/customers/${id}`;
+	const headers = getHeaders();
+	const url = `${API_URL}/${PROJECT_KEY}/customers/${id}`;
 	const data = {
 		version,
 		actions: [
@@ -408,7 +392,8 @@ export function changeCustomerValues({ firstName, lastName, email, dateOfBirth }
 			},
 		],
 	};
-	axios
+
+	await axios
 		.post(url, data, {
 			headers,
 		})
@@ -420,7 +405,7 @@ export function changeCustomerValues({ firstName, lastName, email, dateOfBirth }
 				showModal({
 					title: 'Success',
 					description: 'Data changed successfully',
-					color: 'rgb(60, 179, 113,0.5)',
+					url: successModal,
 				}),
 			);
 			setTimeout(() => {
@@ -433,7 +418,7 @@ export function changeCustomerValues({ firstName, lastName, email, dateOfBirth }
 				showModal({
 					title: 'Fault',
 					description: error.response?.data.message,
-					color: 'rgb(227, 23, 23,0.5)',
+					url: errorModal,
 				}),
 			);
 			setTimeout(() => {
@@ -442,15 +427,11 @@ export function changeCustomerValues({ firstName, lastName, email, dateOfBirth }
 		});
 }
 
-export function changeAddress(addressId: string, addressData: IAddress) {
+export async function changeAddress(addressId: string, addressData: IAddress) {
 	const user = localStorage.getItem('userData') as string;
 	const { id, version } = JSON.parse(user);
-	const token = localStorage.getItem('token');
-	const headers = {
-		'Content-Type': 'application/json',
-		Authorization: `Bearer ${token}`,
-	};
-	const url = `https://api.europe-west1.gcp.commercetools.com/glitter-magazine/customers/${id}`;
+	const headers = getHeaders();
+	const url = `${API_URL}/${PROJECT_KEY}/customers/${id}`;
 	const data = {
 		version,
 		actions: [
@@ -461,7 +442,8 @@ export function changeAddress(addressId: string, addressData: IAddress) {
 			},
 		],
 	};
-	axios
+
+	await axios
 		.post(url, data, {
 			headers,
 		})
@@ -472,7 +454,7 @@ export function changeAddress(addressId: string, addressData: IAddress) {
 				showModal({
 					title: 'Success',
 					description: 'Address changed successfully',
-					color: 'rgb(60, 179, 113,0.5)',
+					url: successModal,
 				}),
 			);
 			setTimeout(() => {
@@ -484,7 +466,7 @@ export function changeAddress(addressId: string, addressData: IAddress) {
 				showModal({
 					title: 'Fault',
 					description: error.response?.data.message,
-					color: 'rgb(227, 23, 23,0.5)',
+					url: errorModal,
 				}),
 			);
 			setTimeout(() => {
@@ -502,15 +484,11 @@ export function changeAddress(addressId: string, addressData: IAddress) {
 // "removeShippingAddressId"
 // "removeAddress"
 
-export function addressActions(addressAction: string, addressId: string) {
+export async function addressActions(addressAction: string, addressId: string) {
 	const user = localStorage.getItem('userData') as string;
 	const { id, version } = JSON.parse(user);
-	const token = localStorage.getItem('token');
-	const headers = {
-		'Content-Type': 'application/json',
-		Authorization: `Bearer ${token}`,
-	};
-	const url = `https://api.europe-west1.gcp.commercetools.com/glitter-magazine/customers/${id}`;
+	const headers = getHeaders();
+	const url = `${API_URL}/${PROJECT_KEY}/customers/${id}`;
 	const data = {
 		version,
 		actions: [
@@ -520,7 +498,8 @@ export function addressActions(addressAction: string, addressId: string) {
 			},
 		],
 	};
-	axios
+
+	await axios
 		.post(url, data, {
 			headers,
 		})
@@ -531,7 +510,7 @@ export function addressActions(addressAction: string, addressId: string) {
 				showModal({
 					title: 'Success',
 					description: 'Data changed successfully',
-					color: 'rgb(60, 179, 113,0.5)',
+					url: successModal,
 				}),
 			);
 			setTimeout(() => {
@@ -543,7 +522,7 @@ export function addressActions(addressAction: string, addressId: string) {
 				showModal({
 					title: 'Fault',
 					description: error.response?.data.message,
-					color: 'rgb(227, 23, 23,0.5)',
+					url: errorModal,
 				}),
 			);
 			setTimeout(() => {
@@ -552,26 +531,27 @@ export function addressActions(addressAction: string, addressId: string) {
 		});
 }
 
-export function addAddress(addressData: IAddress) {
+export interface IActionData {
+	action: string;
+	addressId?: string;
+	address?: IAddress;
+}
+
+export function doRequest(actionData: IActionData[], url: string) {
 	const user = localStorage.getItem('userData') as string;
 	const { id, version } = JSON.parse(user);
+	const preparedUrl = url.replaceAll('[[id]]', id);
 	const token = localStorage.getItem('token');
 	const headers = {
 		'Content-Type': 'application/json',
 		Authorization: `Bearer ${token}`,
 	};
-	const url = `https://api.europe-west1.gcp.commercetools.com/glitter-magazine/customers/${id}`;
 	const data = {
 		version,
-		actions: [
-			{
-				action: 'addAddress',
-				address: addressData,
-			},
-		],
+		actions: actionData,
 	};
-	axios
-		.post(url, data, {
+	return axios
+		.post(preparedUrl, data, {
 			headers,
 		})
 		.then((response) => {
@@ -581,7 +561,7 @@ export function addAddress(addressData: IAddress) {
 				showModal({
 					title: 'Success',
 					description: 'Data changed successfully',
-					color: 'rgb(60, 179, 113,0.5)',
+					url: successModal,
 				}),
 			);
 			setTimeout(() => {
@@ -594,11 +574,579 @@ export function addAddress(addressData: IAddress) {
 				showModal({
 					title: 'Fault',
 					description: error.response?.data.message,
-					color: 'rgb(227, 23, 23,0.5)',
+					url: errorModal,
 				}),
 			);
 			setTimeout(() => {
 				store.dispatch(hideModal());
 			}, 5000);
 		});
+}
+
+export function addAddress(addressData: IAddress): Promise<IUserDataRespons> {
+	const data: IActionData[] = [
+		{
+			action: 'addAddress',
+			address: addressData,
+		},
+	];
+	const url = 'https://api.europe-west1.gcp.commercetools.com/glitter-magazine/customers/[[id]]';
+	return doRequest(data, url);
+}
+
+// / Для установки или удаления используем addressAction:
+// 'setDefaultShippingAddress'
+// "setDefaultBillingAddress"
+//  "addBillingAddressId"
+//  "addShippingAddressId"
+// "removeBillingAddressId"
+// "removeShippingAddressId"
+// "removeAddress"
+
+// export function XaddressActions(addressAction: string, addressId: string) {
+// 	const url = 'https://api.europe-west1.gcp.commercetools.com/glitter-magazine/customers/[[id]]}';
+// 	const data = [
+// 		{
+// 			action: addressAction,
+// 			addressId,
+// 		},
+// 	];
+
+// 	return doRequest(data, url);
+// }
+
+export function addBillingAddressId(addressId: string) {
+	const data = [
+		{
+			action: 'addBillingAddressId',
+			addressId,
+		},
+	];
+	return doRequest(data, CUSTOMER_URL);
+}
+
+export function setDefaultBillingAddress(addressId: string) {
+	const data = [
+		{
+			action: 'setDefaultBillingAddress',
+			addressId,
+		},
+	];
+
+	return doRequest(data, CUSTOMER_URL);
+}
+
+export function addShippingAddressId(addressId: string) {
+	const data = [
+		{
+			action: 'addShippingAddressId',
+			addressId,
+		},
+	];
+
+	return doRequest(data, CUSTOMER_URL);
+}
+
+export function removeAddress(addressId: string) {
+	const data = [
+		{
+			action: 'removeAddress',
+			addressId,
+		},
+	];
+
+	return doRequest(data, CUSTOMER_URL);
+}
+
+export function getAddressRequestData(action: string, addressId: string) {
+	return [
+		{
+			action,
+			addressId,
+		},
+	];
+}
+
+export function setDefaultShippingAddress(addressId: string) {
+	// const data = [
+	// 	{
+	// 		action: 'setDefaultShippingAddress',
+	// 		addressId: addressId,
+	// 	},
+	// ];
+
+	return doRequest(getAddressRequestData('setDefaultShippingAddress', addressId), CUSTOMER_URL);
+}
+
+export async function createCart() {
+	const productIdArr: { item: string; product: string }[] = [];
+	const data = JSON.stringify({
+		currency: 'EUR',
+	});
+	const url = `${API_URL}/${PROJECT_KEY}/me/carts`;
+	const headers = getHeaders();
+
+	await axios
+		.post(url, data, {
+			headers,
+		})
+		.then((response) => {
+			response.data.lineItems.forEach((item: { id: string; productId: string }) => {
+				const idData: {
+					item: string;
+					product: string;
+				} = {
+					item: item.id,
+					product: item.productId,
+				};
+				productIdArr.push(idData);
+			});
+			localStorage.setItem('productsCartId', JSON.stringify(productIdArr));
+			const cartData = {
+				id: response.data.id,
+				version: response.data.version,
+				quantity: response.data.totalLineItemQuantity,
+				total: response.data.totalPrice.centAmount,
+			};
+			store.dispatch(addCartData(cartData));
+		})
+		.catch((error) => {
+			console.log(error);
+		});
+}
+
+export async function getCart() {
+	const url = `${API_URL}/${PROJECT_KEY}/me/active-cart`;
+	const headers = getHeaders();
+	const cart: void | ICartData = await axios
+		.get(url, {
+			headers,
+		})
+		.then((response) => {
+			const productIdArr: {
+				item: string;
+				product: string;
+			}[] = [];
+			const priceArr: number[] = [];
+			const productArr: IProductCart[] = [];
+			const { currencyCode } = response.data.totalPrice;
+			const totalQuantity = response.data.totalLineItemQuantity;
+			const totalDiscount = (response.data.totalPrice.centAmount / 100).toFixed(2);
+
+			response.data.lineItems.forEach(
+				(item: {
+					id: string;
+					productId: string;
+					name: { [x: string]: string };
+					variant: { attributes: { value: string }[]; images: { url: string }[] };
+					totalPrice: { centAmount: number };
+					price: { value: { centAmount: number } };
+					discountedPrice: { value: { centAmount: number } };
+					quantity: number;
+				}) => {
+					let discount: string;
+					if (item.discountedPrice) {
+						discount = (item.discountedPrice.value.centAmount / 100).toFixed(2) as string;
+					} else {
+						discount = '';
+					}
+					const productCart: IProductCart = {
+						id: item.id,
+						productId: item.productId,
+						name: item.name['en-US'],
+						weight: item.variant.attributes[1].value,
+						metall: item.variant.attributes[4].value[0],
+						image: item.variant.images[0].url,
+						currencyCode: response.data.totalPrice.currencyCode,
+						totalPrice: (item.totalPrice.centAmount / 100).toFixed(2) as string,
+						price: (item.price.value.centAmount / 100).toFixed(2) as string,
+						discount,
+						quantity: item.quantity,
+					};
+					const idData: {
+						item: string;
+						product: string;
+					} = {
+						item: item.id,
+						product: item.productId,
+					};
+					productArr.push(productCart);
+					productIdArr.push(idData);
+					priceArr.push(item.price.value.centAmount * item.quantity);
+				},
+			);
+			localStorage.setItem('productsCartId', JSON.stringify(productIdArr));
+			const cartData = {
+				id: response.data.id,
+				version: response.data.version,
+				quantity: response.data.totalLineItemQuantity,
+				total: response.data.totalPrice.centAmount,
+			};
+			const totalPrice = (priceArr.reduce((a, b) => a + b) / 100).toFixed(2);
+			const discountProcent = Math.round(100 - (+totalDiscount / +totalPrice) * 100);
+			store.dispatch(addCartData(cartData));
+			return {
+				productArr,
+				totalPrice,
+				currencyCode,
+				totalQuantity,
+				totalDiscount,
+				discountProcent,
+			};
+		})
+		.catch(() => {
+			createCart();
+		});
+	return cart;
+}
+
+export async function addProductForCart(productId: string | undefined, quantity: number) {
+	const cartData = store.getState().data.cart as ICart;
+	const data = {
+		version: cartData.version,
+		actions: [
+			{
+				action: 'addLineItem',
+				productId: `${productId}`,
+				variantId: 1,
+				quantity,
+			},
+		],
+	};
+	const url = `${API_URL}/${PROJECT_KEY}/me/carts/${cartData.id}`;
+	const headers = getHeaders();
+
+	await axios
+		.post(url, data, {
+			headers,
+		})
+		.then((response) => {
+			const cartProductId: {
+				item: string;
+				product: string;
+			}[] = [];
+			const cart: ICart = {
+				id: response.data.id,
+				version: response.data.version,
+				quantity: response.data.totalLineItemQuantity,
+				total: response.data.totalPrice.centAmount,
+			};
+			store.dispatch(addCartData(cart));
+			response.data.lineItems.forEach((item: { id: string; productId: string }) => {
+				const idData: {
+					item: string;
+					product: string;
+				} = {
+					item: item.id,
+					product: item.productId,
+				};
+				cartProductId.push(idData);
+			});
+			localStorage.setItem('productsCartId', JSON.stringify(cartProductId));
+			store.dispatch(addCartData(cart));
+			store.dispatch(
+				showModal({
+					title: 'Success',
+					description: 'the product has been added to the cart',
+					url: successModal,
+				}),
+			);
+			setTimeout(() => {
+				store.dispatch(hideModal());
+			}, 5000);
+		})
+		.catch((error) => {
+			console.log(error);
+		});
+}
+
+export async function changeQuantityProductForCart(itemId: string, quantity: number) {
+	const cartData = store.getState().data.cart as ICart;
+	const data = JSON.stringify({
+		version: cartData.version,
+		actions: [
+			{
+				action: 'changeLineItemQuantity',
+				lineItemId: `${itemId}`,
+				quantity,
+			},
+		],
+	});
+	const url = `${API_URL}/${PROJECT_KEY}/me/carts/${cartData.id}`;
+	const headers = getHeaders();
+
+	await axios
+		.post(url, data, {
+			headers,
+		})
+		.then((response) => {
+			const cart = {
+				id: response.data.id,
+				version: response.data.version,
+				quantity: response.data.totalLineItemQuantity,
+				total: response.data.totalPrice.centAmount,
+			};
+			store.dispatch(addCartData(cart));
+		})
+		.catch((error) => {
+			console.log(error);
+		});
+}
+
+export async function DeleteProductForCart(itemId: string) {
+	const cartData = store.getState().data.cart as ICart;
+	const url = `${API_URL}/${PROJECT_KEY}/me/carts/${cartData.id}`;
+	const headers = getHeaders();
+	const data = JSON.stringify({
+		version: cartData.version,
+		actions: [
+			{
+				action: 'removeLineItem',
+				lineItemId: itemId,
+			},
+		],
+	});
+	await axios
+		.post(url, data, {
+			headers,
+		})
+		.then((response) => {
+			const cart = {
+				id: response.data.id,
+				version: response.data.version,
+				quantity: response.data.totalLineItemQuantity,
+				total: response.data.totalPrice.centAmount,
+			};
+			store.dispatch(addCartData(cart));
+			store.dispatch(
+				showModal({
+					title: 'Success',
+					description: 'Product removed',
+					url: successModal,
+				}),
+			);
+			setTimeout(() => {
+				store.dispatch(hideModal());
+			}, 1500);
+		})
+		.catch((error) => {
+			console.log(error);
+		});
+}
+
+export async function clearCart(products: IProductCart[]) {
+	const cartData = store.getState().data.cart as ICart;
+	const url = `${API_URL}/${PROJECT_KEY}/me/carts/${cartData.id}`;
+	const headers = getHeaders();
+	const items: { action: string; lineItemId: string }[] = [];
+	products.forEach((product: { id: string }) => {
+		items.push({ action: 'removeLineItem', lineItemId: product.id });
+	});
+	const data = JSON.stringify({
+		version: cartData.version,
+		actions: items,
+	});
+	await axios
+		.post(url, data, {
+			headers,
+		})
+		.then((response) => {
+			const cart = {
+				id: response.data.id,
+				version: response.data.version,
+				quantity: response.data.totalLineItemQuantity,
+				total: response.data.totalPrice.centAmount,
+			};
+			store.dispatch(addCartData(cart));
+			store.dispatch(
+				showModal({
+					title: 'Success',
+					description: 'Cart clear',
+					url: successModal,
+				}),
+			);
+			setTimeout(() => {
+				store.dispatch(hideModal());
+			}, 5000);
+		})
+		.catch((error) => {
+			console.log(error);
+		});
+}
+
+export async function checkAnonimousToken(
+	token: string,
+): Promise<{ email: string; active: string } | void> {
+	const url = `${AUTH_URL}/oauth/introspect?token=${token}`;
+	const headers = HEADERS_BASIC;
+	const data = '';
+
+	await axios
+		.post(url, data, {
+			headers,
+		})
+		.then((response) => {
+			if (response.data.active === false) {
+				getAnonimousToken().then(() => {
+					getCart();
+				});
+			} else {
+				getCart();
+			}
+		})
+		.catch((error) => {
+			console.log(error);
+		});
+}
+
+export async function removePromoCode() {
+	if (store.getState().code.code) {
+		const promoId = store.getState().code.code;
+		const cartData = store.getState().data.cart as ICart;
+		const data = {
+			version: cartData.version,
+			actions: [
+				{
+					action: 'removeDiscountCode',
+					discountCode: {
+						typeId: 'discount-code',
+						id: promoId,
+					},
+				},
+			],
+		};
+		const url = `${API_URL}/${PROJECT_KEY}/me/carts/${cartData.id}`;
+		const headers = getHeaders();
+		await axios
+			.post(url, data, {
+				headers,
+			})
+			.then((response) => {
+				const cart = {
+					id: response.data.id,
+					version: response.data.version,
+					quantity: response.data.totalLineItemQuantity,
+					total: response.data.totalPrice.centAmount,
+				};
+				store.dispatch(addCartData(cart));
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	}
+}
+
+export async function addPromoCode(promo: string) {
+	await removePromoCode();
+	const cartData = store.getState().data.cart as ICart;
+	const totalPrice = ((store.getState().data.cart?.total as number) / 100).toFixed(2);
+	const data = {
+		version: cartData.version,
+		actions: [
+			{
+				action: 'addDiscountCode',
+				code: promo,
+			},
+		],
+	};
+	const url = `${API_URL}/${PROJECT_KEY}/me/carts/${cartData.id}`;
+	const headers = getHeaders();
+
+	const cartDataValue: ICartData | void = await axios
+		.post(url, data, {
+			headers,
+		})
+		.then((response) => {
+			const promoCodeID: string = response.data.discountCodes[0].discountCode.id;
+			store.dispatch(addCode(promoCodeID));
+			const productIdArr: {
+				item: string;
+				product: string;
+			}[] = [];
+			const productArr: IProductCart[] = [];
+			const totalDiscount = (response.data.totalPrice.centAmount / 100).toFixed(2);
+			const { currencyCode } = response.data.totalPrice;
+			const totalQuantity = response.data.totalLineItemQuantity;
+			response.data.lineItems.forEach(
+				(item: {
+					id: string;
+					productId: string;
+					name: { [x: string]: string };
+					variant: { attributes: { value: string }[]; images: { url: string }[] };
+					totalPrice: { centAmount: number };
+					price: { value: { centAmount: number } };
+					discountedPrice: { value: { centAmount: number } };
+					quantity: number;
+				}) => {
+					let discount: string;
+					if (item.discountedPrice) {
+						discount = (item.discountedPrice.value.centAmount / 100).toFixed(2) as string;
+					} else {
+						discount = '';
+					}
+					const productCart: IProductCart = {
+						id: item.id,
+						productId: item.productId,
+						name: item.name['en-US'],
+						weight: item.variant.attributes[1].value,
+						metall: item.variant.attributes[4].value[0],
+						image: item.variant.images[0].url,
+						currencyCode: response.data.totalPrice.currencyCode,
+						totalPrice: (item.totalPrice.centAmount / 100).toFixed(2) as string,
+						price: (item.price.value.centAmount / 100).toFixed(2) as string,
+						discount,
+						quantity: item.quantity,
+					};
+					const idData: {
+						item: string;
+						product: string;
+					} = {
+						item: item.id,
+						product: item.productId,
+					};
+					productArr.push(productCart);
+					productIdArr.push(idData);
+				},
+			);
+			localStorage.setItem('productsCartId', JSON.stringify(productIdArr));
+			const cart = {
+				id: response.data.id,
+				version: response.data.version,
+				quantity: response.data.totalLineItemQuantity,
+				total: response.data.totalPrice.centAmount,
+			};
+			store.dispatch(addCartData(cart));
+			store.dispatch(
+				showModal({
+					title: 'Success',
+					description: 'Code completed',
+					url: successModal,
+				}),
+			);
+			setTimeout(() => {
+				store.dispatch(hideModal());
+			}, 5000);
+			const discountProcent = Math.round(100 - (+totalDiscount / +totalPrice) * 100);
+			return {
+				productArr,
+				totalPrice,
+				currencyCode,
+				totalQuantity,
+				totalDiscount,
+				discountProcent,
+			};
+		})
+		.catch((error) => {
+			store.dispatch(
+				showModal({
+					title: 'Fault',
+					description: error.response?.data.message,
+					url: errorModal,
+				}),
+			);
+			setTimeout(() => {
+				store.dispatch(hideModal());
+			}, 5000);
+		});
+	return cartDataValue;
 }

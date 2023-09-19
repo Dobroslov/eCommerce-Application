@@ -1,12 +1,11 @@
 import React, { useState, FormEvent } from 'react';
-import { addAddress, addressActions } from '../../../services/apiServices';
+import { addAddress, addBillingAddressId, addShippingAddressId, setDefaultBillingAddress, setDefaultShippingAddress } from '../../../services/apiServices';
 import RegistrationInput from '../../../components/inputs/registrationInput';
 import RegistrationButton from '../../../components/buttons/registrationButton';
 
 import style from './address.module.scss';
 
 export default function AddNewAddress({ addressType }: { addressType: string }): React.ReactElement {
-	// Создаем состояние для хранения значений полей формы
 	const [address, setAddress] = useState({
 		country: 'RU',
 		city: '',
@@ -41,32 +40,37 @@ export default function AddNewAddress({ addressType }: { addressType: string }):
 	const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
 		e.preventDefault();
 
-		try {
-			addAddress(address);
-			const userString = localStorage.getItem('userData');
-			if (userString) {
-				const user = JSON.parse(userString);
-				const lastAddress = user.addresses.slice(-1)[0];
-				const addressId = lastAddress.id;
+		addAddress(address).then((responseData) => {
+			const addressId = responseData.addresses.slice(-1)[0].id;
+			if (addressId) {
+				switch (addressType) {
+					case 'billing':
+						addBillingAddressId(addressId).then(() => {
+							if (defaultAddress) {
+								setDefaultBillingAddress(addressId);
+							}
+						});
+						break;
 
-				if (addressType === 'billing') {
-					addressActions('addBillingAddressId', addressId);
-					if (defaultAddress) {
-						addressActions('setDefaultBillingAddress', addressId);
-					}
-				}
-
-				if (addressType === 'shipping') {
-					addressActions('addShippingAddressId', addressId);
-					if (defaultAddress) {
-						addressActions('setDefaultShippingAddress', addressId);
-					}
+					case 'shipping':
+					default:
+						addShippingAddressId(addressId).then(() => {
+							if (defaultAddress) {
+								setDefaultShippingAddress(addressId);
+							}
+						});
+						break;
 				}
 			}
-		} catch (error) {
-			console.error('Error handleSubmit:', error);
-			// Обработайте ошибку, если что-то пошло не так
-		}
+			setAddress({
+				country: 'RU',
+				city: '',
+				streetName: '',
+				streetNumber: '',
+				postalCode: '',
+			});
+			setDefaultAddress(false);
+		});
 	};
 
 	return (
@@ -87,7 +91,7 @@ export default function AddNewAddress({ addressType }: { addressType: string }):
 								onChange={handleSelectChange}
 								name='country'
 								id='country'
-								defaultValue='RU'
+								value={address.country}
 							>
 								<option value='RU'>Russia</option>
 								<option value='BY'>Belarus</option>
@@ -111,6 +115,7 @@ export default function AddNewAddress({ addressType }: { addressType: string }):
 								id='city'
 								errorMessage="City should be 1-16 characters and shoudn'nt include any special character"
 								pattern='^[A-Za-zА-Яа-я]{1,16}$'
+								defaultValue={address.city}
 							/>
 							<RegistrationInput
 								placeholder='Street name'
@@ -119,6 +124,7 @@ export default function AddNewAddress({ addressType }: { addressType: string }):
 								id='streetName'
 								errorMessage="Street name should be 1-16 characters and shoudn'nt include any special character"
 								pattern='^[A-Za-zА-Яа-я]{1,16}$'
+								defaultValue={address.streetName}
 							/>
 							<RegistrationInput
 								placeholder='Street number'
@@ -127,6 +133,7 @@ export default function AddNewAddress({ addressType }: { addressType: string }):
 								id='streetNumber'
 								errorMessage='Street number should contains only positive numbers'
 								pattern='^[0-9]+$'
+								defaultValue={address.streetNumber}
 							/>
 							<RegistrationInput
 								placeholder='Postal code'
@@ -136,6 +143,7 @@ export default function AddNewAddress({ addressType }: { addressType: string }):
 								errorMessage='The postal code must be like this ("12345" or
 								"12345-6789" or "K1M 1E3").'
 								pattern='^(?:\d{5}(?:-\d{4})?|[A-Z]\d[A-Z] \d[A-Z]\d)$'
+								defaultValue={address.postalCode}
 							/>
 							<RegistrationButton value='Register' />
 						</div>

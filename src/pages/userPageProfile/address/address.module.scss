@@ -51,8 +51,12 @@
 }
 
 .content__column {
+	display: flex;
+	flex-direction: column;
 	min-width: 500px;
 	@include respons-property(min-width, 300, 500);
+	padding: 0;
+	gap: 20px;
 }
 
 .toggle_gutton {
@@ -114,4 +118,47 @@
 	left: 0;
 	bottom: 0;
 	background-color: #d8d8d8;
+}
+
+.buttons {
+	display: flex;
+	gap: 30px;
+	justify-content: center;
+}
+
+.button {
+	border: none;
+	outline: none;
+	background-color: #000;
+	color: #fff;
+	font-size: 16px;
+	letter-spacing: 2px;
+	font-weight: 500;
+	text-transform: uppercase;
+	padding: 7px 20px;
+	margin-bottom: 15px;
+	border-radius: 4px;
+	align-self: center;
+	transition: opacity 0.3s ease 0s;
+	cursor: pointer;
+
+	@media (min-width: 320px) and (max-width: 1248px) {
+		padding-top: calc(6px + (16 - 6) * ((100vw - 320px) / (1248 - 320)));
+		padding-bottom: calc(6px + (16 - 6) * ((100vw - 320px) / (1248 - 320)));
+		font-size: calc(12px + (16 - 12) * ((100vw - 320px) / (1248 - 320)));
+	}
+
+	@media (max-width: em(768)) {
+		font-weight: 400;
+	}
+}
+
+.button:hover {
+	opacity: 0.8;
+	transition: opacity 0.3s ease 0s;
+}
+
+.button:active {
+	opacity: 1;
+	transition: opacity 0.3s ease 0s;
 }

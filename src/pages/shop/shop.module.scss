@@ -80,10 +80,11 @@
   color: #000;
   padding-bottom: 10px;  
   @media (min-width: 320px) and (max-width: 1240px) {
-    @include respons-property(font-size, 14, 20);
+    @include respons-property(font-size, 10, 20);
     @include respons-property(padding-bottom, 4, 10);
   }
   @media (max-width: 768px) {
+    @include respons-property(font-size, 14, 18);
     flex: 1 1 auto;
   }
 }
@@ -97,7 +98,7 @@
   font-size: 20px;
   color: #A18A68;
   @media (min-width: 320px) and (max-width: 1240px) {
-    @include respons-property(font-size, 12, 20);
+    @include respons-property(font-size, 14, 20);
   }
   @media (max-width: 480px){
       display: flex;
@@ -181,4 +182,70 @@
 
 .showDetailsModal:hover {
   background-color: rgba($color: #000000, $alpha: 0.25);
+}
+
+.pagination {
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+  column-gap: 5px;
+
+  button {
+    font-size: 16px;
+    background-color: inherit;
+    outline: none;
+    border: 1px solid #000;
+    border-radius: 4px;
+    padding: 10px 15px;
+    transition: all ease 0.3s;
+    cursor: pointer;
+  }
+  button:disabled {
+    border: 1px solid#BFC1C8;
+    cursor: default;
+  }
+
+  button:disabled:hover {
+    background-color: inherit;
+    color: #BFC1C8;
+    transition: all ease 0.3s;
+  }
+
+  button:disabled:active {
+    background-color: inherit;
+    color: #BFC1C8;
+  }
+
+  button:hover {
+    background-color: #000;
+    color: #fff;
+    transition: all ease 0.3s;
+  }
+
+  button:active {
+    background-color: #333333;
+    transition: all ease 0.3s;
+  }
+}
+
+.addtoCartButton {
+  font-size: 14px;
+  padding: 5px 0;
+  margin-top: 5px;
+  border: 1px solid #000;
+  outline: none;
+  background-color: #000;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.addtoCartButton:hover {
+  background-color: #484848;
+  border: 1px solid #484848;
+}
+
+.addtoCartButton:active {
+  background-color: #5b5b5b;
+  border: 1px solid #5b5b5b;
 }

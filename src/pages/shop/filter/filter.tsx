@@ -12,7 +12,7 @@ interface ISort {
 
 export default function Filter(props: ISort): React.ReactElement {
 	const { onValueChange } = props;
-	const [value, setValue] = useState<number[]>([35, 1000]);
+	const [value, setValue] = useState<number[]>([10, 1000]);
 	const [sort, setSorting] = useState<string>('&sort=createdAt+asc');
 	const [category, setCategory] = useState<string>('');
 	const [search, setSearch] = useState<string>('');
@@ -62,7 +62,8 @@ export default function Filter(props: ISort): React.ReactElement {
 	};
 
 	const handleApplyFilters = () => {
-		const priceRange = `&filter=variants.price.centAmount:range (${value[0] * 100} to ${value[1] * 100
+		const priceRange = `&filter=variants.price.centAmount:range (${value[0] * 100} to ${
+			value[1] * 100
 		})`;
 		const searchInput = `&text.en-US=${search}`;
 		const metallValues = filterObject.metallValue.join(',');
@@ -132,9 +133,9 @@ export default function Filter(props: ISort): React.ReactElement {
 			</select>
 			<ReactSlider
 				className={style.slider}
-				defaultValue={[35, 1000]}
+				defaultValue={[10, 1000]}
 				max={1000}
-				min={35}
+				min={10}
 				onChange={(newValue) => setValue(newValue)}
 			/>
 			<div className={style.price}>
@@ -187,8 +188,8 @@ export default function Filter(props: ISort): React.ReactElement {
 				</label>
 			</div>
 			<div className={style.submitButtons}>
-				<SubmitButton onclick={handleResetFilters} value='Reset' />
-				<SubmitButton onclick={handleApplyFilters} value='Apply filters' />
+				<SubmitButton onClick={handleResetFilters} value='Reset' />
+				<SubmitButton onClick={handleApplyFilters} value='Apply filters' />
 			</div>
 		</div>
 	);

@@ -3,9 +3,9 @@ import style from './submitButton.module.scss';
 import { ISubmitButton } from '../../utils/types';
 
 function SubmitButton(props: ISubmitButton): React.JSX.Element {
-	const { value, onclick } = props;
+	const { value, onClick } = props;
 	return (
-		<button onClick={onclick} className={style.button} type='submit'>
+		<button onClick={onClick} className={style.button} type='submit'>
 			{value}
 		</button>
 	);

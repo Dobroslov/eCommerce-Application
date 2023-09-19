@@ -1,0 +1,396 @@
+@import '/src/styles/mixins';
+//===========================================================================================================================
+
+
+.cart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 100px;
+  margin-bottom: 276px;
+  @media (min-width: 320px) and (max-width: 1240px) {
+    @include respons-property(margin-top, 16, 100);
+    @include respons-property(margin-bottom, 90, 276);
+    }
+}
+
+
+.cartTitle {
+  align-self: center;
+  padding-bottom: 64px;
+  font-size: 33px;
+  font-weight: 500;
+  @media (min-width: 320px) and (max-width: 1240px) {
+    @include respons-property(font-size, 16, 33);
+    }
+    @media (max-width: 768px){
+        align-self: flex-start;
+        font-weight: 400;
+    }
+}
+
+.cartTitleNone {
+  display: none;
+}
+
+.body {
+  display: flex;
+  column-gap: 140px;
+  width: 100%;
+
+  @media (min-width: 320px) and (max-width: 1240px) {
+    @include respons-property(column-gap, -80, 140);
+}
+  @media (max-width: 768px){
+    flex-direction: column;
+}
+}
+
+.bodyEmpty {
+  display: none;
+}
+
+.cartList {
+  flex: 1 1 65%;
+  display: flex;
+  flex-direction: column;
+  row-gap: 16px;
+  @media (max-width: 768px){
+    padding-bottom: 40px;
+}
+}
+
+.product {
+  display: flex;
+  
+  @media (max-width: 768px){
+    flex-direction: column;
+    border-bottom: 1px solid #EFEFEF;
+    padding-bottom: 16px;
+    row-gap: 12px;
+}
+  img {
+    max-width: 136px;
+    object-fit: contain;
+  }
+
+  div {
+    display: flex;
+    flex: 1 1 auto;
+  }
+}
+
+.productBody {
+  display: flex;
+  flex: 1 1 auto;
+
+  @media (max-width: 768px){
+      max-height: 100%;
+      padding-left: 8px;
+  }
+}
+
+.productInfo {
+  display: flex;
+  flex-direction: column;
+  align-self: flex-start;
+  row-gap: 4px;
+  padding-left: 40px;
+  align-self: flex-start;
+  @media (max-width: 768px){
+    padding-left: 0px;
+}
+}
+
+.productName {
+  font-size: 18px;
+  @media (min-width: 320px) and (max-width: 1240px) {
+    @include respons-property(font-size, 12, 18);
+    }
+}
+
+.productDescription {
+  color: #707070;
+  font-size: 14px;
+  @media (min-width: 320px) and (max-width: 1240px) {
+    @include respons-property(font-size, 12, 14);
+    }
+}
+//===========================================================================================================================
+.price {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  color: #A18A68;
+  @media (min-width: 320px) and (max-width: 1240px) {
+  @include respons-property(font-size, 12, 14);
+  }
+  @media (max-width: 768px){
+    display: flex;
+    flex-direction: column;
+}
+}
+
+.lineThrough {
+  text-decoration: line-through;
+  color: #000;
+  opacity: 0.5;
+}
+
+.lineThroughNone {
+  display: none;
+}
+//===========================================================================================================================
+.buttons {
+  display: flex;
+}
+
+.counter {
+  display: flex;
+  height: 54px;
+  font-size: 16px;
+  border-radius: 4px;
+  justify-content: flex-end;
+  @media (min-width: 320px) and (max-width: 1248px) {
+    font-size: calc(12px + (16 - 12) * ( (100vw - 320px) / ( 1248 - 320) ));
+    height: calc(36px + (54 - 36) * ( (100vw - 320px) / ( 1248 - 320) ));
+  }
+  @media (max-width: 768px){
+    align-self: flex-start;
+    justify-content: flex-start;
+}
+  input {
+    border: none;
+    max-width: 70px;
+    padding: 0;
+    padding-left: 28px;
+    pointer-events: none;
+    background-color: #EFEFEF;
+    color: #707070;
+    @media (min-width: 768px) and (max-width: 1248px) {
+      max-width: calc(50px + (70 - 50) * ( (100vw - 768px) / ( 1248 - 320) ));
+      padding-left: calc(22px + (28 - 22) * ( (100vw - 768px) / ( 1248 - 320) ));
+    }
+    @media (max-width: 768px){
+      padding-left: 30px;
+    }
+  }
+
+  button {
+    color: #707070;
+    background-color: #EFEFEF;
+    border: none;
+    padding: 0 16px;
+    transition: color ease 0.3s;
+    cursor: pointer;
+    @media (min-width: 320px) and (max-width: 1248px) {
+      padding-left: calc(10px + (16 - 10) * ( (100vw - 768px) / ( 1248 - 320) ));
+      padding-right: calc(10px + (16 - 10) * ( (100vw - 768px) / ( 1248 - 320) ));
+    }
+  }
+
+  button:hover {
+    color: #000;
+    transition: color ease 0.3s;
+  }
+}
+
+.deleteButton {
+  font-size: 16px;
+  outline: none;
+  border: none;
+  background-color: inherit;
+  align-self: flex-start;
+  margin-left: 30px;
+  cursor: pointer;
+  @media (max-width: 768px){
+    align-self: center;
+    font-size: 20px;
+  }
+}
+//===========================================================================================================================
+.inputBody {
+	position: relative;
+  width: 100%;
+}
+
+.inputSearch {
+  display: flex;
+}
+
+.input {
+	width: 100%;
+	font-size: 16px;
+  flex: 1 1 auto;
+	border: none;
+	outline: none;
+	padding: 16px 0;
+  @media (min-width: 320px) and (max-width: 1240px) {
+    @include respons-property(font-size, 12, 16);
+    @include respons-property(padding-top, 8, 16);
+    @include respons-property(padding-bottom, 8, 16);
+  }
+}
+
+.underline {
+	position: absolute;
+	height: 1px;
+	width: 100%;
+	left: 0;
+	bottom: 0;
+	background-color: #d8d8d8;
+}
+
+.clearСart{
+  display: flex;
+  flex-direction: column;
+  row-gap: 64px;
+  button {
+    align-self: flex-end;
+    font-size: 16px;
+    padding: 16px 0;
+    min-width: 168px;
+    border-radius: 4px;
+    cursor: pointer;
+    @media (min-width: 320px) and (max-width: 1240px) {
+      @include respons-property(font-size, 12, 16);
+      @include respons-property(padding-top, 8, 16);
+      @include respons-property(padding-bottom, 8, 16);
+    }
+    @media (max-width: 768px){
+      align-self: center;
+      width: 100%;
+    }
+  }
+
+  button:first-child {
+    background-color: #fff;
+    color: #000;
+    border: 1px solid #000;
+    transition: all ease 0.3s;
+  }
+
+  button:first-child:hover {
+    background-color: #000;
+    color: #fff;
+    border: 1px solid #000;
+    transition: all ease 0.3s;
+  }
+
+  button:first-child:active {
+    background-color: #424242;
+  }
+
+}
+
+.coupon {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  white-space: nowrap;
+  column-gap: 76px;
+
+  @media (max-width: 768px){
+    flex-direction: column;
+    row-gap: 10px;
+  }
+
+  input {
+    width: 100%;
+  }
+}
+
+//===========================================================================================================================
+//===========================================================================================================================
+
+.cartTotal {
+  flex: 1 1 35%;
+  @media (max-width: 768px){
+    background-color: #EFEFEF;
+    padding: 16px;
+  }
+
+  button {
+    align-self: flex-end;
+    font-size: 16px;
+    padding: 16px 0;
+    width: 100%;
+    @media (min-width: 320px) and (max-width: 1240px) {
+      @include respons-property(font-size, 12, 16);
+      @include respons-property(padding-top, 8, 16);
+      @include respons-property(padding-bottom, 8, 16);
+    }
+  }
+}
+
+.totalTitle {
+  font-size: 26px;
+  padding-bottom: 44px;
+
+  @media (min-width: 320px) and (max-width: 1240px) {
+    @include respons-property(font-size, 16, 26);
+    @include respons-property(padding-bottom, 16, 44);
+  }
+}
+
+.totalPrice {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 45px;
+  div, p {
+    font-size: 16px;
+    font-weight: 700;
+    @media (min-width: 320px) and (max-width: 1240px) {
+      @include respons-property(font-size, 12, 16);
+    }
+    @media (max-width: 768px){
+      font-weight: 500;
+    }
+  }
+}
+
+.discount {
+  position: relative;
+}
+
+.discountPercent {
+  position: absolute;
+  font-size: 12px;
+  top: -27px;
+  left: -35px;
+  background-color: #c2ae8f;
+  border-radius: 50%;
+  padding: 10px 5px;
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  row-gap: 20px;
+  button {
+    width: 290px;
+  }
+}
+
+.cartFull {
+  display: none;
+}
+.emptyImage {
+  width: 200px;
+  object-fit: contain;
+  margin-right: 40px;
+  @media (min-width: 320px) and (max-width: 1240px) {
+    @include respons-property(width, 100, 200);
+    @include respons-property(margin-right, 10, 40);
+  }
+}
+
+.addSomeProducts {
+  font-size: 24px;
+  @media (min-width: 320px) and (max-width: 1240px) {
+    @include respons-property(font-size, 12, 24);
+  }
+}

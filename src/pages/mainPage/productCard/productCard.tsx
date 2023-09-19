@@ -1,5 +1,5 @@
 import React from 'react';
-import { IProduct } from '../../utils/types';
+import { IProduct } from '../../../utils/types';
 import styles from './productCard.module.scss';
 
 interface IProductCardItem extends IProduct {
@@ -18,13 +18,14 @@ function ProductCard(props: IProductCardItem): React.JSX.Element {
 
 			<div className={styles.product_card__img_container} style={{ backgroundImage: `url(${image})` }}>
 				{/* <div className={styles.product_card__img_container} style={cardImgStyle}> */}
-				<a
-					href='#{product-id}'
+				<button
+					type='button'
+					aria-label='ADD'
 					className={`${styles.product_card__link} ${styles.text_lage}`}
 					onClick={() => handleProductClick(id)}
 				>
 					Add to cart
-				</a>
+				</button>
 			</div>
 			<h3 className={`${styles.product_card__title} ${styles.title_h3}`}>
 				{name}
